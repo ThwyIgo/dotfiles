@@ -159,25 +159,28 @@
 
 ;; Custom keybindings
 ;; Simple packages
-  ;; (global-set-key (kbd "C-x o") 'other-window)
-  (global-set-key (kbd "C-x o") 'ace-window)
-  (global-set-key [f8] 'neotree-toggle)
+;; (global-set-key (kbd "C-x o") 'other-window)
+(global-set-key (kbd "C-x o") 'ace-window)
+(global-set-key [f8] 'neotree-toggle)
 ;; multi-cursor
-  (global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
-  (global-set-key (kbd "C->") 'mc/mark-next-like-this)
-  (global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
-  (global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
-  (global-set-key (kbd "C-c C->") 'mc/mark-all-like-this-dwim) ;; Change HTML tag
-  (global-set-key (kbd "C-M-<") 'mc/unmark-next-like-this)
-  (global-set-key (kbd "C-M->") 'mc/unmark-previous-like-this)
-  (global-set-key (kbd "C-S-<mouse-1>") 'mc/add-cursor-on-click)
+; (C-') To hide all lines with no cursors
+(global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
+(global-set-key (kbd "C->") 'mc/mark-next-like-this)
+(global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
+(global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
+(global-set-key (kbd "C-c C->") 'mc/mark-all-like-this-dwim) ;; Change HTML tag
+(global-set-key (kbd "C-M-<") 'mc/unmark-next-like-this)
+(global-set-key (kbd "C-M->") 'mc/unmark-previous-like-this)
+(global-set-key (kbd "C-S-<mouse-1>") 'mc/add-cursor-on-click)
 ;; Functions and macros
-  (global-set-key (kbd "C-c n") 'duplicate-line)
-  (global-set-key (kbd "C-c p") 'duplicate-line-up)
-  (global-set-key (kbd "M-[") 'open-close-square-brackets)
-  (global-set-key  [C-backspace]
-		   'ryanmarcus/backward-kill-word)
-  (global-set-key (kbd "C-c C-c") 'comment-or-uncomment-region)
+(global-set-key (kbd "C-c n") 'duplicate-line)
+(global-set-key (kbd "C-c p") 'duplicate-line-up)
+(global-set-key (kbd "M-[") 'open-close-square-brackets)
+(global-set-key  [C-backspace]
+		 'ryanmarcus/backward-kill-word)
+(global-set-key (kbd "C-c c") 'comment-or-uncomment-region)
+(add-hook 'c-mode-common-hook
+          (lambda () (define-key c-mode-base-map (kbd "C-c C-c") 'compile)))
 
 
 ;; Código experimental daqui pra baixo
