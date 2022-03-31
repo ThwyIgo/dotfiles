@@ -1,3 +1,5 @@
+
+
 # Copyright (c) 2010 Aldo Cortesi
 # Copyright (c) 2010, 2014 dequis
 # Copyright (c) 2012 Randall Ma
@@ -40,7 +42,7 @@ from libqtile.utils import guess_terminal
 mod = "mod4"
 terminal = guess_terminal()
 home = os.path.expanduser('~')
-file_manager = "spacefm"
+file_manager = "pcmanfm"
 web_browser = "vivaldi-stable"
 email_client = "thunderbird"
 volume_app = "pavucontrol"
@@ -137,7 +139,7 @@ keys = [
         desc='Launch Email client'),
     KeyChord([mod],"e", [
         Key([], "e",
-            lazy.spawn("emacsclient -c -a 'emacs'"),
+            lazy.spawn("env XMODIFIERS= emacsclient -c -a 'emacs'"),
             desc='Launch Emacs'
             ),
         Key([], "t",

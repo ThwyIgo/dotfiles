@@ -10,15 +10,16 @@
  '(blink-cursor-mode nil)
  '(company-backends
    '(company-bbdb company-semantic company-cmake company-capf company-clang company-files
-		  (company-dabbrev-code company-gtags company-etags company-keywords)
-		  company-oddmuse company-dabbrev
-		  (company-shell company-shell-env company-fish-shell)
-		  company-irony))
+                  (company-dabbrev-code company-gtags company-etags company-keywords)
+                  company-oddmuse company-dabbrev
+                  (company-shell company-shell-env company-fish-shell)
+                  company-irony))
  '(custom-enabled-themes '(dracula))
  '(custom-safe-themes
-   '("fe1c13d75398b1c8fd7fdd1241a55c286b86c3e4ce513c4292d01383de152cb7" default))
+   '("1436985fac77baf06193993d88fa7d6b358ad7d600c1e52d12e64a2f07f07176" "fe1c13d75398b1c8fd7fdd1241a55c286b86c3e4ce513c4292d01383de152cb7" default))
+ '(delete-selection-mode t)
  '(display-line-numbers 'relative)
- '(electric-pair-mode t)
+ '(electric-pair-mode nil)
  '(global-auto-complete-mode t)
  '(global-flycheck-mode t)
  '(ido-enable-flex-matching t)
@@ -28,8 +29,10 @@
    '(("gnu" . "https://elpa.gnu.org/packages/")
      ("melpa" . "https://melpa.org/packages/")))
  '(package-selected-packages
-   '(company-irony company-shell flycheck haskell-snippets company lsp-haskell lsp-ui lsp-mode yasnippet-snippets yasnippet emmet-mode neotree ace-window multiple-cursors auto-complete dracula-theme))
+   '(smartparens haskell-mode yasnippet-snippets neotree multiple-cursors lsp-ui lsp-haskell haskell-snippets flycheck emmet-mode dracula-theme company-shell company-irony auto-complete ace-window))
  '(parens-require-spaces nil)
+ '(show-smartparens-global-mode t)
+ '(smartparens-global-strict-mode t)
  '(tool-bar-mode nil)
  '(visible-bell t)
  '(yas-global-mode t))
@@ -40,9 +43,36 @@
  ;; If there is more than one, they won't work right.
  '(default ((t (:inherit nil :extend nil :stipple nil :background "#282a36" :foreground "#f8f8f2" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 160 :width normal :foundry "ADBO" :family "Fira Code")))))
 ;; Remember to create the directory "~/.emacs.d/backups"
-;;(package-refresh-contents)
 
 ;; Added by user --------------------------------------------------
+;; Install packages on lauch
+(require 'cl-lib)
+(require 'package)
+(package-initialize)
+(defvar required-packages
+  '(
+    company-irony company-shell flycheck haskell-snippets company
+    lsp-haskell lsp-ui lsp-mode yasnippet-snippets yasnippet
+    emmet-mode neotree ace-window multiple-cursors auto-complete
+    dracula-theme haskell-mode smartparens
+    )
+   "A list of packages to ensure are installed at launch.")
+; method to check if all packages are installed
+(defun packages-installed-p ()
+  (cl-loop for p in required-packages
+        when (not (package-installed-p p)) do (cl-return nil)
+        finally (cl-return t)))
+; if not all packages are installed, check one by one and install the missing ones.
+(unless (packages-installed-p)
+  ; check for new packages (package versions)
+  (message "%s" "Emacs is now refreshing its package database...")
+  (package-refresh-contents)
+  (message "%s" " done.")
+  ; install the missing packages
+  (dolist (p required-packages)
+    (when (not (package-installed-p p))
+      (package-install p))))
+
 ;(set-face-attribute 'default nil :height 170)
 (require 'ido)
 (ido-mode t)
