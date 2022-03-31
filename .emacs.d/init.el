@@ -9,18 +9,18 @@
  '(backup-directory-alist '((".*" . "~/.emacs.d/backups")))
  '(blink-cursor-mode nil)
  '(company-backends
-   '(company-bbdb company-semantic company-cmake company-capf company-clang company-files
-                  (company-dabbrev-code company-gtags company-etags company-keywords)
-                  company-oddmuse company-dabbrev
-                  (company-shell company-shell-env company-fish-shell)
-                  company-irony))
+   '(company-bbdb
+     (company-semantic company-cmake company-capf company-clang company-files)
+     (company-dabbrev-code company-gtags company-etags company-keywords)
+     (company-oddmuse company-dabbrev)
+     (company-shell company-shell-env company-fish-shell)
+     (company-irony-c-headers company-irony company-c-headers)))
  '(custom-enabled-themes '(dracula))
  '(custom-safe-themes
    '("1436985fac77baf06193993d88fa7d6b358ad7d600c1e52d12e64a2f07f07176" "fe1c13d75398b1c8fd7fdd1241a55c286b86c3e4ce513c4292d01383de152cb7" default))
  '(delete-selection-mode t)
  '(display-line-numbers 'relative)
  '(electric-pair-mode nil)
- '(global-auto-complete-mode t)
  '(global-flycheck-mode t)
  '(ido-enable-flex-matching t)
  '(inhibit-startup-screen t)
@@ -29,10 +29,10 @@
    '(("gnu" . "https://elpa.gnu.org/packages/")
      ("melpa" . "https://melpa.org/packages/")))
  '(package-selected-packages
-   '(smartparens haskell-mode yasnippet-snippets neotree multiple-cursors lsp-ui lsp-haskell haskell-snippets flycheck emmet-mode dracula-theme company-shell company-irony auto-complete ace-window))
+   '(company-c-headers company-irony-c-headers smartparens haskell-mode yasnippet-snippets neotree multiple-cursors lsp-ui lsp-haskell haskell-snippets flycheck emmet-mode dracula-theme company-shell company-irony ace-window))
  '(parens-require-spaces nil)
  '(show-smartparens-global-mode t)
- '(smartparens-global-strict-mode t)
+ '(smartparens-global-mode t)
  '(tool-bar-mode nil)
  '(visible-bell t)
  '(yas-global-mode t))
@@ -53,8 +53,8 @@
   '(
     company-irony company-shell flycheck haskell-snippets company
     lsp-haskell lsp-ui lsp-mode yasnippet-snippets yasnippet
-    emmet-mode neotree ace-window multiple-cursors auto-complete
-    dracula-theme haskell-mode smartparens
+    emmet-mode neotree ace-window multiple-cursors dracula-theme
+    haskell-mode smartparens company-irony-c-headers
     )
    "A list of packages to ensure are installed at launch.")
 ; method to check if all packages are installed
@@ -81,6 +81,8 @@
 (require 'neotree)
 (setq-default electric-indent-inhibit t)
 (setq-default indent-tabs-mode nil)
+(sp-pair "'" nil :actions :rem) ;; smartparens
+(sp-pair "`" nil :actions :rem)
 (add-hook 'html-mode-hook
           (lambda ()
             ;; Default indentation is usually 2 spaces, changing to 4.
@@ -96,6 +98,19 @@
 (setq company-idle-delay 0)
 ; Use tab key to cycle through suggestions. ('tng' means 'tab and go')
 (company-tng-mode)
+; Tab for both company and yasnippet
+(defun company-mode/backend-with-yas (backend)
+  (if (and (listp backend) (member 'company-yasnippet backend))
+      backend
+    (append (if (consp backend) backend (list backend))
+            '(:with company-yasnippet))))
+(setq company-backends (mapcar #'company-mode/backend-with-yas company-backends))
+
+(define-key company-mode-map [tab]
+  '(menu-item "maybe-company-expand" nil
+              :filter (lambda (&optional _)
+                        (when (check-expansion)
+                          #'company-complete-common))))
 (require 'flycheck)
 (add-hook 'after-init-hook #'global-flycheck-mode)
 (setq-default yas-prompt-functions '(yas-ido-prompt yas-dropdown-prompt))
@@ -166,17 +181,16 @@
   (forward-line 1)
   (yank)
   )
-(defun http-server() ;; Ainda em desenvolvimento
-  "Prompt user to enter dir path, then start a HTTP server with python3 through bash script."
-  (interactive)
-  (async-shell-command (format "cd '%s' && python3 -m http.server" (read-directory-name "Directory:")))
-  )
+;; (defun http-server() ;; Ainda em desenvolvimento
+;;   "Prompt user to enter dir path, then start a HTTP server with python3 through bash script."
+;;   (interactive)
+;;   (async-shell-command (format "cd '%s' && python3 -m http.server" (read-directory-name "Directory:")))
+;;   )
 (defun ryanmarcus/backward-kill-word () ;; Created by Ryan Marcus (https://stackoverflow.com/questions/28221079/ctrl-backspace-in-emacs-deletes-too-much/60826269#60826269)
   "Remove all whitespace if the character behind the cursor is whitespace, otherwise remove a word."
   (interactive)
   (if (looking-back "[ \n]")
-      ;; delete horizontal space before us and then check to see if we
-      ;; are looking at a newline
+      ;; delete horizontal space before us and then check to see if we are looking at a newline
       (progn (delete-horizontal-space 't)
              (while (looking-back "[ \n]")
                (backward-delete-char 1)))
@@ -205,46 +219,9 @@
 ;; Functions and macros
 (global-set-key (kbd "C-c n") 'duplicate-line)
 (global-set-key (kbd "C-c p") 'duplicate-line-up)
-(global-set-key (kbd "M-[") 'open-close-square-brackets)
+;(global-set-key (kbd "M-[") 'open-close-square-brackets)
 (global-set-key  [C-backspace]
 		 'ryanmarcus/backward-kill-word)
 (global-set-key (kbd "C-c c") 'comment-or-uncomment-region)
 (add-hook 'c-mode-common-hook
           (lambda () (define-key c-mode-base-map (kbd "C-c C-c") 'compile)))
-
-
-;; Código experimental daqui pra baixo
-
-;; Código abaixo deve ser inserido antes das custom set variables
-;; (require 'cl)
-;; (require 'package)
-;; (add-to-list 'package-archives
-;;              '("melpa" . "http://melpa.milkbox.net/packages/") t)
-;; (package-initialize)
-;; (defvar required-packages
-;;   '(
-;;     color-theme
-;;     dracula-theme
-;;     company
-;;     company-ghc ;; Não está mais no MELPA
-;;     flycheck
-;;     flycheck-pos-tip
-;;     flycheck-color-mode-line
-;;     haskell-mode
-;;     )
-;;    "a list of packages to ensure are installed at launch.")
-;; ; method to check if all packages are installed
-;; (defun packages-installed-p ()
-;;   (loop for p in required-packages
-;;         when (not (package-installed-p p)) do (return nil)
-;;         finally (return t)))
-;; ; if not all packages are installed, check one by one and install the missing ones.
-;; (unless (packages-installed-p)
-;;   ; check for new packages (package versions)
-;;   (message "%s" "Emacs is now refreshing its package database...")
-;;   (package-refresh-contents)
-;;   (message "%s" " done.")
-;;   ; install the missing packages
-;;   (dolist (p required-packages)
-;;     (when (not (package-installed-p p))
-;;       (package-install p))))
