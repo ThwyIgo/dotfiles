@@ -1,3 +1,4 @@
+(load-file "~/.emacs.d/pkgs/ligature.elc") ;; M-x emacs-lisp-byte-compile
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -20,7 +21,7 @@
    '("1436985fac77baf06193993d88fa7d6b358ad7d600c1e52d12e64a2f07f07176" "fe1c13d75398b1c8fd7fdd1241a55c286b86c3e4ce513c4292d01383de152cb7" default))
  '(delete-selection-mode t)
  '(display-line-numbers 'relative)
- '(electric-pair-mode nil)
+ '(electric-pair-mode t)
  '(global-flycheck-mode t)
  '(ido-enable-flex-matching t)
  '(inhibit-startup-screen t)
@@ -29,10 +30,8 @@
    '(("gnu" . "https://elpa.gnu.org/packages/")
      ("melpa" . "https://melpa.org/packages/")))
  '(package-selected-packages
-   '(company-c-headers company-irony-c-headers smartparens haskell-mode yasnippet-snippets neotree multiple-cursors lsp-ui lsp-haskell haskell-snippets flycheck emmet-mode dracula-theme company-shell company-irony ace-window))
+   '(company-c-headers company-irony-c-headers haskell-mode yasnippet-snippets neotree multiple-cursors lsp-ui lsp-haskell haskell-snippets flycheck emmet-mode dracula-theme company-shell company-irony ace-window))
  '(parens-require-spaces nil)
- '(show-smartparens-global-mode t)
- '(smartparens-global-mode t)
  '(tool-bar-mode nil)
  '(visible-bell t)
  '(yas-global-mode t))
@@ -54,7 +53,7 @@
     company-irony company-shell flycheck haskell-snippets company
     lsp-haskell lsp-ui lsp-mode yasnippet-snippets yasnippet
     emmet-mode neotree ace-window multiple-cursors dracula-theme
-    haskell-mode smartparens company-irony-c-headers
+    haskell-mode company-irony-c-headers
     )
    "A list of packages to ensure are installed at launch.")
 ; method to check if all packages are installed
@@ -81,19 +80,17 @@
 (require 'neotree)
 (setq-default electric-indent-inhibit t)
 (setq-default indent-tabs-mode nil)
-(sp-pair "'" nil :actions :rem) ;; smartparens
-(sp-pair "`" nil :actions :rem)
-(add-hook 'html-mode-hook
-          (lambda ()
-            ;; Default indentation is usually 2 spaces, changing to 4.
-            (set (make-local-variable 'sgml-basic-offset) 4)))
+;; (sp-pair "'" nil :actions :rem) ;; smartparens
+;; (sp-pair "`" nil :actions :rem)
+;; (add-hook 'html-mode-hook
+;;           (lambda ()
+;;             ;; Default indentation is usually 2 spaces, changing to 4.
+;;             (set (make-local-variable 'sgml-basic-offset) 4)))
 
 ;; Company & flycheck & yasnippet
 (require 'company)
 (add-hook 'after-init-hook 'global-company-mode)
 (require 'company)
-;(eval-after-load 'company
-;  (add-to-list 'company-backends '(company-shell company-shell-env company-fish-shell company-irony)))
 ; No delay in showing suggestions.
 (setq company-idle-delay 0)
 ; Use tab key to cycle through suggestions. ('tng' means 'tab and go')
@@ -129,23 +126,27 @@
 (require 'haskell-interactive-mode)
 (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
 (require 'haskell-snippets)
+;; C/C++
+(add-hook 'c++-mode-hook 'irony-mode)
+(add-hook 'c-mode-hook 'irony-mode)
+(add-hook 'objc-mode-hook 'irony-mode)
+(add-hook 'c-mode-common-hook 'irony-server-kill) ;; Fix server not restarting on the second time a file is opened
 
 ;; All font-ligature related stuff works only in Emacs 28+
 ;; Enable the www ligature in every possible major mode
-;(ligature-set-ligatures 't '("www"))
+(ligature-set-ligatures 't '("www"))
 ;; Enable ligatures in programming modes
-;(ligature-set-ligatures 'prog-mode '("www" "**" "***" "**/" "*>" "*/" "\\\\" "\\\\\\" "{-" "::"
-;                                     ":::" ":=" "!!" "!=" "!==" "-}" "----" "-->" "->" "->>"
-;                                     "-<" "-<<" "-~" "#{" "#[" "##" "###" "####" "#(" "#?" "#_"
-;                                     "#_(" ".-" ".=" ".." "..<" "..." "?=" "??" ";;" "/*" "/**"
-;                                     "/=" "/==" "/>" "//" "///" "&&" "||" "||=" "|=" "|>" "^=" "$>"
-;                                     "++" "+++" "+>" "=:=" "==" "===" "==>" "=>" "=>>" "<="
-;                                     "=<<" "=/=" ">-" ">=" ">=>" ">>" ">>-" ">>=" ">>>" "<*"
-;                                     "<*>" "<|" "<|>" "<$" "<$>" "<!--" "<-" "<--" "<->" "<+"
-;                                     "<+>" "<=" "<==" "<=>" "<=<" "<>" "<<" "<<-" "<<=" "<<<"
-;                                     "<~" "<~~" "</" "</>" "~@" "~-" "~>" "~~" "~~>" "%%"))
-
-;(global-ligature-mode 't)
+(ligature-set-ligatures 'prog-mode '("www" "**" "***" "**/" "*>" "*/" "\\\\" "\\\\\\" "{-" "::"
+                                     ":::" ":=" "!!" "!=" "!==" "-}" "----" "-->" "->" "->>"
+                                     "-<" "-<<" "-~" "#{" "#[" "##" "###" "####" "#(" "#?" "#_"
+                                     "#_(" ".-" ".=" ".." "..<" "..." "?=" "??" ";;" "/*" "/**"
+                                     "/=" "/==" "/>" "//" "///" "&&" "||" "||=" "|=" "|>" "^=" "$>"
+                                     "++" "+++" "+>" "=:=" "==" "===" "==>" "=>" "=>>" "<="
+                                     "=<<" "=/=" ">-" ">=" ">=>" ">>" ">>-" ">>=" ">>>" "<*"
+                                     "<*>" "<|" "<|>" "<$" "<$>" "<!--" "<-" "<--" "<->" "<+"
+                                     "<+>" "<=" "<==" "<=>" "<=<" "<>" "<<" "<<-" "<<=" "<<<"
+                                     "<~" "<~~" "</" "</>" "~@" "~-" "~>" "~~" "~~>" "%%"))
+(global-ligature-mode 't)
 
 ;; Web development
 (add-hook 'sgml-mode-hook 'emmet-mode) ;; Auto-start on any markup modes
@@ -197,10 +198,6 @@
     ;; otherwise, just do the normal kill word.
     (backward-kill-word 1)))
 
-;; Custom macros
-(fset 'open-close-square-brackets
-   (kmacro-lambda-form [?\[ ?\] ?\C-b] 0 "%d"))
-
 ;; Custom keybindings
 ;; Simple packages
 ;; (global-set-key (kbd "C-x o") 'other-window)
@@ -216,12 +213,13 @@
 (global-set-key (kbd "C-M-<") 'mc/unmark-next-like-this)
 (global-set-key (kbd "C-M->") 'mc/unmark-previous-like-this)
 (global-set-key (kbd "C-S-<mouse-1>") 'mc/add-cursor-on-click)
+;; Hooks
+(add-hook 'c-mode-common-hook
+          (lambda () (define-key c-mode-base-map (kbd "C-c C-c") 'compile)))
 ;; Functions and macros
 (global-set-key (kbd "C-c n") 'duplicate-line)
 (global-set-key (kbd "C-c p") 'duplicate-line-up)
-;(global-set-key (kbd "M-[") 'open-close-square-brackets)
 (global-set-key  [C-backspace]
 		 'ryanmarcus/backward-kill-word)
+(global-set-key (kbd "C-c <backspace>") 'delete-trailing-whitespace)
 (global-set-key (kbd "C-c c") 'comment-or-uncomment-region)
-(add-hook 'c-mode-common-hook
-          (lambda () (define-key c-mode-base-map (kbd "C-c C-c") 'compile)))
