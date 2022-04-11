@@ -8,7 +8,7 @@ if [ $(whoami) != 'root' ]; then
 fi
 
 # Number of snapshots allowed
-sn=5
+sn=3
 # Colors
 RED='\033[0;31m'
 NC='\033[0m'

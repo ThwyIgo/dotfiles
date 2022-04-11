@@ -1,4 +1,6 @@
 (load-file "~/.emacs.d/pkgs/ligature.elc") ;; M-x emacs-lisp-byte-compile
+(unless (file-directory-p "~/.emacs.d/backups")
+  (make-directory "~/.emacs.d/backups"))
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -22,6 +24,7 @@
  '(delete-selection-mode t)
  '(display-line-numbers 'relative)
  '(electric-pair-mode t)
+ '(gdb-many-windows t)
  '(global-flycheck-mode t)
  '(ido-enable-flex-matching t)
  '(inhibit-startup-screen t)
@@ -32,6 +35,7 @@
  '(package-selected-packages
    '(company-c-headers company-irony-c-headers haskell-mode yasnippet-snippets neotree multiple-cursors lsp-ui lsp-haskell haskell-snippets flycheck emmet-mode dracula-theme company-shell company-irony ace-window))
  '(parens-require-spaces nil)
+ '(sentence-end-double-space nil)
  '(tool-bar-mode nil)
  '(visible-bell t)
  '(yas-global-mode t))
@@ -41,7 +45,6 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(default ((t (:inherit nil :extend nil :stipple nil :background "#282a36" :foreground "#f8f8f2" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 160 :width normal :foundry "ADBO" :family "Fira Code")))))
-;; Remember to create the directory "~/.emacs.d/backups"
 
 ;; Added by user --------------------------------------------------
 ;; Install packages on lauch
@@ -72,7 +75,13 @@
     (when (not (package-installed-p p))
       (package-install p))))
 
+;; If non-graphical, change bg color to black. Dracula's blue can be hard to see in a terminal's limited color space.
+(unless (display-graphic-p)
+    (add-to-list 'default-frame-alist '(background-color . "black")))
+
 ;(set-face-attribute 'default nil :height 170)
+;(set-frame-parameter (selected-frame) 'alpha '(95 . 85))
+(add-to-list 'default-frame-alist '(alpha . (100 . 85)))
 (require 'ido)
 (ido-mode t)
 (require 'multiple-cursors)
@@ -127,6 +136,7 @@
 (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
 (require 'haskell-snippets)
 ;; C/C++
+(setq c-basic-offset 4)
 (add-hook 'c++-mode-hook 'irony-mode)
 (add-hook 'c-mode-hook 'irony-mode)
 (add-hook 'objc-mode-hook 'irony-mode)
@@ -149,6 +159,8 @@
 (global-ligature-mode 't)
 
 ;; Web development
+(setq js-indent-level 2)
+(setq css-indent-offset 2)
 (add-hook 'sgml-mode-hook 'emmet-mode) ;; Auto-start on any markup modes
 (add-hook 'css-mode-hook  'emmet-mode) ;; enable Emmet's css abbreviation.
 ;; Install tern on your system: $ npm install -g tern
@@ -223,3 +235,8 @@
 		 'ryanmarcus/backward-kill-word)
 (global-set-key (kbd "C-c <backspace>") 'delete-trailing-whitespace)
 (global-set-key (kbd "C-c c") 'comment-or-uncomment-region)
+
+;; Códigos a serem testados
+;; (require 'server)
+;; (unless (server-running-p)
+;;   (server-start))
