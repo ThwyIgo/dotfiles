@@ -76,8 +76,14 @@
       (package-install p))))
 
 ;; If non-graphical, change bg color to black. Dracula's blue can be hard to see in a terminal's limited color space.
-(unless (display-graphic-p)
-    (add-to-list 'default-frame-alist '(background-color . "black")))
+(add-hook 'after-init-hook
+          (lambda ()
+          (unless (display-graphic-p)
+            (set-background-color "black"))))
+;; (add-hook 'after-make-frame-functions
+;;           (lambda ()
+;;           (unless (display-graphic-p)
+;;             (set-background-color "black"))))
 
 ;(set-face-attribute 'default nil :height 170)
 ;(set-frame-parameter (selected-frame) 'alpha '(95 . 85))
@@ -173,6 +179,11 @@
 ;      (tern-ac-setup)))
 
 ;; Functions
+(defun bg-black()
+  "Set the frame's background color black."
+  (interactive)
+  (set-background-color "black")
+  )
 (defun duplicate-line()
   "Copy the current line to the next line."
   (interactive)
@@ -235,6 +246,7 @@
 		 'ryanmarcus/backward-kill-word)
 (global-set-key (kbd "C-c <backspace>") 'delete-trailing-whitespace)
 (global-set-key (kbd "C-c c") 'comment-or-uncomment-region)
+(global-set-key (kbd "C-c TAB") 'align-current)
 
 ;; Códigos a serem testados
 ;; (require 'server)

@@ -4,7 +4,7 @@ dex -a -s $HOME/.config/autostart/ &
 #fcitx5 -d &
 #setxkbmap -model "" -layout br,cn -variant "" -option grp:win_space_toggle &
 numlockx on &
-picom &
+picom -b --experimental-backends &
 feh --bg-scale --randomize ~/Imagens/Papéis\ de\ parede/* &
 env XMODIFIERS= /usr/bin/emacs --daemon &
 gtk-launch org.kde.kdeconnect.daemon &

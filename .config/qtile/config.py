@@ -103,6 +103,7 @@ keys = [
         desc="Spawn a command using a prompt widget"),
     Key([mod], "f", lazy.window.toggle_floating(), desc="Toggle window floating on/off"),
     Key([mod], "m", lazy.window.toggle_fullscreen(), desc="Toggle window full-screen on/off"),
+    Key([mod], "Down", lazy.window.toggle_minimize()),
 
     # Media controls
     Key([], "XF86AudioMicMute", lazy.spawn('amixer set Capture toggle && amixer get Capture | grep \'\[off\]\' && notify-send "MIC switched OFF" || notify-send "MIC switched ON"')),
@@ -118,11 +119,11 @@ keys = [
 
     # Spawn apps
     Key([mod], "Return",
-             lazy.spawn("rofi -show drun"),
+             lazy.spawn("rofi -show-icons -show drun"),
              desc='rofi launcher'
              ),
     Key(["mod1"], "Tab", #Alt + Tab = mudar janela
-        lazy.spawn("rofi -show window"),
+        lazy.spawn("rofi -show-icons -show window -theme ~/.config/rofi/themes/launchpad.rasi"),
         desc='rofi change window'
         ),
 #    Key([mod], "period",
@@ -193,9 +194,8 @@ for i in groups:
     ])
 
 layouts = [
-    layout.Bsp(border_width=4, fair=False, margin=0),
-    layout.Columns(border_focus_stack=['#d75f5f', '#8f3d3d'], border_width=4),
-    # Try more layouts by unleashing below layouts.
+    layout.Bsp(border_width=4, fair=False, margin=4, margin_on_single=0),
+    layout.Columns(insert_position=1, border_focus_stack=['#d75f5f', '#8f3d3d'], border_width=4, margin=4, margin_on_single=0),
     # layout.Stack(num_stacks=2),
     # layout.Matrix(),
     # layout.MonadTall(),
@@ -264,7 +264,7 @@ floating_layout = layout.Floating(float_rules=[
     Match(wm_class='ssh-askpass'),  # ssh-askpass
     Match(title='branchdialog'),  # gitk
     Match(title='pinentry'),  # GPG key password entry
-    Match(title='Qalculate!'),        # qalculate-gtk
+    Match(title='Qalculate!'), # qalculate-gtk
 ])
 auto_fullscreen = True
 focus_on_window_activation = "smart"
@@ -283,12 +283,6 @@ def start_once():
 def client_new(client):
     if client.name == 'KeePassXC':
         client.togroup('5')
-#Iniciar telgram em segundo plano. Precisa de ajustes para que a ação só funcione na primeira vez em que ele é invocado
-# @hook.subscribe.client_new
-# def client_new(client):
-#     if client.name == 'Telegram':
-#         client.togroup('3')
-#         client.kill()
     
 # XXX: Gasp! We're lying here. In fact, nobody really uses or cares about this
 # string besides java UI toolkits; you can see several discussions on the
