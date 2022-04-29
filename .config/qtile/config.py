@@ -123,7 +123,7 @@ keys = [
              desc='rofi launcher'
              ),
     Key(["mod1"], "Tab", #Alt + Tab = mudar janela
-        lazy.spawn("rofi -show-icons -show window -theme ~/.config/rofi/themes/launchpad.rasi"),
+        lazy.spawn("rofi -show-icons -show window -me-select-entry '' -me-accept-entry 'MousePrimary' -theme ~/.config/rofi/themes/launchpad.rasi"),
         desc='rofi change window'
         ),
 #    Key([mod], "period",
@@ -150,6 +150,10 @@ keys = [
         Key([], "b",
             lazy.spawn(web_browser),
             desc='Launch Web Browser'
+            ),
+        Key([], "l",
+            lazy.spawn("librewolf"),
+            desc='Launch Librewolf'
             ),
         Key([], "f",
             lazy.spawn(file_manager),
