@@ -43,7 +43,7 @@ mod = "mod4"
 terminal = guess_terminal()
 home = os.path.expanduser('~')
 file_manager = "pcmanfm"
-web_browser = "vivaldi-stable"
+web_browser = "librewolf"
 email_client = "thunderbird"
 volume_app = "pavucontrol"
     
@@ -151,10 +151,10 @@ keys = [
             lazy.spawn(web_browser),
             desc='Launch Web Browser'
             ),
-        Key([], "l",
-            lazy.spawn("librewolf"),
-            desc='Launch Librewolf'
-            ),
+        # Key([], "l",
+        #     lazy.spawn("librewolf"),
+        #     desc='Launch Librewolf'
+        #     ),
         Key([], "f",
             lazy.spawn(file_manager),
             desc='Launch File Manager'

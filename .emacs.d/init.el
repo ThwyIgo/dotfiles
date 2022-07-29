@@ -1,4 +1,9 @@
-(load-file "~/.emacs.d/pkgs/ligature.elc") ;; M-x emacs-lisp-byte-compile
+(defun load-directory (dir)
+  (let ((load-it (lambda (f)
+		   (load-file (concat (file-name-as-directory dir) f)))
+		 ))
+    (mapc load-it (directory-files dir nil "\\.el$"))))
+(load-directory "~/.emacs.d/pkgs") ;; M-x emacs-lisp-byte-compile
 (unless (file-directory-p "~/.emacs.d/backups")
   (make-directory "~/.emacs.d/backups"))
 (custom-set-variables
@@ -11,6 +16,7 @@
    ["#242424" "#e5786d" "#95e454" "#cae682" "#8ac6f2" "#333366" "#ccaa8f" "#f6f3e8"])
  '(backup-directory-alist '((".*" . "~/.emacs.d/backups")))
  '(blink-cursor-mode nil)
+ '(column-number-mode t)
  '(company-backends
    '(company-bbdb
      (company-semantic company-cmake company-capf company-clang company-files)
@@ -95,8 +101,6 @@
 (require 'neotree)
 (setq-default electric-indent-inhibit t)
 (setq-default indent-tabs-mode nil)
-;; (sp-pair "'" nil :actions :rem) ;; smartparens
-;; (sp-pair "`" nil :actions :rem)
 ;; (add-hook 'html-mode-hook
 ;;           (lambda ()
 ;;             ;; Default indentation is usually 2 spaces, changing to 4.
@@ -109,7 +113,7 @@
 ; No delay in showing suggestions.
 (setq company-idle-delay 0)
 ; Use tab key to cycle through suggestions. ('tng' means 'tab and go')
-(company-tng-mode)
+;(company-tng-mode)
 ; Tab for both company and yasnippet
 (defun company-mode/backend-with-yas (backend)
   (if (and (listp backend) (member 'company-yasnippet backend))
@@ -118,11 +122,28 @@
             '(:with company-yasnippet))))
 (setq company-backends (mapcar #'company-mode/backend-with-yas company-backends))
 
-(define-key company-mode-map [tab]
-  '(menu-item "maybe-company-expand" nil
-              :filter (lambda (&optional _)
-                        (when (check-expansion)
-                          #'company-complete-common))))
+(dolist (key '("<return>" "RET"))
+    ;; Here we are a feature of define-key that lets us pass an "extended menu
+    ;; item" instead of an interactive function. Doing this allows RET to regain
+    ;; its usual functionality when the user has not explicitly interacted with
+    ;; Company.
+    (define-key company-active-map (kbd key)
+      `(menu-item nil company-complete
+                  :filter ,(lambda (cmd)
+                             (when (company-explicit-action-p)
+                               cmd)))))
+  (define-key company-active-map (kbd "TAB") #'company-complete-selection)
+  (define-key company-active-map (kbd "<tab>") #'company-complete-selection)
+  (define-key company-active-map (kbd "SPC") nil)
+  ;; Company appears to override the above keymap based on company-auto-complete-chars.
+  ;; Turning it off ensures we have full control.
+  (setq company-auto-complete-chars nil)
+;; (define-key company-mode-map [tab]
+;;   '(menu-item "maybe-company-expand" nil
+;;               :filter (lambda (&optional _)
+;;                         (when (check-expansion)
+;;                           #'company-complete-common))))
+
 (require 'flycheck)
 (add-hook 'after-init-hook #'global-flycheck-mode)
 (setq-default yas-prompt-functions '(yas-ido-prompt yas-dropdown-prompt))
@@ -142,7 +163,8 @@
 (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
 (require 'haskell-snippets)
 ;; C/C++
-(setq c-basic-offset 4)
+(setq c-default-style "linux"
+      c-basic-offset 4)
 (add-hook 'c++-mode-hook 'irony-mode)
 (add-hook 'c-mode-hook 'irony-mode)
 (add-hook 'objc-mode-hook 'irony-mode)
@@ -169,14 +191,6 @@
 (setq css-indent-offset 2)
 (add-hook 'sgml-mode-hook 'emmet-mode) ;; Auto-start on any markup modes
 (add-hook 'css-mode-hook  'emmet-mode) ;; enable Emmet's css abbreviation.
-;; Install tern on your system: $ npm install -g tern
-;(add-to-list 'load-path "/path/to/tern/emacs/")
-;(autoload 'tern-mode "tern.el" nil t)
-;(add-hook 'js-mode-hook (lambda () (tern-mode t)))
-;(eval-after-load 'tern
-;   '(progn
-;      (require 'tern-auto-complete)
-;      (tern-ac-setup)))
 
 ;; Functions
 (defun bg-black()
@@ -194,16 +208,31 @@
   (forward-line 1)
   (yank)
   )
-(defun duplicate-line-up()
-  "Create a line above the current line and copy the current line to the previous line."
+;; (defun duplicate-line-up()
+;;   "Create a line above the current line and copy the current line to the previous line."
+;;   (interactive)
+;;   (move-beginning-of-line 1)
+;;   (kill-line)
+;;   (yank)
+;;   (end-of-line 0)
+;;   (open-line 1)
+;;   (forward-line 1)
+;;   (yank)
+;;   )
+(defun move-line-up ()
+  "Move up the current line."
   (interactive)
-  (move-beginning-of-line 1)
-  (kill-line)
-  (yank)
-  (end-of-line 0)
-  (open-line 1)
+  (transpose-lines 1)
+  (forward-line -2)
+  ;(indent-according-to-mode)
+  )
+(defun move-line-down ()
+  "Move down the current line."
+  (interactive)
   (forward-line 1)
-  (yank)
+  (transpose-lines 1)
+  (forward-line -1)
+  ;(indent-according-to-mode)
   )
 ;; (defun http-server() ;; Ainda em desenvolvimento
 ;;   "Prompt user to enter dir path, then start a HTTP server with python3 through bash script."
@@ -220,6 +249,14 @@
                (backward-delete-char 1)))
     ;; otherwise, just do the normal kill word.
     (backward-kill-word 1)))
+(defun insert-random-number (*n) ;; (random t) para que o número seja mais aleatório.
+  "Insert *n random digits. *n default to 5.
+Call `universal-argument' before for different count."
+  (interactive "P")
+  (let ((-charset "1234567890" )
+        (-baseCount 10))
+    (dotimes (-i (if (numberp *n) (abs *n) 5 ))
+      (insert (elt -charset (random -baseCount))))))
 
 ;; Custom keybindings
 ;; Simple packages
@@ -241,9 +278,9 @@
           (lambda () (define-key c-mode-base-map (kbd "C-c C-c") 'compile)))
 ;; Functions and macros
 (global-set-key (kbd "C-c n") 'duplicate-line)
-(global-set-key (kbd "C-c p") 'duplicate-line-up)
-(global-set-key  [C-backspace]
-		 'ryanmarcus/backward-kill-word)
+(global-set-key (kbd "C-S-<up>")  'move-line-up)
+(global-set-key (kbd "C-S-<down>")  'move-line-down)
+(global-set-key  [C-backspace] 'ryanmarcus/backward-kill-word)
 (global-set-key (kbd "C-c <backspace>") 'delete-trailing-whitespace)
 (global-set-key (kbd "C-c c") 'comment-or-uncomment-region)
 (global-set-key (kbd "C-c TAB") 'align-current)
