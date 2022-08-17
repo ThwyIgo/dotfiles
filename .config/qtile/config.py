@@ -140,7 +140,7 @@ keys = [
         desc='Launch Email client'),
     KeyChord([mod],"e", [
         Key([], "e",
-            lazy.spawn("env XMODIFIERS= emacsclient -c -a 'emacs'"),
+            lazy.spawn("emacsclient -c -a 'emacs'"),
             desc='Launch Emacs'
             ),
         Key([], "t",

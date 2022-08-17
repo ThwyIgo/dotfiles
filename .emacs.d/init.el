@@ -12,8 +12,6 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(all-the-icons-dired-mode t)
- '(ansi-color-names-vector
-   ["#242424" "#e5786d" "#95e454" "#cae682" "#8ac6f2" "#333366" "#ccaa8f" "#f6f3e8"])
  '(backup-directory-alist '((".*" . "~/.emacs.d/backups")))
  '(blink-cursor-mode nil)
  '(column-number-mode t)
@@ -39,7 +37,7 @@
    '(("gnu" . "https://elpa.gnu.org/packages/")
      ("melpa" . "https://melpa.org/packages/")))
  '(package-selected-packages
-   '(company-c-headers company-irony-c-headers haskell-mode yasnippet-snippets neotree multiple-cursors lsp-ui lsp-haskell haskell-snippets flycheck emmet-mode dracula-theme company-shell company-irony ace-window))
+   '(origami company-c-headers company-irony-c-headers haskell-mode yasnippet-snippets neotree multiple-cursors lsp-ui lsp-haskell haskell-snippets flycheck emmet-mode dracula-theme company-shell company-irony ace-window))
  '(parens-require-spaces nil)
  '(sentence-end-double-space nil)
  '(tool-bar-mode nil)
@@ -50,7 +48,8 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:inherit nil :extend nil :stipple nil :background "#282a36" :foreground "#f8f8f2" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 160 :width normal :foundry "ADBO" :family "Fira Code")))))
+ '(default ((t (:family "Fira Code" :foundry "CTDB" :slant normal :weight normal :height 155 :width normal)))))
+(put 'upcase-region 'disabled nil)
 
 ;; Added by user --------------------------------------------------
 ;; Install packages on lauch
@@ -62,7 +61,7 @@
     company-irony company-shell flycheck haskell-snippets company
     lsp-haskell lsp-ui lsp-mode yasnippet-snippets yasnippet
     emmet-mode neotree ace-window multiple-cursors dracula-theme
-    haskell-mode company-irony-c-headers
+    haskell-mode company-irony-c-headers origami
     )
    "A list of packages to ensure are installed at launch.")
 ; method to check if all packages are installed
@@ -86,10 +85,6 @@
           (lambda ()
           (unless (display-graphic-p)
             (set-background-color "black"))))
-;; (add-hook 'after-make-frame-functions
-;;           (lambda ()
-;;           (unless (display-graphic-p)
-;;             (set-background-color "black"))))
 
 ;(set-face-attribute 'default nil :height 170)
 ;(set-frame-parameter (selected-frame) 'alpha '(95 . 85))
@@ -105,6 +100,8 @@
 ;;           (lambda ()
 ;;             ;; Default indentation is usually 2 spaces, changing to 4.
 ;;             (set (make-local-variable 'sgml-basic-offset) 4)))
+(add-hook 'prog-mode-hook
+          (lambda () (origami-mode)))
 
 ;; Company & flycheck & yasnippet
 (require 'company)
@@ -263,6 +260,7 @@ Call `universal-argument' before for different count."
 ;; (global-set-key (kbd "C-x o") 'other-window)
 (global-set-key (kbd "C-x o") 'ace-window)
 (global-set-key [f8] 'neotree-toggle)
+(global-set-key (kbd "C-<return>") 'origami-forward-toggle-node)
 ;; multi-cursor
 ; (C-') To hide all lines with no cursors
 (global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
@@ -289,4 +287,3 @@ Call `universal-argument' before for different count."
 ;; (require 'server)
 ;; (unless (server-running-p)
 ;;   (server-start))
-(put 'upcase-region 'disabled nil)

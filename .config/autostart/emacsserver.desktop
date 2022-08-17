@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Emacs daemon
+Comment=Emacs server
+Exec=/usr/bin/emacs --daemon
+Icon=emacs
+Type=Application
+Terminal=false
+StartupNotify=true
+StartupWMClass=Emacs
