@@ -12,6 +12,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(all-the-icons-dired-mode t)
+ '(auth-source-save-behavior nil)
  '(backup-directory-alist '((".*" . "~/.emacs.d/backups")))
  '(blink-cursor-mode nil)
  '(column-number-mode t)
@@ -30,6 +31,7 @@
  '(electric-pair-mode t)
  '(gdb-many-windows t)
  '(global-flycheck-mode t)
+ '(haskell-interactive-popup-errors nil)
  '(ido-enable-flex-matching t)
  '(inhibit-startup-screen t)
  '(menu-bar-mode nil)
@@ -150,6 +152,7 @@
 (yas-global-mode 1)
 
 ;; Haskell
+; C-c C-l : REPL (haskell-mode)
 ; https://github.com/termslang/emacs-haskell-config/blob/master/init.el
 (require 'lsp-mode)
 (require 'lsp)

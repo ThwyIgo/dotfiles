@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=Qtile (user)
+Comment=Qtile Session with user options
+Exec=env QT_QPA_PLATFORMTHEME=qt5ct qtile start
+Type=Application
+Keywords=wm;tiling

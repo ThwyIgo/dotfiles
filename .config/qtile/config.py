@@ -27,7 +27,7 @@
 # SOFTWARE.
 
 # Required packages for this configuration (Arch):
-# alsa-utils playerctl rofi
+# alsa-utils playerctl rofi python-pyxdg
 
 import os
 import subprocess
@@ -40,8 +40,8 @@ from libqtile.lazy import lazy
 from libqtile.utils import guess_terminal
 
 mod = "mod4"
-terminal = guess_terminal()
 home = os.path.expanduser('~')
+terminal = guess_terminal()
 file_manager = "pcmanfm"
 web_browser = "librewolf"
 email_client = "thunderbird"
@@ -99,6 +99,7 @@ keys = [
 
     Key([mod, "control"], "r", lazy.restart(), desc="Restart Qtile"),
     Key([mod, "control"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
+    Key([mod], "Escape", lazy.spawn(home + '/.local/bin/byebye'), desc="Byebye menu"),
     Key([mod, "control"], "Return", lazy.spawncmd(),
         desc="Spawn a command using a prompt widget"),
     Key([mod], "f", lazy.window.toggle_floating(), desc="Toggle window floating on/off"),
@@ -198,7 +199,7 @@ for i in groups:
     ])
 
 layouts = [
-    layout.Bsp(border_width=4, fair=False, margin=4, margin_on_single=0),
+    layout.Bsp(grow_amount=5, border_width=4, fair=False, margin=4, margin_on_single=0),
     layout.Columns(insert_position=1, border_focus_stack=['#d75f5f', '#8f3d3d'], border_width=4, margin=4, margin_on_single=0),
     # layout.Stack(num_stacks=2),
     # layout.Matrix(),
@@ -225,20 +226,13 @@ screens = [
         top=bar.Bar(
             [
                 widget.CurrentLayout(),
-                widget.GroupBox(),
+                widget.GroupBox(highlight_method='block', hide_unused=True),
                 widget.Prompt(),
                 widget.WindowName(),
-                widget.Chord(
-                    chords_colors={
-                        'launch': ("#ff0000", "#ffffff"),
-                    },
-                    name_transform=lambda name: name.upper(),
-                ),
                 widget.Systray(),
-                #widget.PulseVolume(foreground = "#dd8f08"),
-                #widget.Volume(padding = 5, foreground = "#dd8f08", ),
                 widget.TextBox("Arch btw", foreground="#d75f5f"),
-                widget.Clock(format='%Y-%m-%d %a %H:%M'),
+                widget.Clock(format='%Y/%m/%d %a %H:%M'),
+                widget.Image(filename=home + '/Documentos/repositories/byebye/img/shutdown.png', margin=2, mouse_callbacks={'Button1': lazy.spawn('byebye')}), # https://gitlab.com/dwt1/byebye
             ],
             24,
         ),
@@ -281,11 +275,14 @@ auto_minimize = True
 
 @hook.subscribe.startup_once
 def start_once():
-    home = os.path.expanduser('~')
-    subprocess.call([home + '/.config/qtile/autostart.sh'])
+    subprocess.call([home + '/.config/qtile/autostart.sh'])    
 @hook.subscribe.client_new
 def client_new(client):
-    if client.name == 'KeePassXC':
+    if client.name == 'KeePassXC': # KeePass bugs qtile if client_name_updated is used with it.
+        client.togroup('5')
+@hook.subscribe.client_name_updated
+def client_name_updated(client):
+    if client.name == 'Spotify':
         client.togroup('5')
     
 # XXX: Gasp! We're lying here. In fact, nobody really uses or cares about this

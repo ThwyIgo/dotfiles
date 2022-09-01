@@ -11,6 +11,7 @@ PS1='[\u@\h \W]\$ '
 [ -f "/home/thiago/.ghcup/env" ] && source "/home/thiago/.ghcup/env" # ghcup-env
 
 # Created by user
+PATH=$PATH:~/.local/bin
 alias emacs="env XMODIFIERS= emacsclient -c -a 'emacs'"
 alias nvidia="sudo nvidia-settings"
 alias ipwebcam="/home/thiago/.builds/manual/ipwebcam-gst/run-videochat.sh -v -i"
