@@ -3,7 +3,9 @@
 		   (load-file (concat (file-name-as-directory dir) f)))
 		 ))
     (mapc load-it (directory-files dir nil "\\.el$"))))
-(load-directory "~/.emacs.d/pkgs") ;; M-x emacs-lisp-byte-compile
+(unless (file-directory-p "~/.emacs.d/pkgs")
+  (make-directory "~/.emacs.d/pkgs")) ;; Place extra packages here
+(load-directory "~/.emacs.d/pkgs")    ;; M-x emacs-lisp-byte-compile
 (unless (file-directory-p "~/.emacs.d/backups")
   (make-directory "~/.emacs.d/backups"))
 (custom-set-variables
@@ -25,7 +27,7 @@
      (company-irony-c-headers company-irony company-c-headers)))
  '(custom-enabled-themes '(dracula))
  '(custom-safe-themes
-   '("1436985fac77baf06193993d88fa7d6b358ad7d600c1e52d12e64a2f07f07176" "fe1c13d75398b1c8fd7fdd1241a55c286b86c3e4ce513c4292d01383de152cb7" default))
+   '("05626f77b0c8c197c7e4a31d9783c4ec6e351d9624aa28bc15e7f6d6a6ebd926" default))
  '(delete-selection-mode t)
  '(display-line-numbers 'relative)
  '(electric-pair-mode t)
@@ -39,7 +41,7 @@
    '(("gnu" . "https://elpa.gnu.org/packages/")
      ("melpa" . "https://melpa.org/packages/")))
  '(package-selected-packages
-   '(origami company-c-headers company-irony-c-headers haskell-mode yasnippet-snippets neotree multiple-cursors lsp-ui lsp-haskell haskell-snippets flycheck emmet-mode dracula-theme company-shell company-irony ace-window))
+   '(ligature origami company-c-headers company-irony-c-headers haskell-mode yasnippet-snippets neotree multiple-cursors lsp-ui lsp-haskell haskell-snippets flycheck emmet-mode dracula-theme company-shell company-irony ace-window))
  '(parens-require-spaces nil)
  '(sentence-end-double-space nil)
  '(tool-bar-mode nil)
@@ -52,6 +54,7 @@
  ;; If there is more than one, they won't work right.
  '(default ((t (:family "Fira Code" :foundry "CTDB" :slant normal :weight normal :height 155 :width normal)))))
 (put 'upcase-region 'disabled nil)
+(put 'scroll-left 'disabled nil) ;; C-x < && C-x >
 
 ;; Added by user --------------------------------------------------
 ;; Install packages on lauch
@@ -63,7 +66,7 @@
     company-irony company-shell flycheck haskell-snippets company
     lsp-haskell lsp-ui lsp-mode yasnippet-snippets yasnippet
     emmet-mode neotree ace-window multiple-cursors dracula-theme
-    haskell-mode company-irony-c-headers origami
+    haskell-mode company-irony-c-headers origami ligature
     )
    "A list of packages to ensure are installed at launch.")
 ; method to check if all packages are installed
@@ -82,16 +85,16 @@
     (when (not (package-installed-p p))
       (package-install p))))
 
+(load-theme 'dracula)
 ;; If non-graphical, change bg color to black. Dracula's blue can be hard to see in a terminal's limited color space.
 (add-hook 'after-init-hook
           (lambda ()
-          (unless (display-graphic-p)
-            (set-background-color "black"))))
+            (unless (display-graphic-p)
+              (set-face-background 'default "black" nil))))
 
 ;(set-face-attribute 'default nil :height 170)
 ;(set-frame-parameter (selected-frame) 'alpha '(95 . 85))
 (add-to-list 'default-frame-alist '(alpha . (100 . 85)))
-(require 'ido)
 (ido-mode t)
 (require 'multiple-cursors)
 (define-key mc/keymap (kbd "<return>") nil) ;; Makes multiples-cursors RET insert a new line (It exits the mode by default)
