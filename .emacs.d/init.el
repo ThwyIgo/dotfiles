@@ -1,3 +1,4 @@
+(setq warning-minimum-level :emergency) ;; Delete or change this line to :warning when editing the file.
 (defun load-directory (dir)
   (let ((load-it (lambda (f)
 		   (load-file (concat (file-name-as-directory dir) f)))
@@ -31,6 +32,7 @@
  '(delete-selection-mode t)
  '(display-line-numbers 'relative)
  '(electric-pair-mode t)
+ '(fill-column 80)
  '(gdb-many-windows t)
  '(global-flycheck-mode t)
  '(haskell-interactive-popup-errors nil)
@@ -86,11 +88,13 @@
       (package-install p))))
 
 (load-theme 'dracula)
-;; If non-graphical, change bg color to black. Dracula's blue can be hard to see in a terminal's limited color space.
-(add-hook 'after-init-hook
-          (lambda ()
-            (unless (display-graphic-p)
-              (set-face-background 'default "black" nil))))
+;; If non-graphical, change bg color to black. Dracula's blue can be hard to see
+;; in a terminal's limited color space. Currently disabled because it doesn't
+;; work as expected when running Emacs server
+;; (add-hook 'after-init-hook
+;;           (lambda ()
+;;             (unless (display-graphic-p)
+;;               (set-face-background 'default "black" nil))))
 
 ;(set-face-attribute 'default nil :height 170)
 ;(set-frame-parameter (selected-frame) 'alpha '(95 . 85))
