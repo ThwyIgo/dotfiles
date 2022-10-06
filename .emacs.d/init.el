@@ -18,6 +18,7 @@
  '(auth-source-save-behavior nil)
  '(backup-directory-alist '((".*" . "~/.emacs.d/backups")))
  '(blink-cursor-mode nil)
+ '(byte-compile-verbose nil)
  '(column-number-mode t)
  '(company-backends
    '(company-bbdb
@@ -25,7 +26,8 @@
      (company-dabbrev-code company-gtags company-etags company-keywords)
      (company-oddmuse company-dabbrev)
      (company-shell company-shell-env company-fish-shell)
-     (company-irony-c-headers company-irony company-c-headers)))
+     (company-c-headers)))
+ '(compile-command "gcc -g -Wall ./")
  '(custom-enabled-themes '(dracula))
  '(custom-safe-themes
    '("05626f77b0c8c197c7e4a31d9783c4ec6e351d9624aa28bc15e7f6d6a6ebd926" default))
@@ -43,7 +45,7 @@
    '(("gnu" . "https://elpa.gnu.org/packages/")
      ("melpa" . "https://melpa.org/packages/")))
  '(package-selected-packages
-   '(ligature origami company-c-headers company-irony-c-headers haskell-mode yasnippet-snippets neotree multiple-cursors lsp-ui lsp-haskell haskell-snippets flycheck emmet-mode dracula-theme company-shell company-irony ace-window))
+   '(company-box ligature origami company-c-headers haskell-mode yasnippet-snippets neotree multiple-cursors lsp-ui lsp-haskell haskell-snippets flycheck emmet-mode dracula-theme company-shell ace-window))
  '(parens-require-spaces nil)
  '(sentence-end-double-space nil)
  '(tool-bar-mode nil)
@@ -59,16 +61,16 @@
 (put 'scroll-left 'disabled nil) ;; C-x < && C-x >
 
 ;; Added by user --------------------------------------------------
+(setq frame-resize-pixelwise t)
 ;; Install packages on lauch
 (require 'cl-lib)
 (require 'package)
 (package-initialize)
 (defvar required-packages
   '(
-    company-irony company-shell flycheck haskell-snippets company
-    lsp-haskell lsp-ui lsp-mode yasnippet-snippets yasnippet
-    emmet-mode neotree ace-window multiple-cursors dracula-theme
-    haskell-mode company-irony-c-headers origami ligature
+    company-shell company-box company flycheck haskell-snippets lsp-haskell
+    lsp-ui lsp-mode yasnippet-snippets yasnippet emmet-mode neotree ace-window
+    multiple-cursors dracula-theme haskell-mode origami ligature
     )
    "A list of packages to ensure are installed at launch.")
 ; method to check if all packages are installed
@@ -115,11 +117,10 @@
 ;; Company & flycheck & yasnippet
 (require 'company)
 (add-hook 'after-init-hook 'global-company-mode)
-(require 'company)
+(require 'company-box)
+(add-hook 'company-mode-hook 'company-box-mode)
 ; No delay in showing suggestions.
 (setq company-idle-delay 0)
-; Use tab key to cycle through suggestions. ('tng' means 'tab and go')
-;(company-tng-mode)
 ; Tab for both company and yasnippet
 (defun company-mode/backend-with-yas (backend)
   (if (and (listp backend) (member 'company-yasnippet backend))
@@ -172,10 +173,7 @@
 ;; C/C++
 (setq c-default-style "linux"
       c-basic-offset 4)
-(add-hook 'c++-mode-hook 'irony-mode)
-(add-hook 'c-mode-hook 'irony-mode)
-(add-hook 'objc-mode-hook 'irony-mode)
-(add-hook 'c-mode-common-hook 'irony-server-kill) ;; Fix server not restarting on the second time a file is opened
+(add-hook 'c-mode-hook #'lsp)
 
 ;; All font-ligature related stuff works only in Emacs 28+
 ;; Enable the www ligature in every possible major mode
@@ -215,17 +213,6 @@
   (forward-line 1)
   (yank)
   )
-;; (defun duplicate-line-up()
-;;   "Create a line above the current line and copy the current line to the previous line."
-;;   (interactive)
-;;   (move-beginning-of-line 1)
-;;   (kill-line)
-;;   (yank)
-;;   (end-of-line 0)
-;;   (open-line 1)
-;;   (forward-line 1)
-;;   (yank)
-;;   )
 (defun move-line-up ()
   "Move up the current line."
   (interactive)
