@@ -61,7 +61,6 @@
 (put 'scroll-left 'disabled nil) ;; C-x < && C-x >
 
 ;; Added by user --------------------------------------------------
-(setq frame-resize-pixelwise t)
 ;; Install packages on lauch
 (require 'cl-lib)
 (require 'package)
@@ -98,6 +97,7 @@
 ;;             (unless (display-graphic-p)
 ;;               (set-face-background 'default "black" nil))))
 
+(setq frame-resize-pixelwise t) ;; Emacs doesn't take the whole screen when in full screen mode in some window managers. This fixes it.
 ;(set-face-attribute 'default nil :height 170)
 ;(set-frame-parameter (selected-frame) 'alpha '(95 . 85))
 (add-to-list 'default-frame-alist '(alpha . (100 . 85)))
@@ -150,14 +150,14 @@
 ;;               :filter (lambda (&optional _)
 ;;                         (when (check-expansion)
 ;;                           #'company-complete-common))))
-
-(require 'flycheck)
-(add-hook 'after-init-hook #'global-flycheck-mode)
 (setq-default yas-prompt-functions '(yas-ido-prompt yas-dropdown-prompt))
 (add-to-list 'load-path
               "~/.emacs.d/plugins/yasnippet")
 (require 'yasnippet)
 (yas-global-mode 1)
+
+(require 'flycheck)
+(add-hook 'after-init-hook #'global-flycheck-mode)
 
 ;; Haskell
 ; C-c C-l : REPL (haskell-mode)
@@ -170,6 +170,7 @@
 (require 'haskell-interactive-mode)
 (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
 (require 'haskell-snippets)
+
 ;; C/C++
 (setq c-default-style "linux"
       c-basic-offset 4)
