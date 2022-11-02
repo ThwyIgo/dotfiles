@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+
 setxkbmap -layout br &
 dex -a -e qtile -s $HOME/.config/autostart/ &
 numlockx on &

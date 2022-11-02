@@ -45,7 +45,7 @@
    '(("gnu" . "https://elpa.gnu.org/packages/")
      ("melpa" . "https://melpa.org/packages/")))
  '(package-selected-packages
-   '(company-box ligature origami company-c-headers haskell-mode yasnippet-snippets neotree multiple-cursors lsp-ui lsp-haskell haskell-snippets flycheck emmet-mode dracula-theme company-shell ace-window))
+   '(magit company-box ligature origami company-c-headers haskell-mode yasnippet-snippets neotree multiple-cursors lsp-ui lsp-haskell haskell-snippets flycheck emmet-mode dracula-theme company-shell ace-window))
  '(parens-require-spaces nil)
  '(sentence-end-double-space nil)
  '(tool-bar-mode nil)
@@ -59,6 +59,7 @@
  '(default ((t (:family "Fira Code" :foundry "CTDB" :slant normal :weight normal :height 155 :width normal)))))
 (put 'upcase-region 'disabled nil)
 (put 'scroll-left 'disabled nil) ;; C-x < && C-x >
+(put 'downcase-region 'disabled nil)
 
 ;; Added by user --------------------------------------------------
 ;; Install packages on lauch
@@ -69,7 +70,7 @@
   '(
     company-shell company-box company flycheck haskell-snippets lsp-haskell
     lsp-ui lsp-mode yasnippet-snippets yasnippet emmet-mode neotree ace-window
-    multiple-cursors dracula-theme haskell-mode origami ligature
+    multiple-cursors dracula-theme haskell-mode origami ligature magit
     )
    "A list of packages to ensure are installed at launch.")
 ; method to check if all packages are installed
@@ -282,6 +283,6 @@ Call `universal-argument' before for different count."
 (global-set-key (kbd "C-c TAB") 'align-current)
 
 ;; Códigos a serem testados
-;; (require 'server)
-;; (unless (server-running-p)
-;;   (server-start))
+(require 'server)
+(unless (server-running-p)
+  (server-start))

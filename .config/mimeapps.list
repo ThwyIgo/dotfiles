@@ -1,5 +1,5 @@
 [Added Associations]
-application/json=emacs.desktop;
+application/json=emacsclient.desktop;emacs.desktop;
 application/octet-stream=emacs.desktop;
 application/pdf=librewolf.desktop;vivaldi-stable.desktop;
 application/x-java-archive=java-java-openjdk.desktop;
@@ -19,19 +19,14 @@ x-scheme-handler/tel=org.kde.kdeconnect.handler.desktop;
 x-scheme-handler/tg=userapp-Telegram Desktop-G75SC1.desktop;userapp-Telegram Desktop-D7B2Q1.desktop;
 
 [Default Applications]
-application/json=emacs.desktop;
+application/json=emacsclient.desktop
 application/octet-stream=emacs.desktop;
 application/pdf=librewolf.desktop;
 application/x-java-archive=java-java-openjdk.desktop;
 application/x-shellscript=emacsclient.desktop
 image/jpeg=feh-2.desktop;
 image/png=feh-3.desktop;
-inode/directory=org.kde.dolphin.desktop;
 message/rfc822=userapp-Thunderbird-JZ33C1.desktop
-text/html=vivaldi-stable.desktop
-text/plain=emacsclient.desktop
-text/x-chdr=emacs.desktop
-text/x-csrc=emacsclient.desktop
 video/mp4=mpv.desktop
 x-scheme-handler/geo=qwant-maps-geo-handler.desktop;
 x-scheme-handler/http=librewolf.desktop;
@@ -42,3 +37,6 @@ x-scheme-handler/sgnl=signal-desktop.desktop
 x-scheme-handler/signalcaptcha=signal.desktop
 x-scheme-handler/tel=org.kde.kdeconnect.handler.desktop;
 x-scheme-handler/tg=userapp-Telegram Desktop-D7B2Q1.desktop
+inode/directory=pcmanfm.desktop
+text/x-python=emacsclient.desktop
+text/plain=emacsclient.desktop
