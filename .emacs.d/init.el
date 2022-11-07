@@ -70,7 +70,7 @@
   '(
     company-shell company-box company flycheck haskell-snippets lsp-haskell
     lsp-ui lsp-mode yasnippet-snippets yasnippet emmet-mode neotree ace-window
-    multiple-cursors dracula-theme haskell-mode origami ligature magit
+    multiple-cursors dracula-theme haskell-mode origami ligature magit smex
     )
    "A list of packages to ensure are installed at launch.")
 ; method to check if all packages are installed
@@ -244,7 +244,8 @@
              (while (looking-back "[ \n]")
                (backward-delete-char 1)))
     ;; otherwise, just do the normal kill word.
-    (backward-kill-word 1)))
+    (backward-kill-word 1))
+  )
 (defun insert-random-number (*n) ;; (random t) para que o número seja mais aleatório.
   "Insert *n random digits. *n default to 5.
 Call `universal-argument' before for different count."
@@ -252,7 +253,24 @@ Call `universal-argument' before for different count."
   (let ((-charset "1234567890" )
         (-baseCount 10))
     (dotimes (-i (if (numberp *n) (abs *n) 5 ))
-      (insert (elt -charset (random -baseCount))))))
+      (insert (elt -charset (random -baseCount)))))
+  )
+(defun split-and-follow-horizontally ()
+  "Split the selected window into two windows, one above the other.
+The selected window is below.  The newly split-off window is
+above and displays the same buffer."
+  (interactive)
+  (split-window-below)
+  (other-window 1)
+  )
+;; (defun split-and-follow-vertically ()
+;;   "Split the selected window into two side-by-side windows.
+;; The selected window is on the right.  The newly split-off window
+;; is on the left and displays the same buffer."
+;;   (interactive)
+;;   (split-window-right)
+;;   (other-window 1)
+;;   )
 
 ;; Custom keybindings
 ;; Simple packages
@@ -260,6 +278,8 @@ Call `universal-argument' before for different count."
 (global-set-key (kbd "C-x o") 'ace-window)
 (global-set-key [f8] 'neotree-toggle)
 (global-set-key (kbd "C-<return>") 'origami-forward-toggle-node)
+(global-set-key (kbd "M-x") 'smex)
+(global-set-key (kbd "M-X") 'smex-major-mode-commands)
 ;; multi-cursor
 ; (C-') To hide all lines with no cursors
 (global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
@@ -274,6 +294,8 @@ Call `universal-argument' before for different count."
 (add-hook 'c-mode-common-hook
           (lambda () (define-key c-mode-base-map (kbd "C-c C-c") 'compile)))
 ;; Functions and macros
+(global-set-key (kbd "C-x 2") 'split-and-follow-horizontally)
+;(global-set-key (kbd "C-x 3") 'split-and-follow-vertically)
 (global-set-key (kbd "C-c n") 'duplicate-line)
 (global-set-key (kbd "C-S-<up>")  'move-line-up)
 (global-set-key (kbd "C-S-<down>")  'move-line-down)
