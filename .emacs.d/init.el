@@ -9,6 +9,7 @@
 (load-directory "~/.emacs.d/pkgs")    ;; M-x emacs-lisp-byte-compile
 (unless (file-directory-p "~/.emacs.d/backups")
   (make-directory "~/.emacs.d/backups"))
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -20,13 +21,6 @@
  '(blink-cursor-mode nil)
  '(byte-compile-verbose nil)
  '(column-number-mode t)
- '(company-backends
-   '(company-bbdb
-     (company-semantic company-cmake company-capf company-clang company-files)
-     (company-dabbrev-code company-gtags company-etags company-keywords)
-     (company-oddmuse company-dabbrev)
-     (company-shell company-shell-env company-fish-shell)
-     (company-c-headers)))
  '(compile-command "gcc -g -Wall ./")
  '(custom-enabled-themes '(dracula))
  '(custom-safe-themes
@@ -45,32 +39,30 @@
    '(("gnu" . "https://elpa.gnu.org/packages/")
      ("melpa" . "https://melpa.org/packages/")))
  '(package-selected-packages
-   '(magit company-box ligature origami company-c-headers haskell-mode yasnippet-snippets neotree multiple-cursors lsp-ui lsp-haskell haskell-snippets flycheck emmet-mode dracula-theme company-shell ace-window))
+   '(magit company-box ligature origami haskell-mode yasnippet-snippets neotree multiple-cursors lsp-ui lsp-haskell haskell-snippets flycheck emmet-mode dracula-theme company-shell ace-window))
  '(parens-require-spaces nil)
  '(sentence-end-double-space nil)
  '(tool-bar-mode nil)
- '(visible-bell t)
- '(yas-global-mode t))
+ '(visible-bell t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:family "Fira Code" :foundry "CTDB" :slant normal :weight normal :height 155 :width normal)))))
+ '(default ((t (:weight normal :height 155 :width normal :family "Fira Code")))))
 (put 'upcase-region 'disabled nil)
 (put 'scroll-left 'disabled nil) ;; C-x < && C-x >
 (put 'downcase-region 'disabled nil)
 
 ;; Added by user --------------------------------------------------
 ;; Install packages on lauch
-(require 'cl-lib)
-(require 'package)
 (package-initialize)
 (defvar required-packages
   '(
     company-shell company-box company flycheck haskell-snippets lsp-haskell
     lsp-ui lsp-mode yasnippet-snippets yasnippet emmet-mode neotree ace-window
     multiple-cursors dracula-theme haskell-mode origami ligature magit smex
+    dashboard all-the-icons
     )
    "A list of packages to ensure are installed at launch.")
 ; method to check if all packages are installed
@@ -89,31 +81,59 @@
     (when (not (package-installed-p p))
       (package-install p))))
 
-(load-theme 'dracula)
-;; If non-graphical, change bg color to black. Dracula's blue can be hard to see
-;; in a terminal's limited color space. Currently disabled because it doesn't
-;; work as expected when running Emacs server
-;; (add-hook 'after-init-hook
-;;           (lambda ()
-;;             (unless (display-graphic-p)
-;;               (set-face-background 'default "black" nil))))
-
-(setq frame-resize-pixelwise t) ;; Emacs doesn't take the whole screen when in full screen mode in some window managers. This fixes it.
+;; Dracula is horrific in a limited color space. Changing theme when in a
+;; non-graphical environment
+(if (or (display-graphic-p) (daemonp))
+    (load-theme 'dracula)
+  (disable-theme 'dracula)
+  (load-theme 'manoj-dark)
+  )
+;; Emacs doesn't take the whole screen when in full screen mode in some window
+;; managers. This fixes it.
+(setq frame-resize-pixelwise t)
 ;(set-face-attribute 'default nil :height 170)
 ;(set-frame-parameter (selected-frame) 'alpha '(95 . 85))
 (add-to-list 'default-frame-alist '(alpha . (100 . 85)))
-(ido-mode t)
-(require 'multiple-cursors)
-(define-key mc/keymap (kbd "<return>") nil) ;; Makes multiples-cursors RET insert a new line (It exits the mode by default)
-(require 'neotree)
 (setq-default electric-indent-inhibit t)
 (setq-default indent-tabs-mode nil)
-;; (add-hook 'html-mode-hook
-;;           (lambda ()
-;;             ;; Default indentation is usually 2 spaces, changing to 4.
-;;             (set (make-local-variable 'sgml-basic-offset) 4)))
+
+;; Simple packages configs
+(ido-mode t)
+(require 'multiple-cursors)
+; Makes multiples-cursors RET insert a new line (It exits the mode by default)
+(define-key mc/keymap (kbd "<return>") nil)
 (add-hook 'prog-mode-hook
           (lambda () (origami-mode)))
+(when (or (display-graphic-p) (daemonp))
+  (require 'all-the-icons))
+(require 'neotree)
+(setq neo-theme (if (or (display-graphic-p) (daemonp)) 'icons 'arrow))
+
+;; Dashboard
+(require 'dashboard-widgets)
+(dashboard-setup-startup-hook)
+; Show dashboard in every new emacsclient
+(setq initial-buffer-choice (lambda () (get-buffer-create "*dashboard*")))
+;; Set the title
+;(setq dashboard-banner-logo-title "Welcome to Emacs!")
+;; Set the banner
+;(setq dashboard-startup-banner [VALUE])
+;; Value can be
+;; 'official which displays the official emacs logo
+;; 'logo which displays an alternative emacs logo
+;; 1, 2 or 3 which displays one of the text banners
+;; "path/to/your/image.gif", "path/to/your/image.png" or "path/to/your/text.txt" which displays whatever gif/image/text you would prefer
+;; Content is not centered by default. To center, set
+;(setq dashboard-center-content t)
+(setq dashboard-items '((recents  . 5)
+                        (bookmarks . 5)
+                        ))
+(setq dashboard-set-heading-icons t)
+(setq dashboard-set-file-icons t)
+(dashboard-modify-heading-icons '((recents . "file-text")
+                                  (bookmarks . "bookmark")))
+;; To disable shortcut "jump" indicators for each section, set
+;(setq dashboard-show-shortcuts nil)
 
 ;; Company & flycheck & yasnippet
 (require 'company)
@@ -122,9 +142,12 @@
 (add-hook 'company-mode-hook 'company-box-mode)
 ; No delay in showing suggestions.
 (setq company-idle-delay 0)
-; Tab for both company and yasnippet
+;; ; Add yasnippet support for all company backends
+;; ; https://github.com/syl20bnr/spacemacs/pull/179
+(defvar company-mode/enable-yas t
+  "Enable yasnippet for all backends.")
 (defun company-mode/backend-with-yas (backend)
-  (if (and (listp backend) (member 'company-yasnippet backend))
+  (if (or (not company-mode/enable-yas) (and (listp backend) (member 'company-yasnippet backend)))
       backend
     (append (if (consp backend) backend (list backend))
             '(:with company-yasnippet))))
@@ -152,19 +175,19 @@
 ;;                         (when (check-expansion)
 ;;                           #'company-complete-common))))
 (setq-default yas-prompt-functions '(yas-ido-prompt yas-dropdown-prompt))
-(add-to-list 'load-path
-              "~/.emacs.d/plugins/yasnippet")
-(require 'yasnippet)
-(yas-global-mode 1)
-
-(require 'flycheck)
+(yas-global-mode t)
 (add-hook 'after-init-hook #'global-flycheck-mode)
+
+;; Programming languages configs
+(require 'lsp-mode)
+(require 'lsp)
+;; Prevent LSP from removing YASnippet from company
+(setq lsp-completion-provider :none)
+
 
 ;; Haskell
 ; C-c C-l : REPL (haskell-mode)
 ; https://github.com/termslang/emacs-haskell-config/blob/master/init.el
-(require 'lsp-mode)
-(require 'lsp)
 (require 'lsp-haskell)
 (add-hook 'haskell-mode-hook #'lsp)
 (add-hook 'haskell-literate-mode-hook #'lsp)
@@ -176,6 +199,12 @@
 (setq c-default-style "linux"
       c-basic-offset 4)
 (add-hook 'c-mode-hook #'lsp)
+
+;; Web development
+(setq js-indent-level 2)
+(setq css-indent-offset 2)
+(add-hook 'sgml-mode-hook 'emmet-mode) ;; Auto-start on any markup modes
+(add-hook 'css-mode-hook  'emmet-mode) ;; enable Emmet's css abbreviation.
 
 ;; All font-ligature related stuff works only in Emacs 28+
 ;; Enable the www ligature in every possible major mode
@@ -193,18 +222,7 @@
                                      "<~" "<~~" "</" "</>" "~@" "~-" "~>" "~~" "~~>" "%%"))
 (global-ligature-mode 't)
 
-;; Web development
-(setq js-indent-level 2)
-(setq css-indent-offset 2)
-(add-hook 'sgml-mode-hook 'emmet-mode) ;; Auto-start on any markup modes
-(add-hook 'css-mode-hook  'emmet-mode) ;; enable Emmet's css abbreviation.
-
 ;; Functions
-(defun bg-black()
-  "Set the frame's background color black."
-  (interactive)
-  (set-background-color "black")
-  )
 (defun duplicate-line()
   "Copy the current line to the next line."
   (interactive)
@@ -257,16 +275,16 @@ Call `universal-argument' before for different count."
   )
 (defun split-and-follow-horizontally ()
   "Split the selected window into two windows, one above the other.
-The selected window is below.  The newly split-off window is
-above and displays the same buffer."
+The selected window is below. The newly split-off window displays
+the same buffer."
   (interactive)
   (split-window-below)
   (other-window 1)
   )
 ;; (defun split-and-follow-vertically ()
 ;;   "Split the selected window into two side-by-side windows.
-;; The selected window is on the right.  The newly split-off window
-;; is on the left and displays the same buffer."
+;; The selected window is on the right. The newly split-off window
+;; displays the same buffer."
 ;;   (interactive)
 ;;   (split-window-right)
 ;;   (other-window 1)
@@ -304,7 +322,6 @@ above and displays the same buffer."
 (global-set-key (kbd "C-c c") 'comment-or-uncomment-region)
 (global-set-key (kbd "C-c TAB") 'align-current)
 
-;; Códigos a serem testados
 (require 'server)
 (unless (server-running-p)
   (server-start))
