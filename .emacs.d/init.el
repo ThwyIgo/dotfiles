@@ -4,11 +4,12 @@
 		   (load-file (concat (file-name-as-directory dir) f)))
 		 ))
     (mapc load-it (directory-files dir nil "\\.el$"))))
-(unless (file-directory-p "~/.emacs.d/pkgs")
-  (make-directory "~/.emacs.d/pkgs")) ;; Place extra packages here
-(load-directory "~/.emacs.d/pkgs")    ;; M-x emacs-lisp-byte-compile
-(unless (file-directory-p "~/.emacs.d/backups")
-  (make-directory "~/.emacs.d/backups"))
+(unless (file-directory-p (concat user-emacs-directory "pkgs"))
+  (make-directory (concat user-emacs-directory "pkgs"))) ;; Place extra packages here
+(load-directory (concat user-emacs-directory "pkgs"))    ;; M-x emacs-lisp-byte-compile
+(defvar backup-directory (concat user-emacs-directory "backups") "Directory where all backup files will be stored.")
+(unless (file-directory-p backup-directory)
+  (make-directory backup-directory))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -17,7 +18,7 @@
  ;; If there is more than one, they won't work right.
  '(all-the-icons-dired-mode t)
  '(auth-source-save-behavior nil)
- '(backup-directory-alist '((".*" . "~/.emacs.d/backups")))
+ '(backup-directory-alist `((".*" . ,backup-directory)))
  '(blink-cursor-mode nil)
  '(byte-compile-verbose nil)
  '(column-number-mode t)
@@ -35,6 +36,7 @@
  '(ido-enable-flex-matching t)
  '(inhibit-startup-screen t)
  '(menu-bar-mode nil)
+ '(mode-line-compact 'long)
  '(package-archives
    '(("gnu" . "https://elpa.gnu.org/packages/")
      ("melpa" . "https://melpa.org/packages/")))
@@ -62,7 +64,7 @@
     company-shell company-box company flycheck haskell-snippets lsp-haskell
     lsp-ui lsp-mode yasnippet-snippets yasnippet emmet-mode neotree ace-window
     multiple-cursors dracula-theme haskell-mode origami ligature magit smex
-    dashboard all-the-icons
+    dashboard all-the-icons telephone-line
     )
    "A list of packages to ensure are installed at launch.")
 ; method to check if all packages are installed
@@ -135,6 +137,25 @@
 ;; To disable shortcut "jump" indicators for each section, set
 ;(setq dashboard-show-shortcuts nil)
 
+;; Mode line
+(setq-default mode-line-format
+      '("%e" mode-line-front-space      ;; Small empty space on the right
+        mode-line-mule-info             ;; Coding system and end-of-line style
+        mode-line-client                ;; Displays "@" when editing in a emacsclient frame
+        mode-line-modified              ;; Two "*" indicating if buffer is writable and if it
+                                        ;; is modified. It also works as a toggle
+        ;mode-line-remote               ;; Indicates if the current directory is local(-) or remote
+        mode-line-frame-identification  ;; IDK, it just adds some blank space
+        mode-line-buffer-identification ;; Name of the buffer
+        "   "                           ;; Blank space
+        mode-line-position              ;; Scroll percentage, line number and column number
+        (vc-mode vc-mode)               ;; Version control info
+        "  "
+        mode-line-modes                 ;; Major and minor modes info
+        mode-line-misc-info             ;; IDK
+        mode-line-end-spaces            ;; Mode line construct to put at the end of the mode line.
+        ))
+
 ;; Company & flycheck & yasnippet
 (require 'company)
 (add-hook 'after-init-hook 'global-company-mode)
@@ -182,6 +203,7 @@
 (require 'lsp-mode)
 (require 'lsp)
 ;; Prevent LSP from removing YASnippet from company
+(require 'lsp-completion)
 (setq lsp-completion-provider :none)
 
 

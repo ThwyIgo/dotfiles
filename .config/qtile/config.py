@@ -124,7 +124,7 @@ keys = [
              desc='rofi launcher'
              ),
     Key(["mod1"], "Tab", #Alt + Tab = mudar janela
-        lazy.spawn("rofi -show-icons -show window -me-select-entry '' -me-accept-entry 'MousePrimary' -theme ~/.config/rofi/themes/launchpad.rasi"),
+        lazy.spawn(home + '/.config/qtile/scripts/alttab.sh'),
         desc='rofi change window'
         ),
 #    Key([mod], "period",

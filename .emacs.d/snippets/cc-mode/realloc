@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: p = (cast *) realloc(p, n * sizeof(cast));
+# key: realloc
+# --
+${1:pointer} = (${2:type}) realloc($1, ${0:n} * sizeof(${2:$(replace-regexp-in-string " ?[*]$" "" yas-text)}));
