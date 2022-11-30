@@ -1,5 +1,3 @@
-
-
 # Copyright (c) 2010 Aldo Cortesi
 # Copyright (c) 2010, 2014 dequis
 # Copyright (c) 2012 Randall Ma
@@ -27,7 +25,8 @@
 # SOFTWARE.
 
 # Required packages for this configuration (Arch):
-# alsa-utils playerctl rofi python-pyxdg
+# alsa-utils |   playerctl   |   rofi   | python-dbus-next
+#   volume   | media control | launcher |      Mpris2
 
 import os
 import subprocess
@@ -116,7 +115,7 @@ keys = [
     Key([mod, "shift"], "Down", lazy.spawn('pactl set-sink-volume 0 -5%')),
     Key([mod, "shift"], "Left", lazy.spawn('playerctl previous')),
     Key([mod, "shift"], "Right", lazy.spawn('playerctl next')),
-    Key([mod, "shift"], "space", lazy.spawn('playerctl --player=spotify play-pause')),
+    Key([mod, "shift"], "space", lazy.spawn('playerctl play-pause')),
 
     # Spawn apps
     Key([mod], "Return",
@@ -228,9 +227,9 @@ screens = [
                 widget.CurrentLayout(),
                 widget.GroupBox(highlight_method='block', hide_unused=True),
                 widget.Prompt(),
-                widget.WindowName(),
+                widget.WindowName(empty_group_string=" I use Arch btw"),
+                widget.Mpris2(playing_text=' {track}', paused_text=' {track}', display_metadata=['xesam:title', 'xesam:artist', 'xesam:album'], no_metadata_text="No metadata", max_chars=35, scroll=True),
                 widget.Systray(),
-                widget.TextBox("Arch btw", foreground="#d75f5f"),
                 widget.Clock(format='%Y/%m/%d %a %H:%M'),
                 widget.Image(filename=home + '/Documentos/repositories/byebye/img/shutdown.png', margin=2, mouse_callbacks={'Button1': lazy.spawn('byebye')}), # https://gitlab.com/dwt1/byebye
             ],
@@ -279,10 +278,6 @@ def start_once():
 @hook.subscribe.client_new
 def client_new(client):
     if client.name == 'KeePassXC': # KeePass bugs qtile if client_name_updated is used with it.
-        client.togroup('5')
-@hook.subscribe.client_name_updated
-def client_name_updated(client):
-    if client.name == 'Spotify':
         client.togroup('5')
     
 # XXX: Gasp! We're lying here. In fact, nobody really uses or cares about this

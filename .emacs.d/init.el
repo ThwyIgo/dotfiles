@@ -22,7 +22,7 @@
  '(blink-cursor-mode nil)
  '(byte-compile-verbose nil)
  '(column-number-mode t)
- '(compile-command "gcc -g -Wall ./")
+ '(compile-command "gcc -g -Wall -lm ./")
  '(custom-enabled-themes '(dracula))
  '(custom-safe-themes
    '("05626f77b0c8c197c7e4a31d9783c4ec6e351d9624aa28bc15e7f6d6a6ebd926" default))
