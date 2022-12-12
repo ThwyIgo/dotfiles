@@ -1,0 +1,10 @@
+# -*- mode: snippet -*-
+# name: for i j
+# key: forij
+# --
+for (i = 0; i < ${1:N}; ++i) {
+    for (j = 0; j < ${2:N}; ++j) {
+        $3
+    }
+    $0
+}

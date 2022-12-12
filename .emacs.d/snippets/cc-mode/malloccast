@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: (cast *) malloc(n * sizeof(cast));
+# key: malloccast
+# --
+(${1:type}) malloc(${0:n} * sizeof(${1:$(replace-regexp-in-string " ?[*]$" "" yas-text)}));
