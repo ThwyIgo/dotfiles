@@ -62,10 +62,13 @@
     hexchat
   ];
 
+  # Enable Xmonad window manager
+  services.xserver.windowManager.xmonad.enable = true;
+
   # Auto-login
-  services.xserver.displayManager.defaultSession = "cinnamon";
-  services.xserver.displayManager.autoLogin.enable = true;
-  services.xserver.displayManager.autoLogin.user = "thiago";
+  # services.xserver.displayManager.defaultSession = "cinnamon";
+  # services.xserver.displayManager.autoLogin.enable = true;
+  # services.xserver.displayManager.autoLogin.user = "thiago";
 
   # Configure keymap in X11
   services.xserver = {
@@ -107,7 +110,7 @@
   users.users.thiago = {
     isNormalUser = true;
     description = "Thiago";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [ "networkmanager" "wheel" "libvirtd" "libvirt" "kvm" ];
   };
 
   home-manager.users.thiago = { pkgs, ... }: {
@@ -120,9 +123,18 @@
       signal-desktop
       discord
       spotify
+      freerdp # Winapps
+      bc # Winapps (basic calculator)
+
+      # Programming
       gdb
       clang-tools # Clangd
-      # virt-manager
+      swiProlog
+
+      # Window Manager stuff
+      dmenu
+      rofi
+      haskellPackages.xmobar
     ];
     programs.fish = {
       enable = true;
@@ -145,9 +157,16 @@
     programs.emacs.enable = true;
     services.emacs.enable = true;
     services.emacs.defaultEditor = true;
+    services.emacs.client.enable = true;
+    programs.alacritty.enable = true;
 
-    qt.enable = true;
-    qt.platformTheme = "gtk";
+    xsession.windowManager.xmonad = {
+      enable = true;
+      enableContribAndExtras = true;
+    };
+
+    # qt.enable = true;
+    # qt.platformTheme = "gtk";
 
     # 漢語
     i18n.inputMethod = {
@@ -178,11 +197,15 @@
     gimp
     kdenlive
     obs-studio
+    virt-manager
   ];
   programs.java.enable = true;
   services.flatpak.enable = true;
   xdg.portal.enable = true; # Required for flatpak
   xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+
+  virtualisation.libvirtd.enable = true;
+  programs.dconf.enable = true;
 
   fonts.fonts = with pkgs; [
     fira-code

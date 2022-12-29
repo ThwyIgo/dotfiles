@@ -113,6 +113,8 @@
   (require 'all-the-icons))
 (require 'neotree)
 (setq neo-theme (if (or (display-graphic-p) (daemonp)) 'icons 'arrow))
+(require 'prolog)
+(add-to-list 'auto-mode-alist '("\\.pl\\'" . prolog-mode))
 
 ;; Dashboard
 (require 'dashboard-widgets)
@@ -337,6 +339,9 @@ the same buffer."
 ;; Hooks
 (add-hook 'c-mode-common-hook
           (lambda () (define-key c-mode-base-map (kbd "C-c C-c") 'compile)))
+(add-hook 'prolog-mode-hook
+          ((lambda () (define-key prolog-mode-map (kbd "C-c C-c") 'prolog-compile-file))
+           ))
 ;; Functions and macros
 (global-set-key (kbd "C-x 2") 'split-and-follow-horizontally)
 ;(global-set-key (kbd "C-x 3") 'split-and-follow-vertically)
