@@ -42,7 +42,7 @@
    '(("gnu" . "https://elpa.gnu.org/packages/")
      ("melpa" . "https://melpa.org/packages/")))
  '(package-selected-packages
-   '(yascroll magit company-box ligature origami haskell-mode yasnippet-snippets neotree multiple-cursors lsp-ui lsp-haskell haskell-snippets flycheck emmet-mode dracula-theme company-shell ace-window))
+   '(clang-format+ yascroll magit company-box ligature origami haskell-mode yasnippet-snippets neotree multiple-cursors lsp-ui lsp-haskell haskell-snippets flycheck emmet-mode dracula-theme company-shell ace-window))
  '(parens-require-spaces nil)
  '(scroll-bar-mode nil)
  '(sentence-end-double-space nil)
@@ -66,7 +66,7 @@
     company-shell company-box company flycheck haskell-snippets lsp-haskell
     lsp-ui lsp-mode yasnippet-snippets yasnippet yascroll emmet-mode neotree
     ace-window multiple-cursors dracula-theme haskell-mode origami ligature
-    magit smex dashboard all-the-icons telephone-line nix-mode
+    magit smex dashboard all-the-icons telephone-line nix-mode clang-format+
     ;;company-nixos-options
     )
    "A list of packages to ensure are installed at launch.")
@@ -114,7 +114,9 @@
 (require 'neotree)
 (setq neo-theme (if (or (display-graphic-p) (daemonp)) 'icons 'arrow))
 (require 'prolog)
-(add-to-list 'auto-mode-alist '("\\.pl\\'" . prolog-mode))
+;;(add-to-list 'auto-mode-alist '("\\.pl\\'" . prolog-mode))
+(setq auto-mode-alist (append '(("\\.pl$" . prolog-mode))
+                              auto-mode-alist))
 
 ;; Dashboard
 (require 'dashboard-widgets)
@@ -226,7 +228,10 @@
 ;; C/C++
 (setq c-default-style "linux"
       c-basic-offset 4)
+(require 'lsp-clangd)
+(setq lsp-clients-clangd-args '("--header-insertion-decorators=0" "--clang-tidy"))
 (add-hook 'c-mode-hook #'lsp)
+(add-hook 'c-mode-common-hook #'clang-format+-mode)
 
 ;; Web development
 (setq js-indent-level 2)

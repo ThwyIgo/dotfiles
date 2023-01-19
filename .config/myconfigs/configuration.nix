@@ -123,12 +123,16 @@
       signal-desktop
       discord
       spotify
+      mpv
       freerdp # Winapps
       bc # Winapps (basic calculator)
 
       # Programming
+      vscodium
       gdb
       clang-tools # Clangd
+      ghc
+      haskell-language-server
       swiProlog
 
       # Window Manager stuff
@@ -148,6 +152,7 @@
       '';
       shellAliases = {
         dfgit = "git --git-dir=$HOME/.dotfiles --work-tree=$HOME";
+        gitlog = "git log --decorate --oneline --graph";
       };
     };
     programs.bash = {
@@ -158,7 +163,12 @@
     services.emacs.enable = true;
     services.emacs.defaultEditor = true;
     services.emacs.client.enable = true;
-    programs.alacritty.enable = true;
+    programs.alacritty = {
+      enable = true;
+      settings = {
+        window.opacity = 0.9;
+      };
+    };
 
     xsession.windowManager.xmonad = {
       enable = true;
@@ -203,7 +213,8 @@
   services.flatpak.enable = true;
   xdg.portal.enable = true; # Required for flatpak
   xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
-
+  programs.kdeconnect.enable = true;
+    
   virtualisation.libvirtd.enable = true;
   programs.dconf.enable = true;
 
