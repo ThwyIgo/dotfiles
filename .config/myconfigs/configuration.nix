@@ -39,8 +39,11 @@
   networking.networkmanager.enable = true;
 
   # Garbage collection
-  nix.gc.automatic = true;
-  nix.gc.dates = "weekly";
+  nix.gc = {
+    automatic = true;
+    dates = "weekly";
+    persistent = true;
+  };
 
   nix.extraOptions = "plugin-files = ${pkgs.nix-doc}/lib/libnix_doc_plugin.so";
 
@@ -133,7 +136,6 @@
       clang-tools # Clangd
       ghc
       haskell-language-server
-      swiProlog
 
       # Window Manager stuff
       dmenu
@@ -160,9 +162,12 @@
       initExtra = "exec fish";
     };
     programs.emacs.enable = true;
-    services.emacs.enable = true;
-    services.emacs.defaultEditor = true;
-    services.emacs.client.enable = true;
+    services.emacs = {
+      enable = true;
+      defaultEditor = true;
+      client.enable = true;
+      client.arguments = ["-c -a emacs"];
+    };
     programs.alacritty = {
       enable = true;
       settings = {
@@ -175,8 +180,11 @@
       enableContribAndExtras = true;
     };
 
-    # qt.enable = true;
-    # qt.platformTheme = "gtk";
+    qt = {
+      enable = true;
+      platformTheme = "gtk";
+      style.name = "gtk2";
+    };
 
     # 漢語
     i18n.inputMethod = {
