@@ -43,6 +43,7 @@
     automatic = true;
     dates = "weekly";
     persistent = true;
+    options = "--delete-older-than 7d";
   };
 
   nix.extraOptions = "plugin-files = ${pkgs.nix-doc}/lib/libnix_doc_plugin.so";
@@ -126,7 +127,8 @@
       signal-desktop
       discord
       spotify
-      mpv
+      celluloid
+      tenacity # Audacity
       freerdp # Winapps
       bc # Winapps (basic calculator)
 
@@ -153,13 +155,13 @@
         set fish_greeting
       '';
       shellAliases = {
-        dfgit = "git --git-dir=$HOME/.dotfiles --work-tree=$HOME";
         gitlog = "git log --decorate --oneline --graph";
+        dfgit = "git --git-dir=$HOME/.dotfiles --work-tree=$HOME";
+        dfgitlog = "dfgit log --decorate --oneline --graph";
       };
     };
     programs.bash = {
       enable = true;
-      initExtra = "exec fish";
     };
     programs.emacs.enable = true;
     services.emacs = {
@@ -172,6 +174,7 @@
       enable = true;
       settings = {
         window.opacity = 0.9;
+        shell.program = "fish";
       };
     };
 
