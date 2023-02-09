@@ -167,8 +167,20 @@
     services.emacs = {
       enable = true;
       defaultEditor = true;
-      client.enable = true;
-      client.arguments = ["-c -a emacs"];
+    };
+    xdg.desktopEntries.emacsclient = {
+      name = "Emacs Client";
+      comment = "Edit text";
+      exec = "sh -c \"if [ -n \\\"\\$*\\\" ]; then exec emacsclient --alternate-editor= --display=\\\"\\$DISPLAY\\\" \\\"\\$@\\\"; else exec emacsclient --alternate-editor= --create-frame; fi\" placeholder %F";
+      genericName = "Text Editor";
+      icon = "emacs";
+      settings = {
+        Keywords = "Text;Editor;";
+        StartupWMClass = "Emacsd";
+      };
+      mimeType = [ "text/english" "text/plain" "text/x-makefile" "text/x-c++hdr" "text/x-c++src" "text/x-chdr" "text/x-csrc" "text/x-java" "text/x-moc" "text/x-pascal" "text/x-tcl" "text/x-tex" "application/x-shellscript" "text/x-c" "text/x-c++" ];
+      terminal = false;
+      type = "Application";
     };
     programs.alacritty = {
       enable = true;
