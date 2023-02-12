@@ -6,6 +6,11 @@ import System.Exit
 import XMonad.Util.Run
 import XMonad.Hooks.ManageDocks
 
+import XMonad.Hooks.DynamicLog
+import XMonad.Hooks.StatusBar
+import XMonad.Hooks.StatusBar.PP
+import XMonad.Util.Loggers
+
 import qualified XMonad.StackSet as W
 import qualified Data.Map        as M
 
@@ -255,8 +260,29 @@ myStartupHook = do
 -- Run xmonad with the settings you specify. No need to modify this.
 --
 main = do
-  xmproc <- spawnPipe "xmobar -x 0 ~/.config/xmobar/xmobarrc"
-  xmonad $ ewmhFullscreen $ ewmh $ docks defaults
+--  xmproc <- spawnPipe "xmobar -x 0 ~/.config/xmobar/xmobarrc"
+  xmonad . ewmhFullscreen . ewmh . myXmobarProp $ docks defaults
+  where
+    rcPath = "~/.config/xmobar/xmobarrc"
+    myXmobarProp = withEasySB (statusBarProp ("xmobar " ++ rcPath) (pure myXmobarPP)) defToggleStrutsKey
+    myXmobarPP = def
+      { ppSep           = " | "
+      , ppTitleSanitize = xmobarStrip
+      , ppTitle         = white . \x -> if length x > 30
+                                        then take 30 x ++ "..."
+                                        else x
+      , ppCurrent       = magenta . wrap "[" "]"
+      , ppOrder         = \[ws,l,wt] -> [l,ws,wt]
+      , ppLayout        = (' ':)
+      }
+
+-- Colors                  fg    bg
+magenta  = xmobarColor "#913bbf" ""
+blue     = xmobarColor "#bd93f9" ""
+white    = xmobarColor "#f8f8f2" ""
+yellow   = xmobarColor "#f1fa8c" ""
+red      = xmobarColor "#ff5555" ""
+lowWhite = xmobarColor "#bbbbbb" ""
 
 -- A structure containing your configuration settings, overriding
 -- fields in the default config. Any you don't override, will
