@@ -64,6 +64,8 @@
   environment.cinnamon.excludePackages = with pkgs; [
     xed-editor
     hexchat
+    gnome.geary
+    xplayer
   ];
 
   # Enable Xmonad window manager
@@ -122,12 +124,10 @@
     nixpkgs.config.allowUnfree = true;
     home.packages = with pkgs; [
       keepassxc
-      thunderbird
       tdesktop # Telegram
       signal-desktop
       discord
       spotify
-      celluloid
       tenacity # Audacity
       freerdp # Winapps
       bc # Winapps (basic calculator)
@@ -140,9 +140,11 @@
       haskell-language-server
 
       # Window Manager stuff
+      haskellPackages.xmobar
       dmenu
       rofi
-      haskellPackages.xmobar
+      networkmanagerapplet
+      feh
     ];
     programs.fish = {
       enable = true;
@@ -176,11 +178,21 @@
       icon = "emacs";
       settings = {
         Keywords = "Text;Editor;";
-        StartupWMClass = "Emacsd";
+        StartupWMClass = "Emacs";
       };
       mimeType = [ "text/english" "text/plain" "text/x-makefile" "text/x-c++hdr" "text/x-c++src" "text/x-chdr" "text/x-csrc" "text/x-java" "text/x-moc" "text/x-pascal" "text/x-tcl" "text/x-tex" "application/x-shellscript" "text/x-c" "text/x-c++" ];
       terminal = false;
       type = "Application";
+      actions = {
+        "new-window" = {
+          name = "Nova janela";
+          exec = "emacsclient --alternate-editor= --create-frame %F";
+        };
+        "new-instance" = {
+          name = "Nova instância";
+          exec = "emacs %F";
+        };
+      };
     };
     programs.alacritty = {
       enable = true;
@@ -227,9 +239,11 @@
     simple-scan
     librewolf
     libreoffice-still
+    thunderbird
     gimp
     kdenlive
     obs-studio
+    celluloid
     virt-manager
   ];
   programs.java.enable = true;

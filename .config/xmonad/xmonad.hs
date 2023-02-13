@@ -67,7 +67,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     [ ((modm,               xK_t     ), spawn $ XMonad.terminal conf)
 
     -- launch dmenu
-    , ((modm,               xK_Return), spawn "rofi -show run")
+    , ((modm,               xK_Return), spawn "rofi -show drun")
 
     -- launch gmrun
 --    , ((modm .|. shiftMask, xK_p     ), spawn "gmrun")
@@ -255,6 +255,24 @@ myStartupHook = do
 -}
 
 ------------------------------------------------------------------------
+-- XMobar Prop
+
+-- How should XMonad interact with XMobar
+-- Default: xmobarProp
+--
+myXmobarProp = withEasySB (statusBarProp ("xmobar " ++ rcPath) (pure myXmobarPP)) defToggleStrutsKey
+  where
+    rcPath = "~/.config/xmobar/xmobarrc"  
+    myXmobarPP = def
+      { ppSep           = " | "
+      , ppTitleSanitize = xmobarStrip
+      , ppTitle         = white . shorten 35
+      , ppCurrent       = magenta . wrap "[" "]"
+      , ppOrder         = \[ws,l,wt] -> [l,ws,wt]
+      , ppLayout        = (' ':)
+      }
+      
+------------------------------------------------------------------------
 -- Now run xmonad with all the defaults we set up.
 
 -- Run xmonad with the settings you specify. No need to modify this.
@@ -262,19 +280,6 @@ myStartupHook = do
 main = do
 --  xmproc <- spawnPipe "xmobar -x 0 ~/.config/xmobar/xmobarrc"
   xmonad . ewmhFullscreen . ewmh . myXmobarProp $ docks defaults
-  where
-    rcPath = "~/.config/xmobar/xmobarrc"
-    myXmobarProp = withEasySB (statusBarProp ("xmobar " ++ rcPath) (pure myXmobarPP)) defToggleStrutsKey
-    myXmobarPP = def
-      { ppSep           = " | "
-      , ppTitleSanitize = xmobarStrip
-      , ppTitle         = white . \x -> if length x > 30
-                                        then take 30 x ++ "..."
-                                        else x
-      , ppCurrent       = magenta . wrap "[" "]"
-      , ppOrder         = \[ws,l,wt] -> [l,ws,wt]
-      , ppLayout        = (' ':)
-      }
 
 -- Colors                  fg    bg
 magenta  = xmobarColor "#913bbf" ""
@@ -315,13 +320,13 @@ defaults = def {
 
 -- | Finally, a copy of the default bindings in simple textual tabular format.
 help :: String
-help = unlines ["The default modifier key is 'alt'. Default keybindings:",
+help = unlines ["The modifier key is 'super'. Keybindings:",
     "",
     "-- launching and killing programs",
-    "mod-Shift-Enter  Launch xterminal",
-    "mod-p            Launch dmenu",
-    "mod-Shift-p      Launch gmrun",
-    "mod-Shift-c      Close/kill the focused window",
+    "mod-t            Launch terminal",
+    "mod-Enter        Launch launcher",
+--    "mod-Shift-p      Launch gmrun",
+    "mod-q            Close/kill the focused window",
     "mod-Space        Rotate through the available layout algorithms",
     "mod-Shift-Space  Reset the layouts on the current workSpace to default",
     "mod-n            Resize/refresh viewed windows to the correct size",
@@ -350,8 +355,8 @@ help = unlines ["The default modifier key is 'alt'. Default keybindings:",
     "mod-period (mod-.)   Deincrement the number of windows in the master area",
     "",
     "-- quit, or restart",
-    "mod-Shift-q  Quit xmonad",
-    "mod-q        Restart xmonad",
+    "mod-Ctrl-q  Quit xmonad",
+    "mod-Ctrl-r   Restart xmonad",
     "mod-[1..9]   Switch to workSpace N",
     "",
     "-- Workspaces & screens",
