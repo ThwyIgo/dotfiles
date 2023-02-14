@@ -1,3 +1,8 @@
+{- Dependencies:
+  | acpilight  | playerctl |
+  | alsa-utils |    rofi   |
+-}
+
 import XMonad
 -- Make XMonad EWMH compliant. For example, this fixes full screen applications.
 import XMonad.Hooks.EwmhDesktops
@@ -5,6 +10,7 @@ import Data.Monoid
 import System.Exit
 import XMonad.Util.Run
 import XMonad.Hooks.ManageDocks
+import Graphics.X11.ExtraTypes.XF86
 
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.StatusBar
@@ -59,15 +65,17 @@ myFocusedBorderColor = "#ff0000"
 --
 myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 {- KeyMasks
-        noModMask; shiftMask; controlMask; mod1Mask (Alt); mod2Mask (NumLock);
-        mod3Mask (undefined); mod4Mask (Super); mod5Mask (ISO_Level3_Shift)
+    noModMask; shiftMask; controlMask; mod1Mask (Alt); mod2Mask (NumLock);
+    mod3Mask (undefined); mod4Mask (Super); mod5Mask (ISO_Level3_Shift)
+KeySyms
+    https://hackage.haskell.org/package/X11-1.10.3/docs/Graphics-X11-Types.html#g:2
 -}
 
     -- launch a terminal
     [ ((modm,               xK_t     ), spawn $ XMonad.terminal conf)
 
     -- launch dmenu
-    , ((modm,               xK_Return), spawn "rofi -show drun")
+    , ((modm,               xK_Return), spawn "rofi -show-icons -show drun")
 
     -- launch gmrun
 --    , ((modm .|. shiftMask, xK_p     ), spawn "gmrun")
@@ -76,7 +84,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((modm,               xK_q     ), kill)
 
      -- Rotate through the available layout algorithms
-    , ((modm,               xK_space ), sendMessage NextLayout)
+    , ((modm,               xK_Tab ), sendMessage NextLayout)
 
     --  Reset the layouts on the current workspace to default
     , ((modm .|. shiftMask, xK_space ), setLayout $ XMonad.layoutHook conf)
@@ -85,7 +93,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((modm,               xK_n     ), refresh)
 
     -- Move focus to the next window
-    , ((modm,               xK_Tab   ), windows W.focusDown)
+--    , ((modm,               xK_Tab   ), windows W.focusDown)
 
     -- Move focus to the next window
     , ((modm,               xK_j     ), windows W.focusDown)
@@ -134,6 +142,19 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 
     -- Run xmessage with a summary of the default keybindings (useful for beginners)
     , ((modm .|. shiftMask, xK_slash ), spawn ("echo \"" ++ help ++ "\" | xmessage -file -"))
+    ]
+    ++
+
+    -- Controls, special keys
+    --
+    [ ((noModMask, xF86XK_MonBrightnessUp), spawn "xbacklight -inc 10")
+    , ((noModMask, xF86XK_MonBrightnessDown), spawn "xbacklight -dec 10")
+    , ((noModMask, xF86XK_AudioLowerVolume), spawn "amixer set Master 10%-")
+    , ((noModMask, xF86XK_AudioRaiseVolume), spawn "amixer set Master 10%+")
+    , ((noModMask, xF86XK_AudioMute), spawn "amixer set Master toggle")
+    , ((noModMask, xF86XK_AudioPlay), spawn "playerctl play-pause")
+    , ((noModMask, xF86XK_AudioPrev), spawn "playerctl previous")
+    , ((noModMask, xF86XK_AudioNext), spawn "playerctl next")
     ]
     ++
 

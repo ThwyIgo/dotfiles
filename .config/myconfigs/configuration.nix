@@ -43,7 +43,7 @@
     automatic = true;
     dates = "weekly";
     persistent = true;
-    options = "--delete-older-than 7d";
+    options = "--delete-older-than 5d";
   };
 
   nix.extraOptions = "plugin-files = ${pkgs.nix-doc}/lib/libnix_doc_plugin.so";
@@ -109,6 +109,16 @@
     #media-session.enable = true;
   };
 
+  services.udev = {
+    enable = true;
+    # Allow users in "video" group to control backlight.
+    extraRules = ''
+      SUBSYSTEM=="backlight", ACTION=="add", \
+        RUN+="${pkgs.coreutils}/bin/chgrp video /sys/class/backlight/%k/brightness", \
+        RUN+="${pkgs.coreutils}/bin/chmod g+w /sys/class/backlight/%k/brightness"
+    '';
+  };
+
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
 
@@ -116,7 +126,7 @@
   users.users.thiago = {
     isNormalUser = true;
     description = "Thiago";
-    extraGroups = [ "networkmanager" "wheel" "libvirtd" "libvirt" "kvm" ];
+    extraGroups = [ "networkmanager" "wheel" "libvirtd" "libvirt" "kvm" "video" ];
   };
 
   home-manager.users.thiago = { pkgs, ... }: {
@@ -145,6 +155,8 @@
       rofi
       networkmanagerapplet
       feh
+      playerctl
+      slock
     ];
     programs.fish = {
       enable = true;
@@ -228,6 +240,7 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
+    # CL
     nix-doc
     micro
     htop
@@ -236,6 +249,9 @@
     unzip
     gnumake
     gcc
+    acpilight
+
+    # GUI
     simple-scan
     librewolf
     libreoffice-still
@@ -251,7 +267,7 @@
   xdg.portal.enable = true; # Required for flatpak
   xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
   programs.kdeconnect.enable = true;
-    
+
   virtualisation.libvirtd.enable = true;
   programs.dconf.enable = true;
 
