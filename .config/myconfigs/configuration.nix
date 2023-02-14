@@ -273,6 +273,7 @@
 
   fonts.fonts = with pkgs; [
     fira-code
+    font-awesome
   ];
 
   # Games

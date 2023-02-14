@@ -10,6 +10,7 @@ import Data.Monoid
 import System.Exit
 import XMonad.Util.Run
 import XMonad.Hooks.ManageDocks
+import XMonad.Hooks.ManageHelpers
 import Graphics.X11.ExtraTypes.XF86
 
 import XMonad.Hooks.DynamicLog
@@ -239,7 +240,8 @@ myManageHook = composeAll
     [ className =? "MPlayer"        --> doFloat
     , className =? "Gimp"           --> doFloat
     , resource  =? "desktop_window" --> doIgnore
-    , resource  =? "kdesktop"       --> doIgnore ]
+    , resource  =? "kdesktop"       --> doIgnore
+    , isDialog                      --> doFloat ]
 
 ------------------------------------------------------------------------
 -- Event handling

@@ -1,9 +1,13 @@
-Config { font = "xft:Fira Code:pixelsize=12:antialias=true:hinting=true"
+Config {
+   -- font in Pango format
+     font = "Ubuntu Normal Medium 12"
+   , additionalFonts = ["Font Awesome 14"]
    , bgColor =      "black"
    , fgColor =      "#646464"
-   , position =     Top
+   , position =     TopH 25
    , border =       BottomB
    , borderColor =  "#646464"
+   , borderWidth = 1
    , iconRoot = "/home/thiago/.config/xmobar/icons/" -- Must be xpm format
 
    -- layout
@@ -33,35 +37,23 @@ Config { font = "xft:Fira Code:pixelsize=12:antialias=true:hinting=true"
    --   The --template option controls how the plugin is displayed. Text
    --   color can be set by enclosing in <fc></fc> tags. For more details
    --   see http://projects.haskell.org/xmobar/#system-monitor-plugins.
-   , commands = 
+   , commands =
 
-        -- weather monitor
-        [ -- Run Weather "RJTT" [ "--template", "<skyCondition> | <fc=#4682B4><tempC></fc>°C | <fc=#4682B4><rh></fc>% | <fc=#4682B4><pressure></fc>hPa"
-          --                   ] 36000
-
-          Run XMonadLog
+        [ Run XMonadLog
 
           -- cpu activity monitor
-        , Run Cpu [ "-L", "3"
+        , Run Cpu [ "-t", "<fn=1>\62171</fn> <total>%"
+                  , "-L", "3"
                   , "-H", "50"
                   , "--high", "red"
                   , "--normal", "green"
-                  ] 20          
+                  ] 20
 
-        -- -- cpu core temperature monitor
-        -- , Run CoreTemp       [ "--template" , "Temp: <core0>°C|<core1>°C"
-        --                      , "--Low"      , "70"        -- units: °C
-        --                      , "--High"     , "80"        -- units: °C
-        --                      , "--low"      , "darkgreen"
-        --                      , "--normal"   , "darkorange"
-        --                      , "--high"     , "darkred"
-        --                      ] 50
-                          
         -- memory usage monitor
-        , Run Memory         [ "--template" ,"Mem: <usedratio>%"
-                             , "--Low"      , "20"        -- units: %
-                             , "--High"     , "90"        -- units: %
-                             , "--low"      , "darkgreen"
+        , Run Memory         [ "--template" ,"<fn=1>\xf233</fn> <used>MiB"
+                             , "--Low"      , "2048"        -- units: %
+                             , "--High"     , "6144"        -- units: %
+                             --, "--low"      , "darkgreen"
                              , "--normal"   , "darkorange"
                              , "--high"     , "darkred"
                              ] 50
@@ -75,14 +67,14 @@ Config { font = "xft:Fira Code:pixelsize=12:antialias=true:hinting=true"
                              ]
 
         -- Hostname
-        , Run Com "hostname" [] "hostname" 36000
+        , Run Com "hostname" [] "hostname" 0
 
-        -- time and date indicator 
+        -- time and date indicator
         --   (ISO C strftime format)
-        , Run Date           "<fc=#ABABAB>%a, %D - %H:%M</fc>" "date" 50
+        , Run Date           "<fc=#ABABAB>%a, %D - %H:%M</fc>" "date" 500
 
           -- battery monitor
-        , Run Battery        [ "--template" , "\62017 <acstatus>"
+        , Run Battery        [ "--template" , "<acstatus>"
                              , "--Low"      , "20"        -- units: %
                              , "--High"     , "80"        -- units: %
                              , "--low"      , "darkred"
@@ -90,12 +82,18 @@ Config { font = "xft:Fira Code:pixelsize=12:antialias=true:hinting=true"
                              , "--high"     , "darkgreen"
 
                              , "--" -- battery specific options
+                             , "-p"         , "#dAA520"
+                             , "-P"         -- % symbol in <left>
+                             , "--lows"     , "<fn=1>\62020</fn>"
+                             , "--mediums"  , "<fn=1>\62018</fn>"
+                             , "--highs"    , "<fn=1>\62017</fn>"
+
                                        -- discharging status
-                                       , "-o"	, "<left>%"
+                                       , "-o"	, " <left>"
                                        -- AC "on" status
-                                       , "-O"	, "<fc=#dAA520><left>% Carregando</fc>"
+                                       , "-O"	, "<fc=#dAA520><fn=1>\59705</fn><left> Carregando</fc>"
                                        -- charged status
-                                       , "-i"	, "<fc=#006000>Na tomada</fc>"
+                                       , "-i"	, "<fc=#006000><fn=1>\62016</fn> Na tomada</fc>"
                              ] 100
         ]
    }
