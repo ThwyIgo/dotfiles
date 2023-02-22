@@ -8,11 +8,12 @@ import XMonad
 import XMonad.Hooks.EwmhDesktops
 import Data.Monoid
 import System.Exit
+-- Emacs keybindings
+import XMonad.Util.EZConfig
 import XMonad.Util.Run
 import XMonad.Util.SpawnOnce
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.ManageHelpers
-import Graphics.X11.ExtraTypes.XF86
 
 -- XMobar
 import XMonad.Hooks.DynamicLog
@@ -30,7 +31,11 @@ import qualified Data.Map        as M
 -- The preferred terminal program, which is used in a binding below and by
 -- certain contrib modules.
 --
-myTerminal      = "alacritty"
+myTerminal  = "alacritty"
+fileManager = "nemo"
+browser     = "librewolf"
+emailClient = "thunderbird"
+calculator  = "gnome-calculator"
 
 -- Whether focus follows the mouse pointer.
 myFocusFollowsMouse :: Bool
@@ -42,7 +47,7 @@ myClickJustFocuses = False
 
 -- Width of the window border in pixels.
 --
-myBorderWidth   = 2
+myBorderWidth   = 1
 
 -- modMask lets you specify which modkey you want to use. The default
 -- is mod1Mask ("left alt").  You may also consider using mod3Mask
@@ -70,68 +75,58 @@ myFocusedBorderColor = "#ff0000"
 ------------------------------------------------------------------------
 -- Key bindings. Add, modify or remove key bindings here.
 --
-myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
-{- KeyMasks
-    noModMask; shiftMask; controlMask; mod1Mask (Alt); mod2Mask (NumLock);
-    mod3Mask (undefined); mod4Mask (Super); mod5Mask (ISO_Level3_Shift)
-KeySyms
-    https://hackage.haskell.org/package/X11-1.10.3/docs/Graphics-X11-Types.html#g:2
--}
-
+myKeys c = mkKeymap c $
     -- launch a terminal
-    [ ((modm,               xK_t     ), spawn $ XMonad.terminal conf)
+    [ ("M-t", spawn $ terminal c)
 
-    -- launch dmenu
-    , ((modm,               xK_Return), spawn "rofi -show-icons -show drun")
+    -- launch app launcher
+    , ("M-<Return>", spawn "rofi -show-icons -show drun")
 
     -- close focused window
-    , ((modm,               xK_q     ), kill)
+    , ("M-q", kill)
 
      -- Rotate through the available layout algorithms
-    , ((modm,               xK_Tab ), sendMessage NextLayout)
+    , ("M-<Tab>", sendMessage NextLayout)
 
     --  Reset the layouts on the current workspace to default
-    , ((modm .|. shiftMask, xK_space ), setLayout $ XMonad.layoutHook conf)
+    , ("M-S-<Space>", setLayout $ XMonad.layoutHook c)
 
     -- Resize viewed windows to the correct size
-    , ((modm,               xK_n     ), refresh)
+    , ("M-n", refresh)
 
     -- Move focus to the next window
-    , ((modm,               xK_j     ), windows W.focusDown)
+    , ("M-j", windows W.focusDown)
 
     -- Move focus to the previous window
-    , ((modm,               xK_k     ), windows W.focusUp  )
-
-    -- Move focus to the master window
---    , ((modm,               xK_m     ), windows W.focusMaster  )
+    , ("M-k", windows W.focusUp  )
 
     -- Swap the focused window and the master window
-    , ((modm,               xK_m), windows W.swapMaster)
+    , ("M-m", windows W.swapMaster)
 
     -- Swap the focused window with the next window
-    , ((modm .|. shiftMask, xK_j     ), windows W.swapDown  )
+    , ("M-S-j", windows W.swapDown  )
 
     -- Swap the focused window with the previous window
-    , ((modm .|. shiftMask, xK_k     ), windows W.swapUp    )
+    , ("M-S-k", windows W.swapUp    )
 
     -- Shrink the master area
-    , ((modm,               xK_h     ), sendMessage Shrink)
+    , ("M-h", sendMessage Shrink)
 
     -- Expand the master area
-    , ((modm,               xK_l     ), sendMessage Expand)
+    , ("M-l", sendMessage Expand)
 
-    -- Enlarge window (vertically)
-    , ((modm .|. controlMask, xK_j), sendMessage MirrorShrink)
-    , ((modm .|. controlMask, xK_k), sendMessage MirrorExpand)
+    -- Resize window (vertically)
+    , ("M-C-j", sendMessage MirrorShrink)
+    , ("M-C-k", sendMessage MirrorExpand)
 
     -- Push window back into tiling
-    , ((modm,               xK_f     ), withFocused $ windows . W.sink)
+    , ("M-f", withFocused $ windows . W.sink)
 
     -- Increment the number of windows in the master area
-    , ((modm              , xK_comma ), sendMessage (IncMasterN 1))
+    , ("M-,", sendMessage (IncMasterN 1))
 
     -- Deincrement the number of windows in the master area
-    , ((modm              , xK_period), sendMessage (IncMasterN (-1)))
+    , ("M-.", sendMessage (IncMasterN (-1)))
 
     -- Toggle the status bar gap
     -- Use this binding with avoidStruts from Hooks.ManageDocks.
@@ -140,26 +135,37 @@ KeySyms
     -- , ((modm              , xK_b     ), sendMessage ToggleStruts)
 
     -- Quit xmonad
-    , ((modm .|. controlMask, xK_q     ), io (exitWith ExitSuccess))
+    , ("M-C-q", io (exitWith ExitSuccess))
 
     -- Restart xmonad
-    , ((modm .|. controlMask , xK_r     ), spawn "xmonad --recompile; xmonad --restart")
+    , ("M-C-r", spawn "xmonad --recompile; xmonad --restart")
 
     -- Run xmessage with a summary of the default keybindings (useful for beginners)
-    , ((modm .|. shiftMask, xK_slash ), spawn ("echo \"" ++ help ++ "\" | xmessage -file -"))
+    -- , ((modm .|. shiftMask, xK_slash ), spawn ("echo \"" ++ help ++ "\" | xmessage -file -"))
+    ]
+    ++
+
+    -- Launch apps
+    [("M-a " ++ key, spawn cmd)
+    | (key, cmd) <- [("e", "emacsclient --alternate-editor=emacs -c"),
+                     ("f", fileManager),
+                     ("b", browser),
+                     ("m", emailClient),
+                     ("c", calculator)
+                     ]
     ]
     ++
 
     -- Controls, special keys
     --
-    [ ((noModMask, xF86XK_MonBrightnessUp), spawn "xbacklight -inc 5")
-    , ((noModMask, xF86XK_MonBrightnessDown), spawn "xbacklight -dec 5")
-    , ((noModMask, xF86XK_AudioLowerVolume), spawn "amixer set Master 10%-")
-    , ((noModMask, xF86XK_AudioRaiseVolume), spawn "amixer set Master 10%+")
-    , ((noModMask, xF86XK_AudioMute), spawn "amixer set Master toggle")
-    , ((noModMask, xF86XK_AudioPlay), spawn "playerctl play-pause")
-    , ((noModMask, xF86XK_AudioPrev), spawn "playerctl previous")
-    , ((noModMask, xF86XK_AudioNext), spawn "playerctl next")
+    [ ("<XF86MonBrightnessUp>", spawn "xbacklight -inc 5")
+    , ("<XF86MonBrightnessDown>", spawn "xbacklight -dec 5")
+    , ("<XF86AudioLowerVolume>", spawn "amixer set Master 10%-")
+    , ("<XF86AudioRaiseVolume>", spawn "amixer set Master 10%+")
+    , ("<XF86AudioMute>", spawn "amixer set Master toggle")
+    , ("<XF86AudioPlay>", spawn "playerctl play-pause")
+    , ("<XF86AudioPrev>", spawn "playerctl previous")
+    , ("<XF86AudioNext>", spawn "playerctl next")
     ]
     ++
 
@@ -167,18 +173,18 @@ KeySyms
     -- mod-[1..9], Switch to workspace N
     -- mod-shift-[1..9], Move client to workspace N
     --
-    [((m .|. modm, k), windows $ f i)
-        | (i, k) <- zip (XMonad.workspaces conf) [xK_1 .. xK_9]
-        , (f, m) <- [(W.greedyView, 0), (W.shift, shiftMask)]]
-    ++
+    [("M-" ++ mkey ++ num, windows $ action wsName)
+    | (mkey, action) <- [([], W.greedyView), ("S-", W.shift)],
+      (num, wsName)  <- zip (map show [1..9]) (XMonad.workspaces c)
+    ]
 
     --
     -- mod-{w,e,r}, Switch to physical/Xinerama screens 1, 2, or 3
     -- mod-shift-{w,e,r}, Move client to screen 1, 2, or 3
     --
-    [((m .|. modm, key), screenWorkspace sc >>= flip whenJust (windows . f))
-        | (key, sc) <- zip [xK_w, xK_e, xK_r] [0..]
-        , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
+    -- [((m .|. modm, key), screenWorkspace sc >>= flip whenJust (windows . f))
+    --     | (key, sc) <- zip [xK_w, xK_e, xK_r] [0..]
+    --     , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
 
 
 ------------------------------------------------------------------------
@@ -280,6 +286,7 @@ myLogHook = return ()
 -- per-workspace layout choices.
 --
 myStartupHook = do
+--  checkKeymap defaults myKeys
   spawnOnce "trayer --edge top --align right --SetDockType true --SetPartialStrut true --expand true --width 5 --transparent true --tint 0x000000 --alpha 0 --height 25 --iconspacing 1"
   spawnOnce "nm-applet --sm-disable"
   spawnOnce "feh --bg-scale --randomize ~/.local/share/wallpapers/**"
