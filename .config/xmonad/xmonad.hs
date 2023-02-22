@@ -1,6 +1,6 @@
 {- Dependencies:
-  | acpilight  | playerctl |
-  | alsa-utils |    rofi   |
+  | acpilight  | nm-applet | playerctl |
+  | alsa-utils |  trayer   |    rofi   |
 -}
 
 import XMonad
@@ -9,14 +9,20 @@ import XMonad.Hooks.EwmhDesktops
 import Data.Monoid
 import System.Exit
 import XMonad.Util.Run
+import XMonad.Util.SpawnOnce
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.ManageHelpers
 import Graphics.X11.ExtraTypes.XF86
 
+-- XMobar
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.StatusBar
 import XMonad.Hooks.StatusBar.PP
 import XMonad.Util.Loggers
+
+-- Layouts
+import XMonad.Layout.Tabbed
+import XMonad.Layout.ResizableTile
 
 import qualified XMonad.StackSet as W
 import qualified Data.Map        as M
@@ -78,9 +84,6 @@ KeySyms
     -- launch dmenu
     , ((modm,               xK_Return), spawn "rofi -show-icons -show drun")
 
-    -- launch gmrun
---    , ((modm .|. shiftMask, xK_p     ), spawn "gmrun")
-
     -- close focused window
     , ((modm,               xK_q     ), kill)
 
@@ -92,9 +95,6 @@ KeySyms
 
     -- Resize viewed windows to the correct size
     , ((modm,               xK_n     ), refresh)
-
-    -- Move focus to the next window
---    , ((modm,               xK_Tab   ), windows W.focusDown)
 
     -- Move focus to the next window
     , ((modm,               xK_j     ), windows W.focusDown)
@@ -119,6 +119,10 @@ KeySyms
 
     -- Expand the master area
     , ((modm,               xK_l     ), sendMessage Expand)
+
+    -- Enlarge window (vertically)
+    , ((modm .|. controlMask, xK_j), sendMessage MirrorShrink)
+    , ((modm .|. controlMask, xK_k), sendMessage MirrorExpand)
 
     -- Push window back into tiling
     , ((modm,               xK_f     ), withFocused $ windows . W.sink)
@@ -148,8 +152,8 @@ KeySyms
 
     -- Controls, special keys
     --
-    [ ((noModMask, xF86XK_MonBrightnessUp), spawn "xbacklight -inc 10")
-    , ((noModMask, xF86XK_MonBrightnessDown), spawn "xbacklight -dec 10")
+    [ ((noModMask, xF86XK_MonBrightnessUp), spawn "xbacklight -inc 5")
+    , ((noModMask, xF86XK_MonBrightnessDown), spawn "xbacklight -dec 5")
     , ((noModMask, xF86XK_AudioLowerVolume), spawn "amixer set Master 10%-")
     , ((noModMask, xF86XK_AudioRaiseVolume), spawn "amixer set Master 10%+")
     , ((noModMask, xF86XK_AudioMute), spawn "amixer set Master toggle")
@@ -207,10 +211,10 @@ myMouseBindings (XConfig {XMonad.modMask = modm}) = M.fromList $
 -- The available layouts.  Note that each layout is separated by |||,
 -- which denotes layout choice.
 --
-myLayout = avoidStruts (tiled ||| Mirror tiled ||| Full)
+myLayout = avoidStruts (tiled ||| Mirror tiled ||| tabbed shrinkText myTabConfig)
   where
      -- default tiling algorithm partitions the screen into two panes
-     tiled   = Tall nmaster delta ratio
+     tiled   = ResizableTall nmaster delta ratio []
 
      -- The default number of windows in the master pane
      nmaster = 1
@@ -220,6 +224,12 @@ myLayout = avoidStruts (tiled ||| Mirror tiled ||| Full)
 
      -- Percent of screen to increment by when resizing panes
      delta   = 3/100
+
+myTabConfig = def { activeColor = "#44475A"
+                  , inactiveColor = "#282A36"
+                  , activeBorderColor = "#BD93F9"
+                  , inactiveBorderColor = "#6272A4"
+                  , activeTextColor = "#F8F8F2" }
 
 ------------------------------------------------------------------------
 -- Window rules:
@@ -265,17 +275,14 @@ myLogHook = return ()
 ------------------------------------------------------------------------
 -- Startup hook
 
--- Perform an arbitrary action each time xmonad starts or is restarted
--- with mod-q.  Used by, e.g., XMonad.Layout.PerWorkspace to initialize
+-- Perform an arbitrary action each time xmonad starts or is restarted.
+-- Used by, e.g., XMonad.Layout.PerWorkspace to initialize
 -- per-workspace layout choices.
 --
--- By default, do nothing.
-myStartupHook = return ()
-{- spawnOnce : XMonad.Util.SpawnOnce
 myStartupHook = do
-  spawnOnce "comando"
-  spawnOnce "Mais..."
--}
+  spawnOnce "trayer --edge top --align right --SetDockType true --SetPartialStrut true --expand true --width 5 --transparent true --tint 0x000000 --alpha 0 --height 25 --iconspacing 1"
+  spawnOnce "nm-applet --sm-disable"
+  spawnOnce "feh --bg-scale --randomize ~/.local/share/wallpapers/**"
 
 ------------------------------------------------------------------------
 -- XMobar Prop

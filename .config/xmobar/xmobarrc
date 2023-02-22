@@ -4,7 +4,7 @@ Config {
    , additionalFonts = ["Font Awesome 14"]
    , bgColor =      "black"
    , fgColor =      "#646464"
-   , position =     TopH 25
+   , position =     TopSize L 95 25 -- 5% space for trayer
    , border =       BottomB
    , borderColor =  "#646464"
    , borderWidth = 1
@@ -13,7 +13,7 @@ Config {
    -- layout
    , sepChar =  "%"   -- delineator between plugin names and straight text
    , alignSep = "}{"  -- separator between left-right alignment
-   , template = "%XMonadLog% | %cpu% | %memory% }{ %locks% %kbd% | %hostname% || %date% | %battery%"
+   , template = "%XMonadLog% | %cpu% | %memory% }{ %alsa:default:Master% %locks% | %date% | %battery% ||"
 
    -- general behavior
    , lowerOnStart =     True    -- send to bottom of window stack on start
@@ -61,17 +61,16 @@ Config {
         -- Caps Lock, Num Lock, etc
         , Run Locks
 
-        -- keyboard layout indicator
-        , Run Kbd            [ ("us(dvorak)" , "<fc=#00008B>DV</fc>")
-                             , ("br"         , "BR")
-                             ]
+        -- Volume
+        , Run Alsa           "default" "Master" [ "--"
+                                                , "-O", "" ]
 
         -- Hostname
-        , Run Com "hostname" [] "hostname" 0
+        , Run Com            "hostname" [] "hostname" 0
 
         -- time and date indicator
         --   (ISO C strftime format)
-        , Run Date           "<fc=#ABABAB>%a, %D - %H:%M</fc>" "date" 500
+        , Run DateZone       "<fc=#ABABAB>%A, %Y/%m/%d - %R</fc>" "" "America/Sao_Paulo" "date" 500
 
           -- battery monitor
         , Run Battery        [ "--template" , "<acstatus>"

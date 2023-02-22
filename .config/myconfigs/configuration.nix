@@ -151,9 +151,9 @@
 
       # Window Manager stuff
       haskellPackages.xmobar
-      dmenu
       rofi
       networkmanagerapplet
+      trayer
       feh
       playerctl
       slock
@@ -278,6 +278,9 @@
 
   # Games
   programs.steam.enable = true;
+  # Wine games
+  hardware.opengl.driSupport32Bit = true;
+  services.samba.enable = true;
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
