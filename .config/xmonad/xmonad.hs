@@ -24,6 +24,7 @@ import XMonad.Util.Loggers
 -- Layouts
 import XMonad.Layout.Tabbed
 import XMonad.Layout.ResizableTile
+import XMonad.Layout.Spacing
 
 import qualified XMonad.StackSet as W
 import qualified Data.Map        as M
@@ -138,7 +139,7 @@ myKeys c = mkKeymap c $
     , ("M-C-q", io (exitWith ExitSuccess))
 
     -- Restart xmonad
-    , ("M-C-r", spawn "xmonad --recompile; xmonad --restart")
+    , ("M-C-r", spawn "xmonad --recompile && xmonad --restart")
 
     -- Run xmessage with a summary of the default keybindings (useful for beginners)
     -- , ((modm .|. shiftMask, xK_slash ), spawn ("echo \"" ++ help ++ "\" | xmessage -file -"))
@@ -217,10 +218,13 @@ myMouseBindings (XConfig {XMonad.modMask = modm}) = M.fromList $
 -- The available layouts.  Note that each layout is separated by |||,
 -- which denotes layout choice.
 --
+-- Gaps
+mySpacing i = spacingRaw True (Border i i i i) True (Border i i i i) True
+
 myLayout = avoidStruts (tiled ||| Mirror tiled ||| tabbed shrinkText myTabConfig)
   where
      -- default tiling algorithm partitions the screen into two panes
-     tiled   = ResizableTall nmaster delta ratio []
+     tiled   = mySpacing 5 $ ResizableTall nmaster delta ratio []
 
      -- The default number of windows in the master pane
      nmaster = 1
@@ -253,11 +257,13 @@ myTabConfig = def { activeColor = "#44475A"
 -- 'className' and 'resource' are used below.
 --
 myManageHook = composeAll
-    [ className =? "MPlayer"        --> doFloat
-    , className =? "Gimp"           --> doFloat
-    , resource  =? "desktop_window" --> doIgnore
-    , resource  =? "kdesktop"       --> doIgnore
-    , isDialog                      --> doFloat ]
+    [ className =? "MPlayer"          --> doFloat
+    , className =? "Gimp"             --> doFloat
+    , appName   =? "gnome-calculator" --> doFloat -- Not working
+    , title   =? "Picture-in-Picture" --> doFloat
+    , resource  =? "desktop_window"   --> doIgnore
+    , resource  =? "kdesktop"         --> doIgnore
+    , isDialog                        --> doFloat ]
 
 ------------------------------------------------------------------------
 -- Event handling
@@ -286,10 +292,11 @@ myLogHook = return ()
 -- per-workspace layout choices.
 --
 myStartupHook = do
---  checkKeymap defaults myKeys
+--  return () >> checkKeymap defaults (myKeys defaults)
   spawnOnce "trayer --edge top --align right --SetDockType true --SetPartialStrut true --expand true --width 5 --transparent true --tint 0x000000 --alpha 0 --height 25 --iconspacing 1"
   spawnOnce "nm-applet --sm-disable"
   spawnOnce "feh --bg-scale --randomize ~/.local/share/wallpapers/**"
+  spawnOnce "picom -b --experimental-backends"
 
 ------------------------------------------------------------------------
 -- XMobar Prop

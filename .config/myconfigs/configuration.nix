@@ -151,12 +151,11 @@
 
       # Window Manager stuff
       haskellPackages.xmobar
-      rofi
+      picom-jonaburg
       networkmanagerapplet
       trayer
       feh
       playerctl
-      slock
     ];
     programs.fish = {
       enable = true;
@@ -213,10 +212,23 @@
         shell.program = "fish";
       };
     };
+    programs.rofi = {
+      enable = true;
+      font = "Ubuntu Normal Medium 12";
+      theme = "dmenu";
+      terminal = "${pkgs.alacritty}/bin/alacritty";
+    };
 
     xsession.windowManager.xmonad = {
       enable = true;
       enableContribAndExtras = true;
+    };
+
+    services.screen-locker = {
+      enable = true;
+      # security.wrappers.<name>.setuid
+      lockCmd = "${pkgs.slock}/bin/slock";
+      inactiveInterval = 10; # Minutes
     };
 
     qt = {
@@ -267,6 +279,7 @@
   xdg.portal.enable = true; # Required for flatpak
   xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
   programs.kdeconnect.enable = true;
+  programs.slock.enable = true;
 
   virtualisation.libvirtd.enable = true;
   programs.dconf.enable = true;
