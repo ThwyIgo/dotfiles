@@ -43,7 +43,7 @@
    '(("gnu" . "https://elpa.gnu.org/packages/")
      ("melpa" . "https://melpa.org/packages/")))
  '(package-selected-packages
-   '(clang-format+ yascroll magit company-box ligature origami haskell-mode yasnippet-snippets neotree multiple-cursors lsp-ui lsp-haskell haskell-snippets flycheck emmet-mode dracula-theme company-shell ace-window))
+   '(lsp-java clang-format+ yascroll magit company-box ligature origami haskell-mode yasnippet-snippets neotree multiple-cursors lsp-ui lsp-haskell haskell-snippets flycheck emmet-mode dracula-theme company-shell ace-window))
  '(parens-require-spaces nil)
  '(scroll-bar-mode nil)
  '(sentence-end-double-space nil)
@@ -65,9 +65,10 @@
 (defvar required-packages
   '(
     company-shell company-box company flycheck haskell-snippets lsp-haskell
-    lsp-ui lsp-mode yasnippet-snippets yasnippet yascroll emmet-mode neotree
-    ace-window multiple-cursors dracula-theme haskell-mode origami ligature
-    magit smex dashboard all-the-icons telephone-line nix-mode clang-format+
+    lsp-ui lsp-mode lsp-java yasnippet-snippets yasnippet yascroll emmet-mode
+    neotree ace-window multiple-cursors dracula-theme haskell-mode origami
+    ligature magit smex dashboard all-the-icons telephone-line nix-mode
+    clang-format+
     ;;company-nixos-options
     )
    "A list of packages to ensure are installed at launch.")
@@ -238,6 +239,10 @@
 (add-hook 'c-mode-hook #'lsp)
 (add-hook 'c-mode-common-hook #'clang-format+-mode)
 
+;; Java
+(require 'lsp-java)
+(add-hook 'java-mode-hook #'lsp)
+
 ;; Web development
 (setq js-indent-level 2)
 (setq css-indent-offset 2)
@@ -389,6 +394,7 @@ Version 2018-11-12 2021-09-17"
 ; (C-') To hide all lines with no cursors
 (global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
 (global-set-key (kbd "C->") 'mc/mark-next-like-this)
+(global-set-key (kbd "C-S-k") 'mc/skip-to-next-like-this)
 (global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
 (global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
 (global-set-key (kbd "C-c C->") 'mc/mark-all-like-this-dwim) ;; Change HTML tag
@@ -410,7 +416,7 @@ Version 2018-11-12 2021-09-17"
 (global-set-key  [C-backspace] 'ryanmarcus/backward-kill-word)
 (global-set-key (kbd "C-c <backspace>") 'delete-trailing-whitespace)
 (global-set-key (kbd "C-c c") 'comment-or-uncomment-region)
-(global-set-key (kbd "C-c TAB") 'align-current)
+(global-set-key (kbd "C-c TAB") 'align-regexp)
 
 (require 'server)
 (unless (server-running-p)

@@ -22,6 +22,7 @@ import XMonad.Hooks.StatusBar.PP
 import XMonad.Util.Loggers
 
 -- Layouts
+import XMonad.Layout.Renamed
 import XMonad.Layout.Tabbed
 import XMonad.Layout.ResizableTile
 import XMonad.Layout.Spacing
@@ -221,25 +222,24 @@ myMouseBindings (XConfig {XMonad.modMask = modm}) = M.fromList $
 -- Gaps
 mySpacing i = spacingRaw True (Border i i i i) True (Border i i i i) True
 
-myLayout = avoidStruts (tiled ||| Mirror tiled ||| tabbed shrinkText myTabConfig)
+myLayout = avoidStruts (tiled ||| Mirror tiled ||| tabs)
   where
-     -- default tiling algorithm partitions the screen into two panes
-     tiled   = mySpacing 5 $ ResizableTall nmaster delta ratio []
-
+     tiled   = renamed [Replace "Tall"] $
+               mySpacing 5 $ ResizableTall nmaster delta ratio []
      -- The default number of windows in the master pane
      nmaster = 1
-
      -- Default proportion of screen occupied by master pane
      ratio   = 1/2
-
      -- Percent of screen to increment by when resizing panes
      delta   = 3/100
 
-myTabConfig = def { activeColor = "#44475A"
-                  , inactiveColor = "#282A36"
-                  , activeBorderColor = "#BD93F9"
-                  , inactiveBorderColor = "#6272A4"
-                  , activeTextColor = "#F8F8F2" }
+     tabs = renamed [Replace "Tabbed"] $
+            tabbed shrinkText myTabConfig
+     myTabConfig = def { activeColor         = "#44475A"
+                       , inactiveColor       = "#282A36"
+                       , activeBorderColor   = "#BD93F9"
+                       , inactiveBorderColor = "#6272A4"
+                       , activeTextColor     = "#F8F8F2" }
 
 ------------------------------------------------------------------------
 -- Window rules:
@@ -293,7 +293,7 @@ myLogHook = return ()
 --
 myStartupHook = do
 --  return () >> checkKeymap defaults (myKeys defaults)
-  spawnOnce "trayer --edge top --align right --SetDockType true --SetPartialStrut true --expand true --width 5 --transparent true --tint 0x000000 --alpha 0 --height 25 --iconspacing 1"
+  spawnOnce "trayer --edge top --align right --SetDockType true --SetPartialStrut true --expand true --widthtype request --transparent true --alpha 0 --tint 0x000000 --height 25 --iconspacing 1"
   spawnOnce "nm-applet --sm-disable"
   spawnOnce "feh --bg-scale --randomize ~/.local/share/wallpapers/**"
   spawnOnce "picom -b --experimental-backends"
