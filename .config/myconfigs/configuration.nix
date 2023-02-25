@@ -69,7 +69,10 @@
   ];
 
   # Enable Xmonad window manager
-  services.xserver.windowManager.xmonad.enable = true;
+  services.xserver.windowManager.xmonad = {
+    enable = true;
+    enableContribAndExtras = true;
+  };
 
   # Auto-login
   # services.xserver.displayManager.defaultSession = "cinnamon";
@@ -146,7 +149,11 @@
       vscodium
       gdb
       clang-tools # Clangd
-      ghc
+      (haskellPackages.ghcWithPackages (hpkgs: with hpkgs; [
+        xmobar
+        xmonad
+        xmonad-contrib
+      ]))
       haskell-language-server
 
       # Window Manager stuff
@@ -219,16 +226,23 @@
       terminal = "${pkgs.alacritty}/bin/alacritty";
     };
 
-    xsession.windowManager.xmonad = {
-      enable = true;
-      enableContribAndExtras = true;
-    };
-
     services.screen-locker = {
       enable = true;
       # security.wrappers.<name>.setuid
       lockCmd = "${pkgs.slock}/bin/slock";
-      inactiveInterval = 10; # Minutes
+      inactiveInterval = 1; # Minutes
+    };
+
+    gtk = {
+      enable = true;
+      theme = {
+        package = pkgs.orchis-theme;
+        name = "Orchis-Grey-Dark";
+      };
+      iconTheme = {
+        package = pkgs.tela-icon-theme;
+        name = "Tela-dark";
+      };
     };
 
     qt = {
