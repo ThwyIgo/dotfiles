@@ -225,13 +225,14 @@
       theme = "dmenu";
       terminal = "${pkgs.alacritty}/bin/alacritty";
     };
-
-    services.screen-locker = {
-      enable = true;
-      # security.wrappers.<name>.setuid
-      lockCmd = "${pkgs.slock}/bin/slock";
-      inactiveInterval = 1; # Minutes
-    };
+    
+    # services.screen-locker = {
+    #   enable = true;
+    #   # security.wrappers.<name>.setuid
+    #   lockCmd = "${pkgs.slock}/bin/slock";
+    #   inactiveInterval = 1; # Minutes
+    #   xautolock.enable = true;
+    # };
 
     gtk = {
       enable = true;

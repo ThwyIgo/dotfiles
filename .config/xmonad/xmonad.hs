@@ -77,7 +77,8 @@ myFocusedBorderColor = "#ff0000"
 ------------------------------------------------------------------------
 -- Key bindings. Add, modify or remove key bindings here.
 --
-myKeys c = mkKeymap c $
+myKeys :: XConfig l -> [(String, X ())]
+myKeys c =
     -- launch a terminal
     [ ("M-t", spawn $ terminal c)
 
@@ -91,10 +92,10 @@ myKeys c = mkKeymap c $
     , ("M-<Tab>", sendMessage NextLayout)
 
     --  Reset the layouts on the current workspace to default
-    , ("M-S-<Space>", setLayout $ XMonad.layoutHook c)
+    -- , ("M-S-<Space>", setLayout $ layoutHook c)
 
     -- Resize viewed windows to the correct size
-    , ("M-n", refresh)
+    -- , ("M-n", refresh)
 
     -- Move focus to the next window
     , ("M-j", windows W.focusDown)
@@ -135,6 +136,9 @@ myKeys c = mkKeymap c $
     -- See also the statusBar function from Hooks.DynamicLog.
     --
     -- , ((modm              , xK_b     ), sendMessage ToggleStruts)
+
+    -- Lock
+    , ("M-<Pause>", spawn "slock")
 
     -- Quit xmonad
     , ("M-C-q", io (exitWith ExitSuccess))
@@ -292,7 +296,8 @@ myLogHook = return ()
 -- per-workspace layout choices.
 --
 myStartupHook = do
---  return () >> checkKeymap defaults (myKeys defaults)
+  -- Don't delete the return ()
+  return () >> checkKeymap defaults (myKeys defaults)
   spawnOnce "trayer --edge top --align right --SetDockType true --SetPartialStrut true --expand true --widthtype request --transparent true --alpha 0 --tint 0x000000 --height 25 --iconspacing 1"
   spawnOnce "nm-applet --sm-disable"
   spawnOnce "feh --bg-scale --randomize ~/.local/share/wallpapers/**"
@@ -306,7 +311,7 @@ myStartupHook = do
 --
 myXmobarProp = withEasySB (statusBarProp ("xmobar " ++ rcPath) (pure myXmobarPP)) defToggleStrutsKey
   where
-    rcPath = "~/.config/xmobar/xmobarrc"  
+    rcPath = "~/.config/xmobar/xmobarrc"
     myXmobarPP = def
       { ppSep           = " | "
       , ppTitleSanitize = xmobarStrip
@@ -315,7 +320,7 @@ myXmobarProp = withEasySB (statusBarProp ("xmobar " ++ rcPath) (pure myXmobarPP)
       , ppOrder         = \[ws,l,wt] -> [l,ws,wt]
       , ppLayout        = (' ':)
       }
-      
+
 ------------------------------------------------------------------------
 -- Now run xmonad with all the defaults we set up.
 
@@ -339,6 +344,7 @@ lowWhite = xmobarColor "#bbbbbb" ""
 --
 -- No need to modify this.
 --
+--defaults :: XConfig Layout
 defaults = def {
       -- simple stuff
         terminal           = myTerminal,
@@ -351,7 +357,7 @@ defaults = def {
         focusedBorderColor = myFocusedBorderColor,
 
       -- key bindings
-        keys               = myKeys,
+        keys               = \c -> mkKeymap c (myKeys c),
         mouseBindings      = myMouseBindings,
 
       -- hooks, layouts
