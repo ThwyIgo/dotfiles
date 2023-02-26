@@ -244,6 +244,10 @@
         package = pkgs.tela-icon-theme;
         name = "Tela-dark";
       };
+      cursorTheme = {
+        package = pkgs.callPackage /home/thiago/.config/myconfigs/nix/vimix-cursors/vimix-cursors.nix {};
+        name = "Vimix-white-cursors";
+      };
     };
 
     qt = {
