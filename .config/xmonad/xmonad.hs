@@ -20,12 +20,14 @@ import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.StatusBar
 import XMonad.Hooks.StatusBar.PP
 import XMonad.Util.Loggers
+import XMonad.Layout.NoBorders
 
 -- Layouts
 import XMonad.Layout.Renamed
 import XMonad.Layout.Tabbed
 import XMonad.Layout.ResizableTile
 import XMonad.Layout.Spacing
+import XMonad.Layout.ToggleLayouts
 
 import qualified XMonad.StackSet as W
 import qualified Data.Map        as M
@@ -94,8 +96,8 @@ myKeys c =
     --  Reset the layouts on the current workspace to default
     -- , ("M-S-<Space>", setLayout $ layoutHook c)
 
-    -- Resize viewed windows to the correct size
-    -- , ("M-n", refresh)
+    -- Toggle full screen
+    , ("M-n", sendMessage $ Toggle "Full")
 
     -- Move focus to the next window
     , ("M-j", windows W.focusDown)
@@ -226,7 +228,8 @@ myMouseBindings (XConfig {XMonad.modMask = modm}) = M.fromList $
 -- Gaps
 mySpacing i = spacingRaw True (Border i i i i) True (Border i i i i) True
 
-myLayout = avoidStruts (tiled ||| Mirror tiled ||| tabs)
+myLayout = toggleLayouts (noBorders Full) $ smartBorders . avoidStruts $
+  (tiled ||| Mirror tiled ||| noBorders tabs)
   where
      tiled   = renamed [Replace "Tall"] $
                mySpacing 5 $ ResizableTall nmaster delta ratio []

@@ -155,6 +155,7 @@
         xmonad-contrib
       ]))
       haskell-language-server
+      rstudio
 
       # Window Manager stuff
       haskellPackages.xmobar

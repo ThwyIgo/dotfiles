@@ -48,6 +48,7 @@
  '(scroll-bar-mode nil)
  '(sentence-end-double-space nil)
  '(tool-bar-mode nil)
+ '(truncate-lines t)
  '(visible-bell t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
