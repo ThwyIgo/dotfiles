@@ -195,12 +195,14 @@
                   :filter ,(lambda (cmd)
                              (when (company-explicit-action-p)
                                cmd)))))
-  (define-key company-active-map (kbd "TAB") #'company-complete-selection)
-  (define-key company-active-map (kbd "<tab>") #'company-complete-selection)
-  (define-key company-active-map (kbd "SPC") nil)
-  ;; Company appears to override the above keymap based on company-auto-complete-chars.
-  ;; Turning it off ensures we have full control.
-  (setq company-auto-complete-chars nil)
+(define-key company-active-map (kbd "TAB") #'company-complete-selection)
+(define-key company-active-map (kbd "<tab>") #'company-complete-selection)
+(define-key company-active-map (kbd "C-TAB") #'company-complete-common)
+(define-key company-active-map (kbd "C-<tab>") #'company-complete-common)
+(define-key company-active-map (kbd "SPC") nil)
+;; Company appears to override the above keymap based on company-auto-complete-chars.
+;; Turning it off ensures we have full control.
+(setq company-auto-complete-chars nil)
 ;; (define-key company-mode-map [tab]
 ;;   '(menu-item "maybe-company-expand" nil
 ;;               :filter (lambda (&optional _)
@@ -384,6 +386,28 @@ Version 2018-11-12 2021-09-17"
          $charMap)))))
 
 ;; Custom keybindings
+(defvar my-mode-map (make-sparse-keymap)
+  "Keymap for `my-mode'.")
+(define-minor-mode my-mode
+  "A minor mode so that my key settings override annoying major modes."
+  ;; If init-value is not set to t, this mode does not get enabled in
+  ;; `fundamental-mode' buffers even after doing \"(global-my-mode 1)\".
+  ;; More info: http://emacs.stackexchange.com/q/16693/115
+  :init-value t
+  :lighter " my-mode"
+  :keymap my-mode-map)
+;;;###autoload
+(define-globalized-minor-mode global-my-mode my-mode my-mode)
+;; The keymaps in `emulation-mode-map-alists' take precedence over
+;; `minor-mode-map-alist'
+(add-to-list 'emulation-mode-map-alists `((my-mode . ,my-mode-map)))
+;; Turn off the minor mode in the minibuffer
+(defun turn-off-my-mode ()
+  "Turn off my-mode."
+  (my-mode -1))
+(add-hook 'minibuffer-setup-hook #'turn-off-my-mode)
+(provide 'my-mode)
+
 ;; Simple packages
 ;; (global-set-key (kbd "C-x o") 'other-window)
 (global-set-key (kbd "C-x o") 'ace-window)
@@ -416,8 +440,10 @@ Version 2018-11-12 2021-09-17"
 (global-set-key (kbd "C-S-<down>")  'move-line-down)
 (global-set-key  [C-backspace] 'ryanmarcus/backward-kill-word)
 (global-set-key (kbd "C-c <backspace>") 'delete-trailing-whitespace)
-(global-set-key (kbd "C-c c") 'comment-or-uncomment-region)
-(global-set-key (kbd "C-c TAB") 'align-regexp)
+
+;; Override major modes keymaps
+(define-key my-mode-map (kbd "C-c c") 'comment-or-uncomment-region)
+(define-key my-mode-map (kbd "C-c TAB") 'align-regexp)
 
 (require 'server)
 (unless (server-running-p)

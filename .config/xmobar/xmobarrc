@@ -50,7 +50,7 @@ Config {
 
         -- memory usage monitor
         , Run Memory   [ "--template" ,"<fn=1>\xf233</fn> <used>MiB"
-                       , "--Low"      , "2048"        -- units: %
+                       , "--Low"      , "3072"        -- units: %
                        , "--High"     , "6144"        -- units: %
                        --, "--low"      , "darkgreen"
                        , "--normal"   , "darkorange"

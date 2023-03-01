@@ -14,6 +14,7 @@ import XMonad.Util.Run
 import XMonad.Util.SpawnOnce
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.ManageHelpers
+import XMonad.Actions.CycleWS
 
 -- XMobar
 import XMonad.Hooks.DynamicLog
@@ -180,10 +181,18 @@ myKeys c =
     --
     -- mod-[1..9], Switch to workspace N
     -- mod-shift-[1..9], Move client to workspace N
+    -- mod-0, Switch to next workspace
+    -- mod-ctrl-0, Switch to previous workspace
     --
-    [("M-" ++ mkey ++ num, windows $ action wsName)
+    [ ("M-" ++ mkey ++ num, windows $ action wsName)
     | (mkey, action) <- [([], W.greedyView), ("S-", W.shift)],
       (num, wsName)  <- zip (map show [1..9]) (XMonad.workspaces c)
+    ]
+    ++
+    [ ("M-0", nextWS)
+    , ("M-C-0", prevWS)
+    , ("M-S-0", shiftToNext)
+    , ("M-C-S-0", shiftToPrev)
     ]
 
     --
