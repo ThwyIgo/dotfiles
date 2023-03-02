@@ -32,7 +32,9 @@
  '(electric-pair-mode t)
  '(fill-column 80)
  '(gdb-many-windows t)
+ '(git-gutter:update-interval 2)
  '(global-flycheck-mode t)
+ '(global-git-gutter-mode t)
  '(global-yascroll-bar-mode t)
  '(haskell-interactive-popup-errors nil)
  '(ido-enable-flex-matching t)
@@ -43,7 +45,7 @@
    '(("gnu" . "https://elpa.gnu.org/packages/")
      ("melpa" . "https://melpa.org/packages/")))
  '(package-selected-packages
-   '(lsp-java clang-format+ yascroll magit company-box ligature origami haskell-mode yasnippet-snippets neotree multiple-cursors lsp-ui lsp-haskell haskell-snippets flycheck emmet-mode dracula-theme company-shell ace-window))
+   '(git-gutter lsp-java clang-format+ yascroll magit company-box ligature origami haskell-mode yasnippet-snippets neotree multiple-cursors lsp-ui lsp-haskell haskell-snippets flycheck emmet-mode dracula-theme company-shell ace-window))
  '(parens-require-spaces nil)
  '(scroll-bar-mode nil)
  '(sentence-end-double-space nil)
@@ -68,8 +70,8 @@
     company-shell company-box company flycheck haskell-snippets lsp-haskell
     lsp-ui lsp-mode lsp-java yasnippet-snippets yasnippet yascroll emmet-mode
     neotree ace-window multiple-cursors dracula-theme haskell-mode origami
-    ligature magit smex dashboard all-the-icons telephone-line nix-mode
-    clang-format+
+    ligature magit git-gutter smex dashboard all-the-icons telephone-line
+    nix-mode clang-format+
     ;;company-nixos-options
     )
    "A list of packages to ensure are installed at launch.")
@@ -120,6 +122,8 @@
 ;;(add-to-list 'auto-mode-alist '("\\.pl\\'" . prolog-mode))
 (setq auto-mode-alist (append '(("\\.pl$" . prolog-mode))
                               auto-mode-alist))
+(require 'git-gutter)
+(global-git-gutter-mode t)
 
 ;; Dashboard
 (require 'dashboard-widgets)
@@ -245,6 +249,19 @@
 ;; Java
 (require 'lsp-java)
 (add-hook 'java-mode-hook #'lsp)
+(defun my-java-mode-hook ()
+  ;; (subword-mode) ;; camelCase words are separate words
+  ;; (when window-system
+  ;;   (set-fringe-style '(8 . 0)))
+
+  ;; Fix indentation for anonymous classes
+  (c-set-offset 'substatement-open 0)
+  (if (assoc 'inexpr-class c-offsets-alist)
+      (c-set-offset 'inexpr-class 0))
+
+  ;; Indent arguments on the next line as indented body.
+  (c-set-offset 'arglist-intro '++))
+(add-hook 'java-mode-hook 'my-java-mode-hook)
 
 ;; Web development
 (setq js-indent-level 2)

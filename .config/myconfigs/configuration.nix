@@ -4,6 +4,9 @@
 
 { config, pkgs, ... }:
 
+let
+  vimix-cursors = pkgs.callPackage /home/thiago/.config/myconfigs/nix/vimix-cursors/vimix-cursors.nix {};
+in
 {
   imports =
     [ # Include the results of the hardware scan.
@@ -131,7 +134,7 @@
     description = "Thiago";
     extraGroups = [ "networkmanager" "wheel" "libvirtd" "libvirt" "kvm" "video" ];
   };
-
+  
   home-manager.users.thiago = { pkgs, ... }: {
     home.stateVersion = "22.05";
     nixpkgs.config.allowUnfree = true;
@@ -156,6 +159,7 @@
       ]))
       haskell-language-server
       rstudio
+      jetbrains.idea-community
 
       # Window Manager stuff
       haskellPackages.xmobar
@@ -234,6 +238,15 @@
     #   inactiveInterval = 1; # Minutes
     #   xautolock.enable = true;
     # };
+    
+    home.pointerCursor = {
+      package = vimix-cursors;
+      name = "Vimix-white-cursors";
+      size = 24;
+
+      x11.enable = true;
+      gtk.enable = true;
+    };
 
     gtk = {
       enable = true;
@@ -244,10 +257,6 @@
       iconTheme = {
         package = pkgs.tela-icon-theme;
         name = "Tela-dark";
-      };
-      cursorTheme = {
-        package = pkgs.callPackage /home/thiago/.config/myconfigs/nix/vimix-cursors/vimix-cursors.nix {};
-        name = "Vimix-white-cursors";
       };
     };
 
