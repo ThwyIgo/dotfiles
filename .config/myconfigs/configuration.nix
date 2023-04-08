@@ -69,6 +69,7 @@ in
     hexchat
     gnome.geary
     xplayer
+    cinnamon.xreader
   ];
 
   # Enable Xmonad window manager
@@ -134,7 +135,9 @@ in
     description = "Thiago";
     extraGroups = [ "networkmanager" "wheel" "libvirtd" "libvirt" "kvm" "video" ];
   };
-  
+
+  fonts.fontconfig.enable = true;
+
   home-manager.users.thiago = { pkgs, ... }: {
     home.stateVersion = "22.05";
     nixpkgs.config.allowUnfree = true;
@@ -145,13 +148,16 @@ in
       discord
       spotify
       tenacity # Audacity
+      blender
+
+      # CLI
       freerdp # Winapps
       bc # Winapps (basic calculator)
 
       # Programming
-      vscodium
       gdb
       clang-tools # Clangd
+      codeblocks
       (haskellPackages.ghcWithPackages (hpkgs: with hpkgs; [
         xmobar
         xmonad
@@ -160,6 +166,7 @@ in
       haskell-language-server
       rstudio
       jetbrains.idea-community
+      mars-mips
 
       # Window Manager stuff
       haskellPackages.xmobar
@@ -168,6 +175,9 @@ in
       trayer
       feh
       playerctl
+
+      # Fonts
+      monocraft
     ];
     programs.fish = {
       enable = true;
@@ -194,10 +204,11 @@ in
       defaultEditor = true;
     };
     xdg.desktopEntries.emacsclient = {
+      type = "Application";
       name = "Emacs Client";
+      genericName = "Text Editor";
       comment = "Edit text";
       exec = "sh -c \"if [ -n \\\"\\$*\\\" ]; then exec emacsclient --alternate-editor= --display=\\\"\\$DISPLAY\\\" \\\"\\$@\\\"; else exec emacsclient --alternate-editor= --create-frame; fi\" placeholder %F";
-      genericName = "Text Editor";
       icon = "emacs";
       settings = {
         Keywords = "Text;Editor;";
@@ -205,7 +216,6 @@ in
       };
       mimeType = [ "text/english" "text/plain" "text/x-makefile" "text/x-c++hdr" "text/x-c++src" "text/x-chdr" "text/x-csrc" "text/x-java" "text/x-moc" "text/x-pascal" "text/x-tcl" "text/x-tex" "application/x-shellscript" "text/x-c" "text/x-c++" ];
       terminal = false;
-      type = "Application";
       actions = {
         "new-window" = {
           name = "Nova janela";
@@ -216,6 +226,28 @@ in
           exec = "emacs %F";
         };
       };
+    };
+    xdg.desktopEntries.codeblocks = {
+      type = "Application";
+      name = "Code::Blocks IDE";
+      genericName = "Integrated development environment";
+      comment = "Configurable and extensible IDE";
+      exec = "env GTK_THEME=Adwaita-dark codeblocks %F";
+      icon = "codeblocks";
+      mimeType = [ "application/x-codeblocks" "application/x-codeblocks-workspace" ];
+      terminal = false;
+    };
+    xdg.desktopEntries.mars-mips = {
+      type = "Application";
+      categories = [ "Development" "IDE" ];
+      comment = "An IDE for programming in MIPS assembly language";
+      exec = "env GTK_THEME=Adwaita _JAVA_AWT_WM_NONREPARENTING=1 mars-mips";
+      icon = "mars-mips";
+      name = "MARS";
+    };
+    programs.vscode = {
+      enable = true;
+      package = pkgs.vscodium;
     };
     programs.alacritty = {
       enable = true;
@@ -314,15 +346,15 @@ in
   programs.dconf.enable = true;
 
   fonts.fonts = with pkgs; [
-    fira-code
     font-awesome
+    fira-code
   ];
 
   # Games
   programs.steam.enable = true;
   # Wine games
-  hardware.opengl.driSupport32Bit = true;
-  services.samba.enable = true;
+  # hardware.opengl.driSupport32Bit = true;
+  # services.samba.enable = true;
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
