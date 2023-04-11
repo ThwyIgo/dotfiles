@@ -29,6 +29,7 @@
    '("05626f77b0c8c197c7e4a31d9783c4ec6e351d9624aa28bc15e7f6d6a6ebd926" default))
  '(delete-selection-mode t)
  '(display-line-numbers 'relative)
+ '(drag-stuff-global-mode t)
  '(electric-pair-mode t)
  '(fill-column 80)
  '(gdb-many-windows t)
@@ -45,7 +46,7 @@
    '(("gnu" . "https://elpa.gnu.org/packages/")
      ("melpa" . "https://melpa.org/packages/")))
  '(package-selected-packages
-   '(git-gutter lsp-java clang-format+ yascroll magit company-box ligature origami haskell-mode yasnippet-snippets neotree multiple-cursors lsp-ui lsp-haskell haskell-snippets flycheck emmet-mode dracula-theme company-shell ace-window))
+   '(drag-stuff git-gutter lsp-java clang-format+ yascroll magit company-box ligature origami haskell-mode yasnippet-snippets neotree multiple-cursors lsp-ui lsp-haskell haskell-snippets flycheck emmet-mode dracula-theme company-shell ace-window))
  '(parens-require-spaces nil)
  '(scroll-bar-mode nil)
  '(sentence-end-double-space nil)
@@ -71,7 +72,7 @@
     lsp-ui lsp-mode lsp-java yasnippet-snippets yasnippet yascroll emmet-mode
     neotree ace-window multiple-cursors dracula-theme haskell-mode origami
     ligature magit git-gutter smex dashboard all-the-icons telephone-line
-    nix-mode clang-format+
+    nix-mode clang-format+ drag-stuff
     ;;company-nixos-options
     )
    "A list of packages to ensure are installed at launch.")
@@ -296,21 +297,6 @@
   (forward-line 1)
   (yank)
   )
-(defun move-line-up ()
-  "Move up the current line."
-  (interactive)
-  (transpose-lines 1)
-  (forward-line -2)
-  ;(indent-according-to-mode)
-  )
-(defun move-line-down ()
-  "Move down the current line."
-  (interactive)
-  (forward-line 1)
-  (transpose-lines 1)
-  (forward-line -1)
-  ;(indent-according-to-mode)
-  )
 ;; (defun http-server() ;; Ainda em desenvolvimento
 ;;   "Prompt user to enter dir path, then start a HTTP server with python3 through bash script."
 ;;   (interactive)
@@ -453,8 +439,8 @@ Version 2018-11-12 2021-09-17"
 (global-set-key (kbd "C-x 2") 'split-and-follow-horizontally)
 ;(global-set-key (kbd "C-x 3") 'split-and-follow-vertically)
 (global-set-key (kbd "C-c n") 'duplicate-line)
-(global-set-key (kbd "C-S-<up>")  'move-line-up)
-(global-set-key (kbd "C-S-<down>")  'move-line-down)
+(global-set-key (kbd "C-S-<up>")  'drag-stuff-up)
+(global-set-key (kbd "C-S-<down>")  'drag-stuff-down)
 (global-set-key  [C-backspace] 'ryanmarcus/backward-kill-word)
 (global-set-key (kbd "C-c <backspace>") 'delete-trailing-whitespace)
 

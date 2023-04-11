@@ -314,6 +314,15 @@ myStartupHook = do
   spawnOnce "nm-applet --sm-disable"
   spawnOnce "feh --bg-scale --randomize ~/.local/share/wallpapers/**"
   spawnOnce "picom -b --experimental-backends"
+  {- XMobar crashes if it launches before (alsa plugin + wireplumber).
+     Restarting XMonad after wireplumber (hopefully) fixes the problem.
+   -}
+  spawnOnce $ unwords [ "sh -c 'if [ -z $(pgrep wireplumber) ];"
+                      , "then until pgrep wireplumber; do"
+                      ,   "sleep 1;"
+                      ,   "done && sleep 1 && xmonad --restart;"
+                      , "else echo nao; fi'"
+                      ]
 
 ------------------------------------------------------------------------
 -- XMobar Prop
