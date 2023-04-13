@@ -98,7 +98,7 @@ myKeys c =
     -- , ("M-S-<Space>", setLayout $ layoutHook c)
 
     -- Toggle full screen
-    , ("M-n", sendMessage $ Toggle "Full")
+    , ("M-m", sendMessage $ Toggle "Full")
 
     -- Move focus to the next window
     , ("M-j", windows W.focusDown)
@@ -107,7 +107,7 @@ myKeys c =
     , ("M-k", windows W.focusUp  )
 
     -- Swap the focused window and the master window
-    , ("M-m", windows W.swapMaster)
+    , ("M-n", windows W.swapMaster)
 
     -- Swap the focused window with the next window
     , ("M-S-j", windows W.swapDown  )
@@ -167,10 +167,10 @@ myKeys c =
 
     -- Controls, special keys
     --
-    [ ("<XF86MonBrightnessUp>", spawn "xbacklight -inc 5")
+    [ ("<XF86MonBrightnessUp>"  , spawn "xbacklight -inc 5")
     , ("<XF86MonBrightnessDown>", spawn "xbacklight -dec 5")
-    , ("<XF86AudioLowerVolume>", spawn "amixer set Master 10%-")
-    , ("<XF86AudioRaiseVolume>", spawn "amixer set Master 10%+")
+    , ("<XF86AudioLowerVolume>" , spawn "amixer set Master 10%-")
+    , ("<XF86AudioRaiseVolume>" , spawn "amixer set Master 10%+")
     , ("<XF86AudioMute>", spawn "amixer set Master toggle")
     , ("<XF86AudioPlay>", spawn "playerctl play-pause")
     , ("<XF86AudioPrev>", spawn "playerctl previous")
