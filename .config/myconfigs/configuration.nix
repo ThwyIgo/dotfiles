@@ -157,6 +157,7 @@ in
       # Programming
       gdb
       clang-tools # Clangd
+      mono # DAP emacs dependency
       codeblocks
       (haskellPackages.ghcWithPackages (hpkgs: with hpkgs; [
         xmobar
@@ -323,6 +324,7 @@ in
     gnumake
     gcc
     acpilight
+    xorg.xkill
 
     # GUI
     simple-scan

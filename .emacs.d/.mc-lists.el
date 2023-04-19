@@ -16,6 +16,7 @@
         haskell-indentation-newline-and-indent
         ignore
         indent-for-tab-command
+        keyboard-escape-quit
         kill-region
         lsp-ui-doc--handle-mouse-movement
         overwrite-mode
