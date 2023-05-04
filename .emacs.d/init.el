@@ -1,5 +1,6 @@
 ;; Emacs 28
 
+(setq warning-minimum-level :emergency) ;; Delete or change this line to :warning when editing the file.
 (setq custom-file (concat user-emacs-directory "custom.el"))
 (when (file-exists-p (concat user-emacs-directory "custom.el"))
   (load custom-file))
@@ -279,42 +280,43 @@ Call `universal-argument' before for different count."
         completion-category-overrides '((file (styles partial-completion)))))
 
 ;; Text completion
-(use-package company
-  :hook (after-init . global-company-mode)
+(use-package corfu
   :custom
-  (company-dabbrev-downcase nil "Make company case-sensitive")
-  (company-idle-delay 0 "Delay to show avaliable completions")
-  (company-minimum-prefix-length 1)
-  :bind (:map company-active-map
-              ("<tab>" . company-complete-selection)
-              ("C-<tab>" . company-complete-common)
-              ("<return>" . nil)
-              ("RET" . nil)
-              )
-  :config
-  (use-package company-statistics
-    :config (company-statistics-mode)))
+  ;; (corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
+  (corfu-auto t)                    ;; Enable auto completion
+  (corfu-auto-prefix 2)             ;; Minimum length for auto completion.
+  (corfu-separator ?\s)             ;; Orderless field separator
+  (corfu-quit-at-boundary nil)      ;; Never quit at completion boundary
+  (corfu-quit-no-match t)           ;; Never quit, even if there is no match
+  ;; (corfu-preview-current nil)    ;; Disable current candidate preview
+  ;; (corfu-preselect 'prompt)      ;; Preselect the prompt
+  ;; (corfu-on-exact-match nil)     ;; Configure handling of exact matches
+  ;; (corfu-scroll-margin 5)        ;; Use scroll margin
 
-;; Better UI for company
-(use-package company-box
-  :after (company)
-  :hook (company-mode . company-box-mode))
+  ;; Enable Corfu only for certain modes.
+  ;; :hook ((prog-mode . corfu-mode)
+  ;;        (shell-mode . corfu-mode)
+  ;;        (eshell-mode . corfu-mode))
+
+  :config
+  (unbind-key "RET" corfu-map)
+  (corfu-history-mode 1)
+  (corfu-popupinfo-mode 1)
+  
+  :init
+  (global-corfu-mode))
+
+(use-package corfu-terminal
+  :after (corfu)
+  :config
+  (unless (or (display-graphic-p) (daemonp))
+    (corfu-terminal-mode +1)))
 
 ;; Snippets support
 (use-package yasnippet
-  :after (company)
   :config
   (yas-global-mode 1)
-  (use-package yasnippet-snippets)
-  ;; Add yasnippet support for all company backends
-  ;; https://github.com/syl20bnr/spacemacs/pull/179
-  (defun company-mode/backend-with-yas (backend)
-    (if (and (listp backend) (member 'company-yasnippet backend))
-        backend
-      (append (if (consp backend) backend (list backend))
-              '(:with company-yasnippet))))
-  (setq company-backends (mapcar #'company-mode/backend-with-yas company-backends))
-  )
+  (use-package yasnippet-snippets))
 
 ;; Multiple cursors
 (use-package multiple-cursors
@@ -339,7 +341,6 @@ Call `universal-argument' before for different count."
 
 ;; New startup screen
 (use-package dashboard
-  :after (all-the-icons)
   :config
   (dashboard-setup-startup-hook)
   (dashboard-modify-heading-icons '((recents . "file-text")
@@ -379,30 +380,44 @@ Call `universal-argument' before for different count."
   (git-gutter:update-interval 2))
 
 ;; Language server protocol support (smart text completion)
-(use-package lsp-mode
-  :after (haskell-mode lsp-haskell)
-  :init
-  ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
-  (setq lsp-keymap-prefix "C-c l")
-  :hook (((c-mode c++-mode haskell-mode) . lsp)))
+;; Eglot will be part of emacs 29, this will be no longer necessary soon
+(use-package eglot
+  :hook (prog-mode . eglot-ensure)
+  :custom
+  (eglot-autoshutdown 1)
 
-;; Show lsp messages in sideline
-(use-package lsp-ui
-  :after (lsp-mode)
-  :commands lsp-ui-mode)
+  :bind ("C-<f2>" . eglot-rename))
+; Eglot keybindings:
+; "M-." goto symbol definition
+; "M-," go back (after "M-.")
+; "M-?" find references to a symbol
+; "C-h-." display symbol help
+; Useful funcions
+; "imenu" search definition IN THE CURRENT FILE
 
 ;; Underline errors, warnings and suggestions as you type
-(use-package flycheck
-  :hook (after-init . global-flycheck-mode))
+(use-package flymake
+  :config
+  (flymake-mode 1))
 
 ;; "C-<return>" to fold a code block
 (use-package origami
   :hook (prog-mode . origami-mode)
   :bind ("C-<return>" . origami-forward-toggle-node))
 
-;; Change indentation style because the default is GNU and I don't like it
+;; Documentation at point
+(use-package eldoc-box
+  :after (eglot)
+  :config
+  (add-hook 'eglot-managed-mode-hook #'eldoc-box-hover-mode t)
+  :custom
+  (eldoc-box-max-pixel-height 400)
+  (eldoc-box-max-pixel-width 500))
+
+;; Install clangd to enable lsp features for C/C++
 (use-package cc-mode
   :config
+  ;; Change indentation style because the default is GNU and I don't like it
   (add-to-list 'c-default-style '(c-mode . "linux"))
   (add-to-list 'c-default-style '(c++-mode . "linux"))
   (setq c-basic-offset 4))
@@ -418,35 +433,14 @@ Call `universal-argument' before for different count."
 
 ;; Auto-format code with clang-format when saving the file
 (use-package clang-format+
-  :hook (c-mode . clang-format+-mode))
+  :hook
+  (c-mode . clang-format+-mode)
+  (c-mode . clang-format+-mode))
 
+;; Install hls to enable lsp features for Haskell
 (use-package haskell-mode
   :hook ((haskell-mode . (lambda ()
                            (push '("\\" . ?λ) prettify-symbols-alist)))
          )
   :config
   (add-hook 'haskell-mode-hook 'prettify-symbols-mode 1))
-
-(use-package lsp-haskell)
-
-;; DAP support (debugger) !(it isn't working at the moment)
-;; https://emacs-lsp.github.io/lsp-mode/tutorials/CPP-guide/#debugging
-;; https://code.visualstudio.com/docs/cpp/launch-json-reference
-;; You maybe have to compile this by hand: https://github.com/llvm/llvm-project/tree/main/lldb/tools/lldb-vscode
-;; The above is probably false
-(use-package dap-mode
-  :config
-  (require 'dap-cpptools)
-
-  (dap-register-debug-template
-  "c++::Run a.out"
-  (list :name "c++::Run a.out"
-        :type "cppdbg"
-        :request "launch"
-        :MIMode "gdb"
-;        :miDebuggerPath "/home/thiago/.nix-profile/bin/gdb"
-        :program "${workspaceFolder}/a.out"
-        :cwd "${workspaceFolder}"))
-  )
-;; Create a launch.json for each project to use a custom debug configutarion
-;; for it.

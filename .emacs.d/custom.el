@@ -7,7 +7,8 @@
  '(blink-cursor-mode nil)
  '(column-number-mode t)
  '(package-selected-packages
-   '(dap-mode realgud git-gutter magit origami lsp-haskell haskell-mode flycheck lsp-ui lsp-mode neotree drag-stuff ligature multiple-cursors company-statistics yasnippet-snippets yasnippet company-box company orderless save-hist vertico ace-window yascroll use-package dracula-theme auto-package-update)))
+   '(corfu-terminal eldoc-box eglot corfu git-gutter magit origami haskell-mode neotree drag-stuff ligature multiple-cursors yasnippet-snippets yasnippet orderless save-hist vertico ace-window yascroll use-package dracula-theme auto-package-update))
+ )
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
