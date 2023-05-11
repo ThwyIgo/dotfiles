@@ -29,6 +29,7 @@
         ace-window
         comint-send-input
         compile
+        eval-last-sexp
         goto-line
         handle-switch-frame
         lsp-signature-stop

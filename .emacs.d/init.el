@@ -87,7 +87,7 @@
   (yank)
   )
 
-(defun insert-random-number (*n) ;; (random t) to increase randomness
+(defun insert-random-number-with-n-digits (*n) ;; (random t) to increase randomness
   "Insert *n random digits. *n default to 5.
 Call `universal-argument' before for different count."
   (interactive "P")
@@ -95,6 +95,14 @@ Call `universal-argument' before for different count."
         (-baseCount 10))
     (dotimes (-i (if (numberp *n) (abs *n) 5 ))
       (insert (elt -charset (random -baseCount)))))
+  )
+
+(defun insert-random-number (n)
+  "Insert a random number between 0 and `universal-argument'.
+Default is 1000."
+  (interactive "P")
+  (message "%s" n)
+  (insert (number-to-string (random (if (numberp n) (identity n) 1000))))
   )
 
 (defun ryanmarcus/backward-kill-word ()
@@ -382,10 +390,13 @@ Call `universal-argument' before for different count."
 ;; Language server protocol support (smart text completion)
 ;; Eglot will be part of emacs 29, this will be no longer necessary soon
 (use-package eglot
-  :hook (prog-mode . eglot-ensure)
+  :hook
+  (c-mode . eglot-ensure)
+  (c++-mode . eglot-ensure)
+  (java-mode . eglot-ensure)
+  (haskell-mode . eglot-ensure)
   :custom
   (eglot-autoshutdown 1)
-
   :bind ("C-<f2>" . eglot-rename))
 ; Eglot keybindings:
 ; "M-." goto symbol definition
@@ -414,6 +425,10 @@ Call `universal-argument' before for different count."
   (eldoc-box-max-pixel-height 400)
   (eldoc-box-max-pixel-width 500))
 
+;; Modular debugger
+(use-package realgud)
+;; "M-x realgud:DEBUGGERNAME" to start debugging
+
 ;; Install clangd to enable lsp features for C/C++
 (use-package cc-mode
   :config
@@ -435,12 +450,25 @@ Call `universal-argument' before for different count."
 (use-package clang-format+
   :hook
   (c-mode . clang-format+-mode)
-  (c-mode . clang-format+-mode))
+  (c++-mode . clang-format+-mode))
+
+;; Eclipse JDT Language Server is hard to work with. eglot-java automates a lot of things
+(use-package eglot-java
+  :hook (java-mode . eglot-java-mode)
+  :bind (:map eglot-java-mode-map
+              ("C-c l n" . eglot-java-file-new)
+              ("C-c l x" . eglot-java-run-main)
+              ("C-c l t" . eglot-java-run-test)
+              ("C-c l N" . eglot-java-project-new)
+              ("C-c l T" . eglot-java-project-build-task)
+              ("C-c l R" . eglot-java-project-build-refresh)))
 
 ;; Install hls to enable lsp features for Haskell
 (use-package haskell-mode
   :hook ((haskell-mode . (lambda ()
-                           (push '("\\" . ?λ) prettify-symbols-alist)))
-         )
+                           (push '("\\" . ?λ) prettify-symbols-alist))))
   :config
   (add-hook 'haskell-mode-hook 'prettify-symbols-mode 1))
+(put 'narrow-to-region 'disabled nil)
+
+(use-package nix-mode)

@@ -150,14 +150,9 @@ in
       tenacity # Audacity
       blender
 
-      # CLI
-      freerdp # Winapps
-      bc # Winapps (basic calculator)
-
       # Programming
       gdb
       clang-tools # Clangd
-      mono # DAP emacs dependency
       codeblocks
       (haskellPackages.ghcWithPackages (hpkgs: with hpkgs; [
         xmobar
