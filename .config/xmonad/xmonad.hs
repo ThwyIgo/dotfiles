@@ -41,6 +41,7 @@ fileManager = "nemo"
 browser     = "librewolf"
 emailClient = "thunderbird"
 calculator  = "gnome-calculator"
+screenshot  = "gnome-screenshot --interactive"
 
 -- Whether focus follows the mouse pointer.
 myFocusFollowsMouse :: Bool
@@ -157,17 +158,19 @@ myKeys c =
     -- Launch apps
     [("M-a " ++ key, spawn cmd)
     | (key, cmd) <- [("e", "emacsclient --alternate-editor=emacs -c"),
+                     ("c", calculator),
                      ("f", fileManager),
+                     ("v", "pavucontrol"),
                      ("b", browser),
-                     ("m", emailClient),
-                     ("c", calculator)
+                     ("m", emailClient)
                      ]
     ]
     ++
 
     -- Controls, special keys
     --
-    [ ("<XF86MonBrightnessUp>"  , spawn "xbacklight -inc 5")
+    [ ("<Print>", spawn screenshot)
+    , ("<XF86MonBrightnessUp>"  , spawn "xbacklight -inc 5")
     , ("<XF86MonBrightnessDown>", spawn "xbacklight -dec 5")
     , ("<XF86AudioLowerVolume>" , spawn "amixer set Master 10%-")
     , ("<XF86AudioRaiseVolume>" , spawn "amixer set Master 10%+")
@@ -210,15 +213,15 @@ myKeys c =
 myMouseBindings (XConfig {XMonad.modMask = modm}) = M.fromList $
 
     -- mod-button1, Set the window to floating mode and move by dragging
-    [ ((modm, button1), (\w -> focus w >> mouseMoveWindow w
-                                       >> windows W.shiftMaster))
+    [ ((modm, button1), \w -> focus w >> mouseMoveWindow w
+                              >> windows W.shiftMaster)
 
     -- mod-button2, Raise the window to the top of the stack
-    , ((modm, button2), (\w -> focus w >> windows W.shiftMaster))
+    , ((modm, button2), \w -> focus w >> windows W.shiftMaster)
 
     -- mod-button3, Set the window to floating mode and resize by dragging
-    , ((modm, button3), (\w -> focus w >> mouseResizeWindow w
-                                       >> windows W.shiftMaster))
+    , ((modm, button3), \w -> focus w >> mouseResizeWindow w
+                              >> windows W.shiftMaster)
 
     -- you may also bind events to the mouse scroll wheel (button4 and button5)
     ]
@@ -275,7 +278,8 @@ myLayout = toggleLayouts (noBorders Full) $ smartBorders . avoidStruts $
 myManageHook = composeAll
     [ className =? "MPlayer"          --> doFloat
     , className =? "Gimp"             --> doFloat
-    , appName   =? "gnome-calculator" --> doFloat -- Not working
+    , className =? "Gnome-screenshot" --> doFloat
+    , className =? "gnome-calculator" --> doFloat -- Not working
     , title   =? "Picture-in-Picture" --> doFloat
     , resource  =? "desktop_window"   --> doIgnore
     , resource  =? "kdesktop"         --> doIgnore

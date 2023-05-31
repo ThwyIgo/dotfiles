@@ -40,11 +40,14 @@
 ;; GNU standard
 (setq-default fill-column 80)
 
-;; If the window is too narrow, make the mode-line compact
-(setq mode-line-compact 'long)
+;; Make I-search show match numbers in the search prompt
+(setq isearch-lazy-count t)
 
 ;; Please, don't make noise when I type "C-g"
 (setq visible-bell t)
+
+;; If the window is too narrow, make the mode-line compact
+(setq mode-line-compact 'long)
 
 ;; Change the mode-line a little bit
 (setq-default mode-line-format
@@ -65,6 +68,10 @@
         mode-line-end-spaces            ;; Mode line construct to put at the end of the mode line.
         ))
 
+;; Screen-saver
+(require 'zone)
+(zone-when-idle 60)
+
 ;;; Other configs
 (electric-pair-mode t)
 (setq-default truncate-lines t)
@@ -73,6 +80,7 @@
 (require 'server)
 (unless (server-running-p)
   (server-start))
+(put 'narrow-to-region 'disabled nil) ;; "C-x n n" / "C-x n w"
 
 ;;;;; Functions ;;;;;
 
@@ -265,6 +273,15 @@ Default is 1000."
   (scroll-bar-mode -1)
   :custom
   (global-yascroll-bar-mode t))
+
+;; Custom mode-line
+(use-package mood-line
+  ;; Enable mood-line
+  :config
+  (mood-line-mode)
+  ;; Use pretty Fira Code-compatible glyphs
+  :custom
+  (mood-line-glyph-alist mood-line-glyphs-fira-code))
 
 ;; Better window switching
 (use-package ace-window
@@ -465,10 +482,13 @@ Default is 1000."
 
 ;; Install hls to enable lsp features for Haskell
 (use-package haskell-mode
-  :hook ((haskell-mode . (lambda ()
-                           (push '("\\" . ?λ) prettify-symbols-alist))))
+  :hook (haskell-mode . (lambda ()
+                          (push '("\\" . ?λ) prettify-symbols-alist)))
+  (haskell-mode . interactive-haskell-mode)
   :config
-  (add-hook 'haskell-mode-hook 'prettify-symbols-mode 1))
-(put 'narrow-to-region 'disabled nil)
+  (add-hook 'haskell-mode-hook 'prettify-symbols-mode 1)
+  :custom
+  (haskell-interactive-popup-errors nil))
+;; "C-c C-l" Start Haskell REPL
 
 (use-package nix-mode)

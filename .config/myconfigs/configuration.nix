@@ -204,6 +204,7 @@ in
       name = "Emacs Client";
       genericName = "Text Editor";
       comment = "Edit text";
+      categories = [ "Development" "TextEditor" ];
       exec = "sh -c \"if [ -n \\\"\\$*\\\" ]; then exec emacsclient --alternate-editor= --display=\\\"\\$DISPLAY\\\" \\\"\\$@\\\"; else exec emacsclient --alternate-editor= --create-frame; fi\" placeholder %F";
       icon = "emacs";
       settings = {
@@ -228,6 +229,7 @@ in
       name = "Code::Blocks IDE";
       genericName = "Integrated development environment";
       comment = "Configurable and extensible IDE";
+      categories = [ "Development" ];
       exec = "env GTK_THEME=Adwaita-dark codeblocks %F";
       icon = "codeblocks";
       mimeType = [ "application/x-codeblocks" "application/x-codeblocks-workspace" ];
@@ -258,14 +260,6 @@ in
       theme = "dmenu";
       terminal = "${pkgs.alacritty}/bin/alacritty";
     };
-    
-    # services.screen-locker = {
-    #   enable = true;
-    #   # security.wrappers.<name>.setuid
-    #   lockCmd = "${pkgs.slock}/bin/slock";
-    #   inactiveInterval = 1; # Minutes
-    #   xautolock.enable = true;
-    # };
     
     home.pointerCursor = {
       package = vimix-cursors;
@@ -320,6 +314,11 @@ in
     gcc
     acpilight
     xorg.xkill
+
+    # Sysadmin
+    arandr
+    pavucontrol
+    xfce.xfce4-taskmanager
 
     # GUI
     simple-scan
