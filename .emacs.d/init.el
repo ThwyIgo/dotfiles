@@ -267,6 +267,10 @@ Default is 1000."
   ;; per mode with `ligature-mode'.
   (global-ligature-mode t))
 
+;; Set background color to strings that match color names
+(use-package rainbow-mode
+  :hook (html-mode css-mode scss-mode js-mode))
+
 ;; Custom scroll bar
 (use-package yascroll
   :init
@@ -437,7 +441,7 @@ Default is 1000."
 (use-package eldoc-box
   :after (eglot)
   :config
-  (add-hook 'eglot-managed-mode-hook #'eldoc-box-hover-mode t)
+  (add-hook 'eglot-managed-mode-hook #'eldoc-box-hover-at-point-mode t)
   :custom
   (eldoc-box-max-pixel-height 400)
   (eldoc-box-max-pixel-width 500))

@@ -70,6 +70,7 @@ in
     gnome.geary
     xplayer
     cinnamon.xreader
+    cinnamon.warpinator
   ];
 
   # Enable Xmonad window manager
@@ -142,6 +143,10 @@ in
     home.stateVersion = "22.05";
     nixpkgs.config.allowUnfree = true;
     home.packages = with pkgs; [
+      # Libs
+      libsForQt5.qtstyleplugin-kvantum
+
+      # GUI
       keepassxc
       tdesktop # Telegram
       signal-desktop
@@ -162,7 +167,6 @@ in
       haskell-language-server
       rstudio
       jetbrains.idea-community
-      mars-mips
 
       # Window Manager stuff
       haskellPackages.xmobar
@@ -235,14 +239,6 @@ in
       mimeType = [ "application/x-codeblocks" "application/x-codeblocks-workspace" ];
       terminal = false;
     };
-    xdg.desktopEntries.mars-mips = {
-      type = "Application";
-      categories = [ "Development" "IDE" ];
-      comment = "An IDE for programming in MIPS assembly language";
-      exec = "env GTK_THEME=Adwaita _JAVA_AWT_WM_NONREPARENTING=1 mars-mips";
-      icon = "mars-mips";
-      name = "MARS";
-    };
     programs.vscode = {
       enable = true;
       package = pkgs.vscodium;
@@ -260,7 +256,9 @@ in
       theme = "dmenu";
       terminal = "${pkgs.alacritty}/bin/alacritty";
     };
-    
+
+    services.kdeconnect.indicator = true;
+
     home.pointerCursor = {
       package = vimix-cursors;
       name = "Vimix-white-cursors";
@@ -285,7 +283,12 @@ in
     qt = {
       enable = true;
       platformTheme = "gtk";
-      style.name = "gtk2";
+      style.name = "kvantum";
+    };
+
+    home.file."kvantum.kvconfig" = {
+      target = ".config/Kvantum/kvantum.kvconfig";
+      text = "[General]\ntheme=KvGnomeDark";
     };
 
     # 漢語
@@ -302,7 +305,7 @@ in
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
-  environment.systemPackages = with pkgs; [
+  environment.systemPackages = with pkgs; [    
     # CL
     nix-doc
     micro
@@ -367,11 +370,10 @@ in
 
   # Open ports in the firewall.
   # 443/631/9100-9102 = CUPS/Printers
-  # 42000/42001 = Warpinator
   # 5353 = discovery protocol / mDNS
   networking.firewall = {
-    allowedTCPPorts = [ 443 631 42000 42001 ];
-    allowedUDPPorts = [ 5353 42000 42001 ];
+    allowedTCPPorts = [ 443 631 ];
+    allowedUDPPorts = [ 5353 ];
     allowedTCPPortRanges = [
       { from = 9100; to = 9102; }
     ];
