@@ -12,6 +12,9 @@
   (make-directory backup-directory))
 (setq backup-directory-alist `((".*" \, backup-directory)))
 
+;; Default shell
+(setq shell-file-name "fish")
+
 ;; Tool-bar is useless
 (tool-bar-mode -1)
 
@@ -67,10 +70,6 @@
         mode-line-misc-info             ;; IDK
         mode-line-end-spaces            ;; Mode line construct to put at the end of the mode line.
         ))
-
-;; Screen-saver
-(require 'zone)
-(zone-when-idle 60)
 
 ;;; Other configs
 (electric-pair-mode t)
@@ -456,7 +455,7 @@ Default is 1000."
   ;; Change indentation style because the default is GNU and I don't like it
   (add-to-list 'c-default-style '(c-mode . "linux"))
   (add-to-list 'c-default-style '(c++-mode . "linux"))
-  (setq c-basic-offset 4))
+  )
 
 (add-hook 'c-mode-hook
           (lambda ()
@@ -466,6 +465,8 @@ Default is 1000."
 		          (concat "gcc -g -Wall -lm "
 			          (if buffer-file-name
 			              (shell-quote-argument buffer-file-name)))))))
+(add-hook 'c-mode-hook (lambda () (setq-local c-basic-offset 4)))
+(add-hook 'c++-mode-hook (lambda () (setq-local c-basic-offset 4)))
 
 ;; Auto-format code with clang-format when saving the file
 (use-package clang-format+
@@ -475,14 +476,9 @@ Default is 1000."
 
 ;; Eclipse JDT Language Server is hard to work with. eglot-java automates a lot of things
 (use-package eglot-java
-  :hook (java-mode . eglot-java-mode)
-  :bind (:map eglot-java-mode-map
-              ("C-c l n" . eglot-java-file-new)
-              ("C-c l x" . eglot-java-run-main)
-              ("C-c l t" . eglot-java-run-test)
-              ("C-c l N" . eglot-java-project-new)
-              ("C-c l T" . eglot-java-project-build-task)
-              ("C-c l R" . eglot-java-project-build-refresh)))
+  :hook (java-mode . eglot-java-mode))
+
+(use-package groovy-mode)
 
 ;; Install hls to enable lsp features for Haskell
 (use-package haskell-mode
