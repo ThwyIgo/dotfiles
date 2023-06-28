@@ -52,6 +52,9 @@
 ;; If the window is too narrow, make the mode-line compact
 (setq mode-line-compact 'long)
 
+;; Make links clickable (https://gnu.org)
+(global-goto-address-mode)
+
 ;; Change the mode-line a little bit
 (setq-default mode-line-format
       '("%e" mode-line-front-space      ;; Small empty space on the right
@@ -363,9 +366,10 @@ Default is 1000."
 
 ;; Cool font icons
 (use-package all-the-icons
-  :when (or (display-graphic-p) (daemonp))
-  :custom
-  (all-the-icons-dired-mode t))
+  :when (or (display-graphic-p) (daemonp)))
+(use-package all-the-icons-dired
+  :after (all-the-icons)
+  :hook (dired-mode . (lambda () (all-the-icons-dired-mode t))))
 
 ;; New startup screen
 (use-package dashboard
@@ -408,7 +412,7 @@ Default is 1000."
   (git-gutter:update-interval 2))
 
 ;; Language server protocol support (smart text completion)
-;; Eglot will be part of emacs 29, this will be no longer necessary soon
+;; Eglot will be part of emacs 29.
 (use-package eglot
   :hook
   (c-mode . eglot-ensure)
@@ -467,6 +471,8 @@ Default is 1000."
 			              (shell-quote-argument buffer-file-name)))))))
 (add-hook 'c-mode-hook (lambda () (setq-local c-basic-offset 4)))
 (add-hook 'c++-mode-hook (lambda () (setq-local c-basic-offset 4)))
+
+(use-package cmake-mode)
 
 ;; Auto-format code with clang-format when saving the file
 (use-package clang-format+

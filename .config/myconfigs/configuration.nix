@@ -158,7 +158,7 @@ in
       # Programming
       gdb
       clang-tools # Clangd
-      codeblocks
+      cmake
       (haskellPackages.ghcWithPackages (hpkgs: with hpkgs; [
         xmobar
         xmonad
@@ -227,17 +227,6 @@ in
           exec = "emacs %F";
         };
       };
-    };
-    xdg.desktopEntries.codeblocks = {
-      type = "Application";
-      name = "Code::Blocks IDE";
-      genericName = "Integrated development environment";
-      comment = "Configurable and extensible IDE";
-      categories = [ "Development" ];
-      exec = "env GTK_THEME=Adwaita-dark codeblocks %F";
-      icon = "codeblocks";
-      mimeType = [ "application/x-codeblocks" "application/x-codeblocks-workspace" ];
-      terminal = false;
     };
     programs.vscode = {
       enable = true;
