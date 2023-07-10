@@ -15,8 +15,14 @@
 ;; Default shell
 (setq shell-file-name "fish")
 
-;; Tool-bar is useless
+;; Disable tool-bar and menu-bar
+(menu-bar-mode -1)
 (tool-bar-mode -1)
+
+;; Enable tab-bar (prefix: C-x t)
+(setq tab-bar-show 1) ;; Show the tab-bar only when there's more than 2 tabs
+(setq tab-bar-close-button-show nil)
+(tab-bar-mode)
 
 ;; Emacs doesn't take the whole screen when in full screen mode in some window
 ;; managers. This fixes it.
@@ -473,6 +479,8 @@ Default is 1000."
 (add-hook 'c++-mode-hook (lambda () (setq-local c-basic-offset 4)))
 
 (use-package cmake-mode)
+(use-package eldoc-cmake
+  :hook (cmake-mode . eldoc-cmake-enable))
 
 ;; Auto-format code with clang-format when saving the file
 (use-package clang-format+

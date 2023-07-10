@@ -3,10 +3,6 @@
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
 { config, pkgs, ... }:
-
-let
-  vimix-cursors = pkgs.callPackage /home/thiago/.config/myconfigs/nix/vimix-cursors/vimix-cursors.nix {};
-in
 {
   imports =
     [ # Include the results of the hardware scan.
@@ -134,158 +130,13 @@ in
   users.users.thiago = {
     isNormalUser = true;
     description = "Thiago";
-    extraGroups = [ "networkmanager" "wheel" "libvirtd" "libvirt" "kvm" "video" ];
+    extraGroups = [ "networkmanager" "wheel" "libvirtd" "video" ];
   };
 
   fonts.fontconfig.enable = true;
 
-  home-manager.users.thiago = { pkgs, ... }: {
-    home.stateVersion = "22.05";
-    nixpkgs.config.allowUnfree = true;
-    home.packages = with pkgs; [
-      # Libs
-      libsForQt5.qtstyleplugin-kvantum
-
-      # GUI
-      keepassxc
-      tdesktop # Telegram
-      signal-desktop
-      discord
-      spotify
-      tenacity # Audacity
-      blender
-
-      # Programming
-      gdb
-      clang-tools # Clangd
-      cmake
-      (haskellPackages.ghcWithPackages (hpkgs: with hpkgs; [
-        xmobar
-        xmonad
-        xmonad-contrib
-      ]))
-      haskell-language-server
-      jetbrains.idea-community
-      gradle
-
-      # Window Manager stuff
-      haskellPackages.xmobar
-      picom-jonaburg
-      networkmanagerapplet
-      trayer
-      feh
-      playerctl
-
-      # Fonts
-      monocraft
-    ];
-    programs.fish = {
-      enable = true;
-      functions = {
-        fish_right_prompt = "echo [(date '+%H:%M')]";
-      };
-      interactiveShellInit = ''
-        set fish_color_user 5cf brblue
-        set fish_color_cwd brgreen
-        set fish_greeting
-      '';
-      shellAliases = {
-        gitlog = "git log --decorate --oneline --graph";
-        dfgit = "git --git-dir=$HOME/.dotfiles --work-tree=$HOME";
-        dfgitlog = "dfgit log --decorate --oneline --graph";
-      };
-    };
-    programs.bash = {
-      enable = true;
-    };
-    programs.emacs.enable = true;
-    services.emacs = {
-      enable = true;
-      defaultEditor = true;
-    };
-    xdg.desktopEntries.emacsclient = {
-      type = "Application";
-      name = "Emacs Client";
-      genericName = "Text Editor";
-      comment = "Edit text";
-      categories = [ "Development" "TextEditor" ];
-      exec = "sh -c \"if [ -n \\\"\\$*\\\" ]; then exec emacsclient --alternate-editor= --display=\\\"\\$DISPLAY\\\" \\\"\\$@\\\"; else exec emacsclient --alternate-editor= --create-frame; fi\" placeholder %F";
-      icon = "emacs";
-      settings = {
-        Keywords = "Text;Editor;";
-        StartupWMClass = "Emacs";
-      };
-      mimeType = [ "text/english" "text/plain" "text/x-makefile" "text/x-c++hdr" "text/x-c++src" "text/x-chdr" "text/x-csrc" "text/x-java" "text/x-moc" "text/x-pascal" "text/x-tcl" "text/x-tex" "application/x-shellscript" "text/x-c" "text/x-c++" ];
-      terminal = false;
-      actions = {
-        "new-window" = {
-          name = "Nova janela";
-          exec = "emacsclient --alternate-editor= --create-frame %F";
-        };
-        "new-instance" = {
-          name = "Nova instância";
-          exec = "emacs %F";
-        };
-      };
-    };
-    programs.vscode = {
-      enable = true;
-      package = pkgs.vscodium;
-    };
-    programs.alacritty = {
-      enable = true;
-      settings = {
-        window.opacity = 0.9;
-        shell.program = "fish";
-      };
-    };
-    programs.rofi = {
-      enable = true;
-      font = "Ubuntu Normal Medium 12";
-      theme = "dmenu";
-      terminal = "${pkgs.alacritty}/bin/alacritty";
-    };
-
-    services.kdeconnect.indicator = true;
-
-    home.pointerCursor = {
-      package = vimix-cursors;
-      name = "Vimix-white-cursors";
-      size = 24;
-
-      x11.enable = true;
-      gtk.enable = true;
-    };
-
-    gtk = {
-      enable = true;
-      theme = {
-        package = pkgs.orchis-theme;
-        name = "Orchis-Grey-Dark";
-      };
-      iconTheme = {
-        package = pkgs.tela-icon-theme;
-        name = "Tela-dark";
-      };
-    };
-
-    qt = {
-      enable = true;
-      platformTheme = "gtk";
-      style.name = "kvantum";
-    };
-
-    home.file."kvantum.kvconfig" = {
-      target = ".config/Kvantum/kvantum.kvconfig";
-      text = "[General]\ntheme=KvGnomeDark";
-    };
-
-    # 漢語
-    i18n.inputMethod = {
-      enabled = "fcitx5";
-      fcitx5.addons = with pkgs; [ fcitx5-chinese-addons ];
-    };
-  };
+  home-manager.users.thiago = import (/home/thiago +
+                                      /.config/myconfigs/nix/home-manager-config.nix);
 
   environment.localBinInPath = true;
 
@@ -324,12 +175,13 @@ in
     virt-manager
   ];
   programs.java.enable = true;
-  services.flatpak.enable = true;
-  xdg.portal.enable = true; # Required for flatpak
-  xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
   programs.kdeconnect.enable = true;
   programs.slock.enable = true;
 
+  services.flatpak.enable = true;
+  xdg.portal.enable = true; # Required for flatpak
+  xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+  
   virtualisation.libvirtd.enable = true;
   programs.dconf.enable = true;
 
