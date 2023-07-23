@@ -58,7 +58,7 @@
 ;; If the window is too narrow, make the mode-line compact
 (setq mode-line-compact 'long)
 
-;; Make links clickable (https://gnu.org)
+;; Make links clickable (https://gnu.org) "C-c RET"
 (global-goto-address-mode)
 
 ;; Change the mode-line a little bit
@@ -80,6 +80,12 @@
         mode-line-end-spaces            ;; Mode line construct to put at the end of the mode line.
         ))
 
+;; org-mode
+(use-package org
+  :custom
+  (org-edit-src-content-indentation 0)
+)
+
 ;;; Other configs
 (electric-pair-mode t)
 (setq-default truncate-lines t)
@@ -89,6 +95,7 @@
 (unless (server-running-p)
   (server-start))
 (put 'narrow-to-region 'disabled nil) ;; "C-x n n" / "C-x n w"
+(setq set-mark-command-repeat-pop t) ;; "C-u C-SPC"
 
 ;;;;; Functions ;;;;;
 
@@ -404,6 +411,37 @@ Default is 1000."
   :bind ([f8] . neotree-toggle)
   :config
   (setq neo-theme (if (or (display-graphic-p) (daemonp)) 'icons 'arrow)))
+
+;; Pop-up buffers
+(use-package popper
+  :bind (("C-S-j"   . popper-toggle-latest)
+         ;; ("M-`"   . popper-cycle)
+         ("C-M-j" . popper-toggle-type)
+         )
+  :init
+  (setq popper-reference-buffers
+        '("\\*Messages\\*"
+          "Output\\*$"
+          "\\*Async Shell Command\\*"
+          help-mode
+          compilation-mode
+          term-mode))
+  (popper-mode +1)
+  (popper-echo-mode +1) ; For echo area hints
+  :hook (term-mode . (lambda ()
+                       (let ((buf (current-buffer)))
+                         (bury-buffer)
+                         (switch-to-buffer-other-window buf)
+                         )))
+  )
+
+;; which-key
+(use-package which-key
+  :custom
+  (which-key-idle-delay 2.0)
+  :config
+  (which-key-mode)
+  )
 
 ;;;;; IDE-like features ;;;;
 

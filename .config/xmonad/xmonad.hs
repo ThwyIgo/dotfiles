@@ -145,7 +145,10 @@ myKeys c =
     , ("M-<Pause>", spawn "slock")
 
     -- Quit xmonad
-    , ("M-C-q", io (exitWith ExitSuccess))
+    , ("M-C-q", io exitSuccess)
+
+    -- Quit GUI
+    , ("M-<Escape>", spawn "session-quit")
 
     -- Restart xmonad
     , ("M-C-r", spawn "xmonad --recompile && xmonad --restart")

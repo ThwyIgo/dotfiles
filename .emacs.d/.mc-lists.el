@@ -6,6 +6,7 @@
         c-beginning-of-statement
         c-electric-brace
         c-electric-delete-forward
+        c-electric-lt-gt
         c-electric-paren
         c-electric-semi&comma
         c-electric-slash
@@ -13,6 +14,7 @@
         c-indent-line-or-region
         comint-delchar-or-maybe-eof
         electric-pair-delete-pair
+        end-of-buffer
         haskell-indentation-common-electric-command
         haskell-indentation-newline-and-indent
         ignore
@@ -35,4 +37,5 @@
         handle-switch-frame
         lsp-signature-stop
         mouse-drag-bottom-edge
+        switch-to-buffer
         ))
