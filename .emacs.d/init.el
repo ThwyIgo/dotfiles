@@ -19,6 +19,10 @@
 (menu-bar-mode -1)
 (tool-bar-mode -1)
 
+;; Customize scratch buffer
+(setq initial-major-mode 'text-mode)
+(setq initial-scratch-message nil)
+
 ;; Enable tab-bar (prefix: C-x t)
 (setq tab-bar-show 1) ;; Show the tab-bar only when there's more than 2 tabs
 (setq tab-bar-close-button-show nil)
@@ -82,9 +86,17 @@
 
 ;; org-mode
 (use-package org
+  :hook (org-mode . auto-fill-mode)
   :custom
   (org-edit-src-content-indentation 0)
+  (org-startup-indented t)
 )
+(use-package org-sticky-header
+  :after (org)
+  :hook (org-mode . org-sticky-header-mode)
+  :custom
+  (org-sticky-header-always-show-header nil)
+  (org-sticky-header-full-path 'reversed))
 
 ;;; Other configs
 (electric-pair-mode t)
@@ -96,6 +108,7 @@
   (server-start))
 (put 'narrow-to-region 'disabled nil) ;; "C-x n n" / "C-x n w"
 (setq set-mark-command-repeat-pop t) ;; "C-u C-SPC"
+(put 'scroll-left 'disabled nil) ;; "C-x <"
 
 ;;;;; Functions ;;;;;
 
@@ -167,14 +180,14 @@ Default is 1000."
 ;; The code above creates 'my-mode-map', which will override major modes keymaps
 (define-key my-mode-map (kbd "C-c c") 'comment-or-uncomment-region)
 (define-key my-mode-map (kbd "C-c TAB") 'align-regexp)
-(define-key my-mode-map (kbd "M-<up>") 'windmove-up)
-(define-key my-mode-map (kbd "M-<down>") 'windmove-down)
-(define-key my-mode-map (kbd "M-<left>") 'windmove-left)
-(define-key my-mode-map (kbd "M-<right>") 'windmove-right)
+(define-key my-mode-map (kbd "<up>") 'windmove-up)
+(define-key my-mode-map (kbd "<down>") 'windmove-down)
+(define-key my-mode-map (kbd "<left>") 'windmove-left)
+(define-key my-mode-map (kbd "<right>") 'windmove-right)
 
-(global-set-key (kbd "C-c <backspace>") 'delete-trailing-whitespace)
-(global-set-key [C-backspace] 'ryanmarcus/backward-kill-word)
 (global-set-key (kbd "C-c DEL") 'delete-trailing-whitespace)
+(global-set-key (kbd "M-q") 'fill-region)
+(global-set-key [C-backspace] 'ryanmarcus/backward-kill-word)
 (global-set-key (kbd "C-c n") 'duplicate-line)
 
 ;;;;;;;;;;
@@ -346,7 +359,7 @@ Default is 1000."
   (unbind-key "RET" corfu-map)
   (corfu-history-mode 1)
   (corfu-popupinfo-mode 1)
-  
+
   :init
   (global-corfu-mode))
 
@@ -403,8 +416,8 @@ Default is 1000."
 
 ;; Move a selection up and down the lines
 (use-package drag-stuff
-  :bind (("C-S-<up>" . drag-stuff-up)
-         ("C-S-<down>" . drag-stuff-down)))
+  :bind (("M-S-<up>" . drag-stuff-up)
+         ("M-S-<down>" . drag-stuff-down)))
 
 ;; Press f8 to open the current directory's tree
 (use-package neotree
