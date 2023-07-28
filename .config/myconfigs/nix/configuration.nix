@@ -76,9 +76,9 @@
   };
 
   # Auto-login
-  # services.xserver.displayManager.defaultSession = "cinnamon";
-  # services.xserver.displayManager.autoLogin.enable = true;
-  # services.xserver.displayManager.autoLogin.user = "thiago";
+  services.xserver.displayManager.defaultSession = "none+xmonad";
+  services.xserver.displayManager.autoLogin.enable = true;
+  services.xserver.displayManager.autoLogin.user = "thiago";
 
   # Configure keymap in X11
   services.xserver = {

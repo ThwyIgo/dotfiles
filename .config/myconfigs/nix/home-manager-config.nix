@@ -8,11 +8,13 @@ in
   home.packages = with pkgs; [
     # Libs
     libsForQt5.qtstyleplugin-kvantum
+    aspell
+    aspellDicts.pt_BR
+    aspellDicts.en
 
     # GUI
     keepassxc
     tdesktop # Telegram
-    signal-desktop
     discord
     spotify
     tenacity # Audacity

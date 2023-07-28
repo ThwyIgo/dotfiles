@@ -23,6 +23,7 @@
         keyboard-escape-quit
         kill-region
         lsp-ui-doc--handle-mouse-movement
+        org-self-insert-command
         overwrite-mode
         prolog-inferior-self-insert-command
         ryanmarcus/backward-kill-word

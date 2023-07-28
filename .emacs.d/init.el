@@ -90,6 +90,11 @@
   :custom
   (org-edit-src-content-indentation 0)
   (org-startup-indented t)
+  :config
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((haskell . t)
+     (emacs-lisp . t)))
 )
 (use-package org-sticky-header
   :after (org)
@@ -374,6 +379,23 @@ Default is 1000."
   :config
   (yas-global-mode 1)
   (use-package yasnippet-snippets))
+
+;; Spellchecking (install Aspell and the dictionaries on your system)
+;; Spell check a single word or region: M-$
+;; Change the language of a single buffer: M-x ispell-change-dictionary
+(use-package ispell
+  :custom
+  (ispell-program-name "aspell")
+  (ispell-dictionary "brasileiro")
+  (ispell-dictionary-alist (ispell-find-aspell-dictionaries))
+  )
+(use-package flyspell
+  :hook
+  (org-mode . flyspell-mode)
+  (text-mode . (lambda () ;; Don't start flyspell in the scratch buffer
+                 (unless (string= (buffer-name) "*scratch*") (flyspell-mode))
+                 ))
+  )
 
 ;; Multiple cursors
 (use-package multiple-cursors
