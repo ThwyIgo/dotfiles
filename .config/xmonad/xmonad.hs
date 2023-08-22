@@ -181,7 +181,6 @@ myKeys c =
     ]
     ++
 
-    --
     -- mod-[1..9], Switch to workspace N
     -- mod-shift-[1..9], Move client to workspace N
     -- mod-0, Switch to next workspace
@@ -197,14 +196,15 @@ myKeys c =
     , ("M-S-0", shiftToNext)
     , ("M-C-S-0", shiftToPrev)
     ]
+    ++
 
+    -- mod-{z,x,c}, Switch to physical/Xinerama screens 1, 2, or 3
+    -- mod-shift-{z,x,c}, Move client to screen 1, 2, or 3
     --
-    -- mod-{w,e,r}, Switch to physical/Xinerama screens 1, 2, or 3
-    -- mod-shift-{w,e,r}, Move client to screen 1, 2, or 3
-    --
-    -- [((m .|. modm, key), screenWorkspace sc >>= flip whenJust (windows . f))
-    --     | (key, sc) <- zip [xK_w, xK_e, xK_r] [0..]
-    --     , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
+    [ ("M-" ++ mkey ++ key, screenWorkspace sc >>= flip whenJust (windows . action))
+    | (mkey, action) <- [([], W.view), ("S-", W.shift)],
+      (key, sc)  <- zip ["z","x","c"] [0..]
+    ]
 
 
 ------------------------------------------------------------------------

@@ -11,6 +11,7 @@ in
     aspell
     aspellDicts.pt_BR
     aspellDicts.en
+    texlive.combined.scheme-medium
 
     # GUI
     keepassxc
@@ -24,14 +25,15 @@ in
     # Programming
     gdb
     clang-tools # Clangd
-    cmake
     (haskellPackages.ghcWithPackages (hpkgs: with hpkgs; [
       xmobar
       xmonad
       xmonad-contrib
     ]))
     haskell-language-server
-    gradle
+    (python3.withPackages (ps: with ps; [
+      python-lsp-server
+    ]))
 
     # Window Manager stuff
     haskellPackages.xmobar

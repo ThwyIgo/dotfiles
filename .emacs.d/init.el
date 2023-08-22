@@ -90,11 +90,13 @@
   :custom
   (org-edit-src-content-indentation 0)
   (org-startup-indented t)
+  (org-preview-latex-default-process 'dvisvgm)
   :config
   (org-babel-do-load-languages
    'org-babel-load-languages
    '((haskell . t)
      (emacs-lisp . t)))
+  (setq org-format-latex-options (plist-put org-format-latex-options :scale 1.7))
 )
 (use-package org-sticky-header
   :after (org)
@@ -498,6 +500,7 @@ Default is 1000."
   (c++-mode . eglot-ensure)
   (java-mode . eglot-ensure)
   (haskell-mode . eglot-ensure)
+  (python-mode . eglot-ensure)
   :custom
   (eglot-autoshutdown 1)
   :bind ("C-<f2>" . eglot-rename))

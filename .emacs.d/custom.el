@@ -7,7 +7,7 @@
  '(blink-cursor-mode nil)
  '(column-number-mode t)
  '(package-selected-packages
-   '(org-sticky-header popper which-key eldoc-cmake cmake-mode all-the-icons-dired groovy-mode rainbow-mode mood-line nix-mode eglot-java realgud corfu-terminal eldoc-box eglot corfu git-gutter magit origami haskell-mode neotree drag-stuff ligature multiple-cursors yasnippet-snippets yasnippet orderless save-hist vertico ace-window yascroll use-package dracula-theme auto-package-update))
+   '(typescript-mode org-sticky-header popper which-key eldoc-cmake cmake-mode all-the-icons-dired groovy-mode rainbow-mode mood-line nix-mode eglot-java realgud corfu-terminal eldoc-box eglot corfu git-gutter magit origami haskell-mode neotree drag-stuff ligature multiple-cursors yasnippet-snippets yasnippet orderless save-hist vertico ace-window yascroll use-package dracula-theme auto-package-update))
  '(safe-local-variable-values '((ispell-local-dictionary . english))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.

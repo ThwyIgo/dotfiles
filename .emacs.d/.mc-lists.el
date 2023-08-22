@@ -23,6 +23,8 @@
         keyboard-escape-quit
         kill-region
         lsp-ui-doc--handle-mouse-movement
+        org-delete-char
+        org-end-of-line
         org-self-insert-command
         overwrite-mode
         prolog-inferior-self-insert-command
@@ -39,5 +41,6 @@
         handle-switch-frame
         lsp-signature-stop
         mouse-drag-bottom-edge
+        org-latex-preview
         switch-to-buffer
         ))
