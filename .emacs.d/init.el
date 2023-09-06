@@ -91,13 +91,14 @@
   (org-edit-src-content-indentation 0)
   (org-startup-indented t)
   (org-preview-latex-default-process 'dvisvgm)
+  (org-latex-compiler "lualatex")
   :config
   (org-babel-do-load-languages
    'org-babel-load-languages
    '((haskell . t)
      (emacs-lisp . t)))
   (setq org-format-latex-options (plist-put org-format-latex-options :scale 1.7))
-)
+  )
 (use-package org-sticky-header
   :after (org)
   :hook (org-mode . org-sticky-header-mode)
@@ -388,7 +389,7 @@ Default is 1000."
 (use-package ispell
   :custom
   (ispell-program-name "aspell")
-  (ispell-dictionary "brasileiro")
+  (ispell-dictionary "english") ; brasileiro for pt-BR
   (ispell-dictionary-alist (ispell-find-aspell-dictionaries))
   )
 (use-package flyspell

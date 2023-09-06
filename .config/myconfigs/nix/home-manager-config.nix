@@ -1,6 +1,12 @@
 { pkgs, ... }:
 let
   vimix-cursors = pkgs.callPackage ./vimix-cursors/vimix-cursors.nix {};
+  tex = (pkgs.texlive.combine {
+    inherit (pkgs.texlive) scheme-basic
+      dvisvgm dvipng # for preview and export as html
+      wrapfig amsmath ulem hyperref capt-of
+      latexmk; # org-latex-export-to-pdf
+  });
 in
 {
   home.stateVersion = "22.05";
@@ -11,7 +17,7 @@ in
     aspell
     aspellDicts.pt_BR
     aspellDicts.en
-    texlive.combined.scheme-medium
+    tex
 
     # GUI
     keepassxc
@@ -34,6 +40,7 @@ in
     (python3.withPackages (ps: with ps; [
       python-lsp-server
     ]))
+    rstudio
 
     # Window Manager stuff
     haskellPackages.xmobar

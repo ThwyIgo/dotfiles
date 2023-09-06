@@ -23,9 +23,14 @@
         keyboard-escape-quit
         kill-region
         lsp-ui-doc--handle-mouse-movement
+        org-beginning-of-line
+        org-cycle
         org-delete-char
         org-end-of-line
+        org-metaleft
+        org-metaright
         org-self-insert-command
+        org-shiftmetaright
         overwrite-mode
         prolog-inferior-self-insert-command
         ryanmarcus/backward-kill-word
@@ -41,6 +46,8 @@
         handle-switch-frame
         lsp-signature-stop
         mouse-drag-bottom-edge
+        org-ctrl-c-ctrl-c
         org-latex-preview
         switch-to-buffer
+        toggle-input-method
         ))
