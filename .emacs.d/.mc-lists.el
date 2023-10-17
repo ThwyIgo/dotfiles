@@ -14,6 +14,8 @@
         c-electric-star
         c-indent-line-or-region
         comint-delchar-or-maybe-eof
+        comment-or-uncomment-region
+        electric-newline-and-maybe-indent
         electric-pair-delete-pair
         end-of-buffer
         haskell-indentation-common-electric-command
@@ -23,6 +25,7 @@
         keyboard-escape-quit
         kill-region
         lsp-ui-doc--handle-mouse-movement
+        mark-sexp
         org-beginning-of-line
         org-cycle
         org-delete-char
@@ -39,6 +42,7 @@
 (setq mc/cmds-to-run-once
       '(
         ace-window
+        beginning-of-buffer
         comint-send-input
         compile
         eval-last-sexp
@@ -50,4 +54,5 @@
         org-latex-preview
         switch-to-buffer
         toggle-input-method
+        toggle-truncate-lines
         ))

@@ -1,6 +1,6 @@
 { pkgs, ... }:
 let
-  vimix-cursors = pkgs.callPackage ./vimix-cursors/vimix-cursors.nix {};
+  vimix-cursors = pkgs.callPackage ./vimix-cursors.nix {};
   tex = (pkgs.texlive.combine {
     inherit (pkgs.texlive) scheme-basic
       dvisvgm dvipng # for preview and export as html
@@ -21,6 +21,7 @@ in
 
     # GUI
     keepassxc
+    virt-manager
     tdesktop # Telegram
     discord
     spotify
@@ -29,6 +30,7 @@ in
     zathura
 
     # Programming
+    rnix-lsp
     gdb
     clang-tools # Clangd
     (haskellPackages.ghcWithPackages (hpkgs: with hpkgs; [
@@ -37,9 +39,6 @@ in
       xmonad-contrib
     ]))
     haskell-language-server
-    (python3.withPackages (ps: with ps; [
-      python-lsp-server
-    ]))
     rstudio
 
     # Window Manager stuff
@@ -158,5 +157,12 @@ in
   i18n.inputMethod = {
     enabled = "fcitx5";
     fcitx5.addons = with pkgs; [ fcitx5-chinese-addons ];
+  };
+
+  dconf.settings = {
+    "org/virt-manager/virt-manager/connections" = {
+      autoconnect = ["qemu:///system"];
+      uris = ["qemu:///system"];
+    };
   };
 }

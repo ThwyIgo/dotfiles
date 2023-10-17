@@ -94,7 +94,10 @@
   services.printing.drivers = [ pkgs.hplipWithPlugin ];
   services.avahi.enable = true; # Auto-detect printers
   services.avahi.nssmdns = true;
+  services.avahi.openFirewall = true;
   programs.system-config-printer.enable = true;
+  # Enable scanners
+  hardware.sane.enable = true;
 
   # Enable sound with pipewire.
   sound.enable = true;
@@ -130,7 +133,7 @@
   users.users.thiago = {
     isNormalUser = true;
     description = "Thiago";
-    extraGroups = [ "networkmanager" "wheel" "libvirtd" "video" ];
+    extraGroups = [ "networkmanager" "wheel" "libvirtd" "video" "scanner" "lp" ];
   };
 
   fonts.fontconfig.enable = true;
@@ -172,7 +175,6 @@
     kdenlive
     obs-studio
     celluloid
-    virt-manager
   ];
   programs.java.enable = true;
   programs.kdeconnect.enable = true;
@@ -213,11 +215,11 @@
   # 443/631/9100-9102 = CUPS/Printers
   # 5353 = discovery protocol / mDNS
   networking.firewall = {
-    allowedTCPPorts = [ 443 631 ];
-    allowedUDPPorts = [ 5353 ];
-    allowedTCPPortRanges = [
-      { from = 9100; to = 9102; }
-    ];
+    # allowedTCPPorts = [ 443 631 ];
+    # allowedUDPPorts = [ 5353 ];
+    # allowedTCPPortRanges = [
+    #   { from = 9100; to = 9102; }
+    # ];
   };
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;

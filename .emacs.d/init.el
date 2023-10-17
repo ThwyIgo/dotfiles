@@ -501,7 +501,7 @@ Default is 1000."
   (c++-mode . eglot-ensure)
   (java-mode . eglot-ensure)
   (haskell-mode . eglot-ensure)
-  (python-mode . eglot-ensure)
+  (nix-mode . eglot-ensure)
   :custom
   (eglot-autoshutdown 1)
   :bind ("C-<f2>" . eglot-rename))
@@ -527,7 +527,7 @@ Default is 1000."
 (use-package eldoc-box
   :after (eglot)
   :config
-  (add-hook 'eglot-managed-mode-hook #'eldoc-box-hover-at-point-mode t)
+  (add-hook 'eglot-managed-mode-hook #'eldoc-box-hover-mode t)
   :custom
   (eldoc-box-max-pixel-height 400)
   (eldoc-box-max-pixel-width 500))
@@ -544,14 +544,6 @@ Default is 1000."
   (add-to-list 'c-default-style '(c++-mode . "linux"))
   )
 
-(add-hook 'c-mode-hook
-          (lambda ()
-	    (unless (or (file-exists-p "makefile")
-		        (file-exists-p "Makefile"))
-              (setq-local compile-command
-		          (concat "gcc -g -Wall -lm "
-			          (if buffer-file-name
-			              (shell-quote-argument buffer-file-name)))))))
 (add-hook 'c-mode-hook (lambda () (setq-local c-basic-offset 4)))
 (add-hook 'c++-mode-hook (lambda () (setq-local c-basic-offset 4)))
 
