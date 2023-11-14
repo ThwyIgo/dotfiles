@@ -23,6 +23,7 @@ in
     keepassxc
     virt-manager
     tdesktop # Telegram
+    signal-desktop
     discord
     spotify
     tenacity # Audacity
@@ -57,7 +58,7 @@ in
     functions = {
       fish_right_prompt = "echo [(date '+%H:%M')]";
     };
-    interactiveShellInit = ''
+    shellInit = ''
         set fish_color_user 5cf brblue
         set fish_color_cwd brgreen
         set fish_greeting
@@ -68,37 +69,14 @@ in
       dfgitlog = "dfgit log --decorate --oneline --graph";
     };
   };
-  programs.bash = {
-    enable = true;
-  };
+  programs.bash.enable = true;
   programs.emacs.enable = true;
   services.emacs = {
     enable = true;
     defaultEditor = true;
-  };
-  xdg.desktopEntries.emacsclient = {
-    type = "Application";
-    name = "Emacs Client";
-    genericName = "Text Editor";
-    comment = "Edit text";
-    categories = [ "Development" "TextEditor" ];
-    exec = "sh -c \"if [ -n \\\"\\$*\\\" ]; then exec emacsclient --alternate-editor= --display=\\\"\\$DISPLAY\\\" \\\"\\$@\\\"; else exec emacsclient --alternate-editor= --create-frame; fi\" placeholder %F";
-    icon = "emacs";
-    settings = {
-      Keywords = "Text;Editor;";
-      StartupWMClass = "Emacs";
-    };
-    mimeType = [ "text/english" "text/plain" "text/x-makefile" "text/x-c++hdr" "text/x-c++src" "text/x-chdr" "text/x-csrc" "text/x-java" "text/x-moc" "text/x-pascal" "text/x-tcl" "text/x-tex" "application/x-shellscript" "text/x-c" "text/x-c++" ];
-    terminal = false;
-    actions = {
-      "new-window" = {
-        name = "Nova janela";
-        exec = "emacsclient --alternate-editor= --create-frame %F";
-      };
-      "new-instance" = {
-        name = "Nova instância";
-        exec = "emacs %F";
-      };
+    client = {
+      enable = true;
+      arguments = [ "-c" "-a ${pkgs.emacs}/bin/emacs" ];
     };
   };
   programs.vscode = {
@@ -109,7 +87,7 @@ in
     enable = true;
     settings = {
       window.opacity = 0.9;
-      shell.program = "fish";
+      shell.program = "${pkgs.fish}/bin/fish";
     };
   };
   programs.rofi = {

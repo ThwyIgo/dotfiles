@@ -45,8 +45,6 @@
     options = "--delete-older-than 5d";
   };
 
-  nix.extraOptions = "plugin-files = ${pkgs.nix-doc}/lib/libnix_doc_plugin.so";
-
   # Set your time zone.
   time.timeZone = "America/Sao_Paulo";
 
@@ -63,11 +61,16 @@
   environment.cinnamon.excludePackages = with pkgs; [
     xed-editor
     hexchat
-    gnome.geary
     xplayer
     cinnamon.xreader
+    cinnamon.xviewer
     cinnamon.warpinator
+    gnome.gnome-calendar
   ];
+  programs = {
+    geary.enable = false;
+    gnome-terminal.enable = false;
+  };
 
   # Enable Xmonad window manager
   services.xserver.windowManager.xmonad = {
@@ -90,11 +93,15 @@
   console.keyMap = "br-abnt2";
 
   # Enable CUPS to print documents.
-  services.printing.enable = true;
-  services.printing.drivers = [ pkgs.hplipWithPlugin ];
-  services.avahi.enable = true; # Auto-detect printers
-  services.avahi.nssmdns = true;
-  services.avahi.openFirewall = true;
+  services.printing = {
+    enable = true;
+    drivers = [ pkgs.hplipWithPlugin ];
+  };
+  services.avahi = {
+    enable = true; # Auto-detect printers
+    nssmdns = true;
+    openFirewall = true;
+  };
   programs.system-config-printer.enable = true;
   # Enable scanners
   hardware.sane.enable = true;
@@ -133,7 +140,7 @@
   users.users.thiago = {
     isNormalUser = true;
     description = "Thiago";
-    extraGroups = [ "networkmanager" "wheel" "libvirtd" "video" "scanner" "lp" ];
+    extraGroups = [ "networkmanager" "wheel" "libvirtd" "docker" "video" "scanner" "lp" ];
   };
 
   fonts.fontconfig.enable = true;
@@ -148,9 +155,9 @@
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
-  environment.systemPackages = with pkgs; [    
+  environment.systemPackages = with pkgs; [
     # CL
-    nix-doc
+    alacritty
     micro
     htop
     pfetch
@@ -162,6 +169,7 @@
     xorg.xkill
 
     # Sysadmin
+    virtiofsd
     arandr
     pavucontrol
     xfce.xfce4-taskmanager
@@ -183,9 +191,16 @@
   services.flatpak.enable = true;
   xdg.portal.enable = true; # Required for flatpak
   xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
-  
+
   virtualisation.libvirtd.enable = true;
   programs.dconf.enable = true;
+  virtualisation.docker = {
+    enable = true;
+    rootless = {
+      enable = true;
+      setSocketVariable = true;
+    };
+  };
 
   fonts.fonts = with pkgs; [
     font-awesome
@@ -215,11 +230,8 @@
   # 443/631/9100-9102 = CUPS/Printers
   # 5353 = discovery protocol / mDNS
   networking.firewall = {
-    # allowedTCPPorts = [ 443 631 ];
-    # allowedUDPPorts = [ 5353 ];
-    # allowedTCPPortRanges = [
-    #   { from = 9100; to = 9102; }
-    # ];
+    allowedTCPPorts = [];
+    allowedTCPPortRanges = [];
   };
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
@@ -231,5 +243,4 @@
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "22.05"; # Did you read the comment?
-
 }

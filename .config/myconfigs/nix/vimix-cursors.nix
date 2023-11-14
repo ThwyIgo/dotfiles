@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
-    DEST_DIR="$out/usr/share/icons"
+    DEST_DIR="$out/share/icons"
 
     mkdir -p $DEST_DIR
     cp -r dist/ $DEST_DIR/Vimix-cursors
