@@ -156,7 +156,7 @@ myKeys c =
     ++
 
     -- Launch apps
-    [("M-a " ++ key, spawn cmd)
+    [ ("M-a " ++ key, spawn cmd)
     | (key, cmd) <- [ ("e", "emacsclient --alternate-editor=emacs -c")
                     , ("c", calculator)
                     , ("f", fileManager)
@@ -165,6 +165,8 @@ myKeys c =
                     , ("m", emailClient)
                     ]
     ]
+    ++
+    [ ("M-p", spawn "arandr") ]
     ++
 
     -- Controls, special keys

@@ -13,7 +13,7 @@ Config {
    -- layout
    , sepChar  = "%"   -- delineator between plugin names and straight text
    , alignSep = "}{"  -- separator between left-right alignment
-   , template = "<icon=haskell_30.xpm/> %XMonadLog% | %cpu% | %memory% }{ %alsa:default:Master% %locks% | %date% | %battery% ||%trayerpad%"
+   , template = "<icon=haskell_30.xpm/> %XMonadLog% | %cpu% | %memory% }{ %player% %alsa:default:Master% %locks% | %date% | %battery% ||%trayerpad%"
 
    -- general behavior
    , lowerOnStart     = True    -- send to bottom of window stack on start
@@ -57,12 +57,16 @@ Config {
                        , "--high"     , "darkred"
                        ] 50
 
-        -- Caps Lock, Num Lock, etc
-        , Run Locks
+        , Run ComX "/home/thiago/.config/xmobar/playerctl.sh" [] "Vol:" "player" 50
 
         -- Volume
-        , Run Alsa     "default" "Master" [ "--"
-                                                , "-O", "" ]
+        , Run Alsa     "default" "Master" [ "-t"
+                                          , "<volume>%<status>"
+                                          , "--"
+                                          , "-O", "" ]
+
+        -- Caps Lock, Num Lock, etc
+        , Run Locks
 
         -- Hostname
         , Run Com      "hostname" [] "hostname" 0

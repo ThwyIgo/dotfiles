@@ -11,9 +11,12 @@
     ];
 
   # Bootloader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
-  boot.loader.efi.efiSysMountPoint = "/boot/efi";
+  boot.loader = {
+    systemd-boot.enable = true;
+    timeout = 0; # Press Space to show boot menu
+    efi.canTouchEfiVariables = true;
+    efi.efiSysMountPoint = "/boot/efi";
+  };
 
   # Setup keyfile
   boot.initrd.secrets = {
@@ -184,13 +187,12 @@
     obs-studio
     celluloid
   ];
-  programs.java.enable = true;
   programs.kdeconnect.enable = true;
   programs.slock.enable = true;
 
-  services.flatpak.enable = true;
-  xdg.portal.enable = true; # Required for flatpak
-  xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+  # services.flatpak.enable = true;
+  # xdg.portal.enable = true; # Required for flatpak
+  # xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
 
   virtualisation.libvirtd.enable = true;
   programs.dconf.enable = true;

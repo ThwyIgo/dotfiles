@@ -1,0 +1,8 @@
+﻿---
+BasedOnStyle: Chromium
+AccessModifierOffset: '-2'
+ColumnLimit: '120'
+IndentWidth: '4'
+Language: Cpp
+
+...
