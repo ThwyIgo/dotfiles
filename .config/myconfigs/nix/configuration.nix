@@ -58,21 +58,11 @@
   # Enable the X11 windowing system.
   services.xserver.enable = true;
 
-  # Enable the Cinnamon Desktop Environment.
-  services.xserver.displayManager.lightdm.enable = true;
-  services.xserver.desktopManager.cinnamon.enable = true;
-  environment.cinnamon.excludePackages = with pkgs; [
-    xed-editor
-    hexchat
-    xplayer
-    cinnamon.xreader
-    cinnamon.xviewer
-    cinnamon.warpinator
-    gnome.gnome-calendar
-  ];
-  programs = {
-    geary.enable = false;
-    gnome-terminal.enable = false;
+  services.xserver.displayManager.lightdm = {
+    enable = true;
+    greeters.slick = {
+      enable = true;
+    };
   };
 
   # Enable Xmonad window manager
@@ -82,9 +72,11 @@
   };
 
   # Auto-login
-  services.xserver.displayManager.defaultSession = "none+xmonad";
-  services.xserver.displayManager.autoLogin.enable = true;
-  services.xserver.displayManager.autoLogin.user = "thiago";
+  services.xserver.displayManager = {
+    defaultSession = "none+xmonad";
+    autoLogin.enable = true;
+    autoLogin.user = "thiago";
+  };
 
   # Configure keymap in X11
   services.xserver = {
@@ -178,17 +170,23 @@
     xfce.xfce4-taskmanager
 
     # GUI
-    simple-scan
     librewolf
+    cinnamon.nemo-with-extensions
+    cinnamon.pix
+    celluloid
     libreoffice-still
+    gnome.gnome-calculator
     thunderbird
     gimp
     kdenlive
     obs-studio
-    celluloid
+    simple-scan
   ];
-  programs.kdeconnect.enable = true;
-  programs.slock.enable = true;
+  programs = {
+    file-roller.enable = true;
+    kdeconnect.enable = true;
+    slock.enable = true;
+  };
 
   # services.flatpak.enable = true;
   # xdg.portal.enable = true; # Required for flatpak
