@@ -62,6 +62,10 @@
     enable = true;
     greeters.slick = {
       enable = true;
+      cursorTheme = {
+        name = "Nordzy-cursors-white";
+        package = pkgs.nordzy-cursor-theme;
+      };
     };
   };
 

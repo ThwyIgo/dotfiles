@@ -1,6 +1,5 @@
 { pkgs, ... }:
 let
-  vimix-cursors = pkgs.callPackage ./vimix-cursors.nix {};
   tex = (pkgs.texlive.combine {
     inherit (pkgs.texlive) scheme-basic
       dvisvgm dvipng # for preview and export as html
@@ -99,8 +98,8 @@ in
   services.kdeconnect.indicator = true;
 
   home.pointerCursor = {
-    package = vimix-cursors;
-    name = "Vimix-white-cursors";
+    package = pkgs.nordzy-cursor-theme;
+    name = "Nordzy-cursors-white";
     size = 24;
 
     x11.enable = true;
