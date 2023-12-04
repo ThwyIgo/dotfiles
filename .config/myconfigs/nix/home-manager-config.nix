@@ -12,7 +12,7 @@ in
   nixpkgs.config.allowUnfree = true;
   home.packages = with pkgs; [
     # Libs
-    libsForQt5.qtstyleplugin-kvantum
+    qt6Packages.qtstyleplugin-kvantum
     aspell
     aspellDicts.pt_BR
     aspellDicts.en
@@ -96,6 +96,8 @@ in
   };
 
   services.kdeconnect.indicator = true;
+
+  fonts.fontconfig.enable = true;
 
   home.pointerCursor = {
     package = pkgs.nordzy-cursor-theme;

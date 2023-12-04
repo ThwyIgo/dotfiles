@@ -143,6 +143,10 @@
   };
 
   fonts.fontconfig.enable = true;
+  fonts.packages = with pkgs; [
+    font-awesome
+    fira-code
+  ];
 
   home-manager.users.thiago = import (/home/thiago +
                                       /.config/myconfigs/nix/home-manager-config.nix);
@@ -205,12 +209,7 @@
       setSocketVariable = true;
     };
   };
-
-  fonts.fonts = with pkgs; [
-    font-awesome
-    fira-code
-  ];
-
+  
   # Games
   programs.steam.enable = true;
   # Wine games
