@@ -31,14 +31,13 @@ in
 
     # Programming
     rnix-lsp
-    gdb
-    clang-tools # Clangd
     (haskellPackages.ghcWithPackages (hpkgs: with hpkgs; [
       xmobar
       xmonad
       xmonad-contrib
     ]))
     haskell-language-server
+    jetbrains.idea-community
 
     # Window Manager stuff
     haskellPackages.xmobar
@@ -142,5 +141,9 @@ in
       autoconnect = ["qemu:///system"];
       uris = ["qemu:///system"];
     };
+  };
+
+  home.sessionVariables = {
+    ASPELL_CONF = "data-dir \${HOME}/.nix-profile/lib/aspell";
   };
 }

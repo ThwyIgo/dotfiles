@@ -170,6 +170,7 @@
     gcc
     acpilight
     xorg.xkill
+    killall
 
     # Sysadmin
     virtiofsd
@@ -184,6 +185,7 @@
     celluloid
     libreoffice-still
     gnome.gnome-calculator
+    flameshot
     thunderbird
     gimp
     kdenlive

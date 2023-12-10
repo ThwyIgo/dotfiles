@@ -386,6 +386,7 @@ Default is 1000."
 ;; Spellchecking (install Aspell and the dictionaries on your system)
 ;; Spell check a single word or region: M-$
 ;; Change the language of a single buffer: M-x ispell-change-dictionary
+;(setq-default ispell-aspell-dict-dir nil) ;; Uncomment if aspell dict dir breaks and restart emacs
 (use-package ispell
   :custom
   (ispell-program-name "aspell")

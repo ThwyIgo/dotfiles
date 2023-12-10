@@ -43,7 +43,7 @@ fileManager = "nemo"
 browser     = "librewolf"
 emailClient = "thunderbird"
 calculator  = "gnome-calculator"
-screenshot  = "gnome-screenshot --interactive"
+screenshot  = "flameshot gui"
 
 -- Whether focus follows the mouse pointer.
 myFocusFollowsMouse :: Bool
