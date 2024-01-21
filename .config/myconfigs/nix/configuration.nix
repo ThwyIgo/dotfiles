@@ -69,6 +69,15 @@
     };
   };
 
+  services.xserver.xautolock = rec {
+    enable = true;
+    nowlocker = "${pkgs.betterlockscreen}/bin/betterlockscreen -l";
+    time = 10;
+    killtime = 20;
+    locker = "${pkgs.xorg.xset}/bin/xset dpms force off;" + nowlocker;
+    killer = "/run/current-system/systemd/bin/systemctl suspend";
+  };
+
   # Enable Xmonad window manager
   services.xserver.windowManager.xmonad = {
     enable = true;
@@ -131,6 +140,9 @@
         RUN+="${pkgs.coreutils}/bin/chmod g+w /sys/class/backlight/%k/brightness"
     '';
   };
+
+  # Allows applications to query and manipulate storage devices, e.g. automount
+  services.udisks2.enable = true;
 
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
@@ -195,7 +207,6 @@
   programs = {
     file-roller.enable = true;
     kdeconnect.enable = true;
-    slock.enable = true;
   };
 
   # services.flatpak.enable = true;
@@ -240,6 +251,8 @@
   };
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
+
+  security.polkit.enable = true;
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions

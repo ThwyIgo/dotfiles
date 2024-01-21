@@ -186,7 +186,6 @@ Default is 1000."
 (provide 'my-mode)
 
 ;; The code above creates 'my-mode-map', which will override major modes keymaps
-(define-key my-mode-map (kbd "C-c c") 'comment-or-uncomment-region)
 (define-key my-mode-map (kbd "C-c TAB") 'align-regexp)
 (define-key my-mode-map (kbd "<up>") 'windmove-up)
 (define-key my-mode-map (kbd "<down>") 'windmove-down)
