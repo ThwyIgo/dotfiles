@@ -11,6 +11,9 @@ in
   home.stateVersion = "22.05";
   nixpkgs.config.allowUnfree = true;
   home.packages = with pkgs; [
+    # CL
+    mate.mate-polkit
+
     # Libs
     qt6Packages.qtstyleplugin-kvantum
     aspell
@@ -22,22 +25,20 @@ in
     keepassxc
     virt-manager
     tdesktop # Telegram
-    signal-desktop
     discord
     spotify
     tenacity # Audacity
-    blender
     zathura
+    prismlauncher
 
     # Programming
-    rnix-lsp
+    nixd
     (haskellPackages.ghcWithPackages (hpkgs: with hpkgs; [
       xmobar
       xmonad
       xmonad-contrib
     ]))
     haskell-language-server
-    jetbrains.idea-community
 
     # Window Manager stuff
     haskellPackages.xmobar
@@ -48,6 +49,8 @@ in
     playerctl
 
     # Fonts
+    fira-code
+    emacs-all-the-icons-fonts
     monocraft
   ];
   programs.fish = {
@@ -95,6 +98,15 @@ in
   };
 
   services.kdeconnect.indicator = true;
+
+  # automount
+  services.udiskie.enable = true;
+
+  # programs.ssh = {
+  #   enable = true;
+  #   addKeysToAgent = "30m";
+  # };
+  # services.ssh-agent.enable = true;
 
   fonts.fontconfig.enable = true;
 

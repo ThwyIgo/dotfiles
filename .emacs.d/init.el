@@ -504,6 +504,10 @@ Default is 1000."
   (nix-mode . eglot-ensure)
   :custom
   (eglot-autoshutdown 1)
+  
+  (dolist (mode '((nix-mode . ("nixd"))))
+    (add-to-list 'eglot-server-programs mode))
+
   :bind ("C-<f2>" . eglot-rename))
 ; Eglot keybindings:
 ; "M-." goto symbol definition
@@ -560,8 +564,6 @@ Default is 1000."
 ;; Eclipse JDT Language Server is hard to work with. eglot-java automates a lot of things
 (use-package eglot-java
   :hook (java-mode . eglot-java-mode))
-
-(use-package groovy-mode)
 
 ;; Install hls to enable lsp features for Haskell
 (use-package haskell-mode
