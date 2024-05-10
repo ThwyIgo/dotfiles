@@ -6,6 +6,12 @@ let
       wrapfig amsmath ulem hyperref capt-of
       latexmk; # org-latex-export-to-pdf
   });
+  session-quit = (pkgs.callPackage (pkgs.fetchFromGitHub {
+    owner = "ThwyIgo";
+    repo = "session-quit";
+    rev = "6a05ffa49d3099eee2b696559010490b4b51e500";
+    hash = "sha256-j5qYQeMnixqCEXdZexjbLErj9ewaBm2KblQeQxOepwM=";
+  }) {}).session-quit;
 in
 {
   home.stateVersion = "22.05";
@@ -22,6 +28,7 @@ in
     tex
 
     # GUI
+    session-quit
     keepassxc
     virt-manager
     tdesktop # Telegram
