@@ -141,9 +141,6 @@ myKeys c =
     --
     -- , ((modm              , xK_b     ), sendMessage ToggleStruts)
 
-    -- Lock
-    , ("M-<Pause>", spawn "slock")
-
     -- Quit xmonad
     , ("M-C-q", io exitSuccess)
 
@@ -163,6 +160,7 @@ myKeys c =
                     , ("v", "pavucontrol")
                     , ("b", browser)
                     , ("m", emailClient)
+                    , ("h", myTerminal ++ " -e htop")
                     ]
     ]
     ++

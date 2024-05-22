@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 let
   tex = (pkgs.texlive.combine {
     inherit (pkgs.texlive) scheme-basic
@@ -6,22 +6,30 @@ let
       wrapfig amsmath ulem hyperref capt-of
       latexmk; # org-latex-export-to-pdf
   });
-  session-quit = (pkgs.callPackage (pkgs.fetchFromGitHub {
+  session-quit = pkgs.callPackage (pkgs.fetchFromGitHub {
     owner = "ThwyIgo";
     repo = "session-quit";
-    rev = "6a05ffa49d3099eee2b696559010490b4b51e500";
-    hash = "sha256-j5qYQeMnixqCEXdZexjbLErj9ewaBm2KblQeQxOepwM=";
-  }) {}).session-quit;
+    rev = "8995c3b9b822b1bdadf893b4871c2ad70b86e201";
+    hash = "sha256-veQdpzlo8ZR3eGs8UjvydCzldhsHXyP8ScMh4+3lUAU=";
+  }) {};
+  stylix = import ((import <nixpkgs> {}).fetchFromGitHub {
+      owner = "danth";
+      repo = "stylix";
+      rev = "release-23.11";
+      sha256 = "sha256-KZkl9aTYcuCM4okpeCIaJCuS4WkE+mVG3EMyNaidyQI=";
+  });
+  dracula-theme-qt = pkgs.callPackage ./pkgs/dracula-theme-qt.nix {};
 in
 {
   home.stateVersion = "22.05";
   nixpkgs.config.allowUnfree = true;
+  imports = [ stylix.homeManagerModules.stylix ];
+
   home.packages = with pkgs; [
     # CL
     mate.mate-polkit
 
     # Libs
-    qt6Packages.qtstyleplugin-kvantum
     aspell
     aspellDicts.pt_BR
     aspellDicts.en
@@ -37,6 +45,7 @@ in
     tenacity # Audacity
     zathura
     prismlauncher
+    bottles
 
     # Programming
     nixd
@@ -117,36 +126,53 @@ in
 
   fonts.fontconfig.enable = true;
 
-  home.pointerCursor = {
-    package = pkgs.nordzy-cursor-theme;
-    name = "Nordzy-cursors-white";
-    size = 24;
-
-    x11.enable = true;
-    gtk.enable = true;
-  };
-
-  gtk = {
-    enable = true;
-    theme = {
-      package = pkgs.orchis-theme;
-      name = "Orchis-Grey-Dark";
-    };
-    iconTheme = {
-      package = pkgs.tela-icon-theme;
-      name = "Tela-dark";
-    };
-  };
-
   qt = {
     enable = true;
-    platformTheme = "gtk";
-    style.name = "kvantum";
+    platformTheme = "qtct";
   };
 
-  home.file."kvantum.kvconfig" = {
-    target = ".config/Kvantum/kvantum.kvconfig";
-    text = "[General]\ntheme=KvGnomeDark";
+  xdg.configFile = {
+    "qt5ct/qt5ct.conf".text = ''
+      [Appearance]
+      color_scheme_path=${dracula-theme-qt}/share/qt5ct/colors/Dracula.conf
+      custom_palette=true
+      style=Breeze
+    '';
+  };
+
+  stylix = {
+    image = /. + config.home.homeDirectory
+            + /.local/share/wallpapers/default.jpg;
+    polarity = "dark";
+    base16Scheme = "${pkgs.base16-schemes}/share/themes/dracula.yaml";
+    opacity.terminal = 0.9;
+    fonts = {
+      serif = {
+        package = pkgs.dejavu_fonts;
+        name = "DejaVu Serif";
+      };
+      sansSerif = {
+        package = pkgs.ubuntu_font_family;
+        name = "Ubuntu";
+      };
+      monospace = {
+        package = pkgs.dejavu_fonts;
+        name = "DejaVu Sans Mono";
+      };
+      emoji = {
+        package = pkgs.noto-fonts-emoji;
+        name = "Noto Color Emoji";
+      };
+    };
+    cursor = {
+      package = pkgs.nordzy-cursor-theme;
+      name = "Nordzy-cursors-white";
+      size = 24;
+    };
+    targets = builtins.listToAttrs
+      (map (a: {name = a; value = {enable = false;};}) [
+                  "rofi" "emacs" "vscode"
+                ]);
   };
 
   # 漢語
