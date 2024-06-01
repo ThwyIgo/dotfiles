@@ -9,14 +9,14 @@ let
   session-quit = pkgs.callPackage (pkgs.fetchFromGitHub {
     owner = "ThwyIgo";
     repo = "session-quit";
-    rev = "8995c3b9b822b1bdadf893b4871c2ad70b86e201";
-    hash = "sha256-veQdpzlo8ZR3eGs8UjvydCzldhsHXyP8ScMh4+3lUAU=";
+    rev = "c22e4b344fb9378c37190556617812aa04268789";
+    hash = "sha256-/dGXzVdX8O4DfqIbW0L6+dsFsXAA7VFFoOJioSSRoAo=";
   }) {};
   stylix = import ((import <nixpkgs> {}).fetchFromGitHub {
       owner = "danth";
       repo = "stylix";
-      rev = "release-23.11";
-      sha256 = "sha256-KZkl9aTYcuCM4okpeCIaJCuS4WkE+mVG3EMyNaidyQI=";
+      rev = "99bcaa552096ccff21658a9eb6a1e8397b10eb78";
+      sha256 = "sha256-7tXlevpGhg+73g53RAS8gEOglTf9fPdVMlTOn8r7XAk=";
   });
   dracula-theme-qt = pkgs.callPackage ./pkgs/dracula-theme-qt.nix {};
 in
@@ -58,7 +58,7 @@ in
 
     # Window Manager stuff
     haskellPackages.xmobar
-    picom-jonaburg
+    picom
     networkmanagerapplet
     trayer
     feh
@@ -117,18 +117,18 @@ in
 
   # automount
   services.udiskie.enable = true;
-
-  # programs.ssh = {
-  #   enable = true;
-  #   addKeysToAgent = "30m";
-  # };
-  # services.ssh-agent.enable = true;
+  
+  programs.ssh = {
+    enable = true;
+    addKeysToAgent = "30m";
+  };
+  services.ssh-agent.enable = true;
 
   fonts.fontconfig.enable = true;
 
   qt = {
     enable = true;
-    platformTheme = "qtct";
+    platformTheme.name = "qtct";
   };
 
   xdg.configFile = {

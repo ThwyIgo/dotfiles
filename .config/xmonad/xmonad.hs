@@ -323,7 +323,7 @@ myStartupHook = do
   spawnOnce "trayer --edge top --align right --SetDockType true --SetPartialStrut true --expand true --widthtype request --transparent true --alpha 0 --tint 0x000000 --height 25 --iconspacing 1"
   spawnOnce "nm-applet --sm-disable"
   spawnOnce "feh --bg-scale --randomize ~/.local/share/wallpapers/**"
-  spawnOnce "picom -b --experimental-backends"
+  spawnOnce "picom -b"
   spawnOnce "xsetroot -cursor_name left_ptr"
   {- XMobar crashes if it starts before (alsa plugin + wireplumber).
      Restarting XMonad after wireplumber (hopefully) fixes the problem.

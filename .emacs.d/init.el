@@ -452,7 +452,7 @@ Default is 1000."
 
 ;; Pop-up buffers
 (use-package popper
-  :bind (("C-S-j"   . popper-toggle-latest)
+  :bind (("C-S-j"   . popper-toggle)
          ;; ("M-`"   . popper-cycle)
          ("C-M-j" . popper-toggle-type)
          )
@@ -504,7 +504,7 @@ Default is 1000."
   (nix-mode . eglot-ensure)
   :custom
   (eglot-autoshutdown 1)
-  
+
   (dolist (mode '((nix-mode . ("nixd"))))
     (add-to-list 'eglot-server-programs mode))
 
