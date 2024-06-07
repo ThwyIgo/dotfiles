@@ -282,14 +282,15 @@ myManageHook = composeAll
     [ className =? "MPlayer"          --> doFloat
     , className =? "Gimp"             --> doFloat
     , className =? "Gnome-screenshot" --> doFloat
-    , className =? "gnome-calculator" --> doFloat -- Not working
+    , className =? "gnome-calculator" --> doFloat
     , title   =? "Picture-in-Picture" --> doFloat
     , resource  =? "desktop_window"   --> doIgnore
     , resource  =? "kdesktop"         --> doIgnore
     , isDialog                        --> doFloat
 
     , className =? "KeePassXC" --> doShift (myWorkspaces !! 5)
-    , className =? "Spotify"   --> doShift (myWorkspaces !! 4) ]
+    , className =? "Spotify"   --> doShift (myWorkspaces !! 4)
+    ]
 
 ------------------------------------------------------------------------
 -- Event handling
@@ -325,15 +326,7 @@ myStartupHook = do
   spawnOnce "feh --bg-scale --randomize ~/.local/share/wallpapers/**"
   spawnOnce "picom -b"
   spawnOnce "xsetroot -cursor_name left_ptr"
-  {- XMobar crashes if it starts before (alsa plugin + wireplumber).
-     Restarting XMonad after wireplumber (hopefully) fixes the problem.
-   -}
-  spawnOnce $ unwords [ "sh -c 'if [ -z $(pgrep wireplumber) ];"
-                      , "then until pgrep wireplumber; do"
-                      ,   "sleep 1;"
-                      ,   "done && sleep 1 && xmonad --restart;"
-                      , "fi'"
-                      ]
+  spawnOnce "kdeconnect-indicator"
 
 ------------------------------------------------------------------------
 -- XMobar Prop

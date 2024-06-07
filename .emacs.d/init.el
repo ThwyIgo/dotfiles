@@ -203,12 +203,6 @@ Default is 1000."
 (add-to-list 'package-archives
              '("melpa" . "https://melpa.org/packages/") t)
 
-;; use-package is shipped with Emacs 29, this will be no longer necessary soon
-;; Install use-package automatically
-(unless (package-installed-p 'use-package)
-  (package-refresh-contents)
-  (package-install 'use-package))
-
 (eval-when-compile (require 'use-package))
 (require 'use-package-ensure)
 (setq use-package-always-ensure t)
@@ -375,6 +369,14 @@ Default is 1000."
   :config
   (unless (or (display-graphic-p) (daemonp))
     (corfu-terminal-mode +1)))
+
+(use-package kind-icon
+  :after corfu
+  ;:custom
+  ; (kind-icon-blend-background t)
+  ; (kind-icon-default-face 'corfu-default) ; only needed with blend-background
+  :config
+  (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
 
 ;; Snippets support
 (use-package yasnippet

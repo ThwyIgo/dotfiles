@@ -30,9 +30,7 @@ in
     mate.mate-polkit
 
     # Libs
-    aspell
-    aspellDicts.pt_BR
-    aspellDicts.en
+    (aspellWithDicts (dicts: with dicts; [ en pt_BR ]))
     tex
 
     # GUI
@@ -113,11 +111,14 @@ in
     terminal = "${pkgs.alacritty}/bin/alacritty";
   };
 
-  services.kdeconnect.indicator = true;
+  services.kdeconnect = {
+    enable = true;
+    indicator = true;
+  };
 
   # automount
   services.udiskie.enable = true;
-  
+
   programs.ssh = {
     enable = true;
     addKeysToAgent = "30m";
@@ -186,9 +187,5 @@ in
       autoconnect = ["qemu:///system"];
       uris = ["qemu:///system"];
     };
-  };
-
-  home.sessionVariables = {
-    ASPELL_CONF = "data-dir \${HOME}/.nix-profile/lib/aspell";
   };
 }
