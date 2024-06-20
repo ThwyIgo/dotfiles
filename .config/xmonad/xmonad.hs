@@ -3,15 +3,17 @@
   | alsa-utils |  trayer   |    rofi   |
 -}
 
+import Data.Monoid
+import System.Exit
+
 import XMonad
 -- Make XMonad EWMH compliant. For example, this fixes full screen applications.
 import XMonad.Hooks.EwmhDesktops
-import Data.Monoid
-import System.Exit
 -- Emacs keybindings
 import XMonad.Util.EZConfig
 import XMonad.Util.Run
 import XMonad.Util.SpawnOnce
+import XMonad.Util.Hacks as Hacks
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.ManageHelpers
 import XMonad.Actions.CycleWS
@@ -301,7 +303,7 @@ myManageHook = composeAll
 -- return (All True) if the default handler is to be run afterwards. To
 -- combine event hooks use mappend or mconcat from Data.Monoid.
 --
-myEventHook = mempty
+myEventHook = Hacks.fixSteamFlicker
 
 ------------------------------------------------------------------------
 -- Status bars and logging
@@ -351,7 +353,7 @@ myXmobarProp = withEasySB (statusBarProp ("xmobar " ++ rcPath) (pure myXmobarPP)
 
 -- Run xmonad with the settings you specify. No need to modify this.
 --
-main = xmonad . ewmhFullscreen . ewmh . myXmobarProp $ docks defaults
+main = xmonad . Hacks.javaHack . ewmhFullscreen . ewmh . myXmobarProp $ docks defaults
 
 -- XMobar colors           fg    bg
 magenta  = xmobarColor "#913bbf" ""

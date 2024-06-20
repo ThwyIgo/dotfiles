@@ -44,6 +44,7 @@ in
     zathura
     prismlauncher
     bottles
+    musescore
 
     # Programming
     nixd
