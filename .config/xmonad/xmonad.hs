@@ -101,6 +101,8 @@ myKeys c =
 
     -- Toggle full screen
     , ("M-m", sendMessage $ Toggle "Full")
+    -- Make a window take 100% of the screen
+    , ("M-<F11>", withFocused $ windows . flip W.float (W.RationalRect 0 0 1 1))
 
     , ("M-j",   windows W.focusDown)
     , ("M-k",   windows W.focusUp)

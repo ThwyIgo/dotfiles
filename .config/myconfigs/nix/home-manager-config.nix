@@ -15,8 +15,8 @@ let
   stylix = import ((import <nixpkgs> {}).fetchFromGitHub {
       owner = "danth";
       repo = "stylix";
-      rev = "99bcaa552096ccff21658a9eb6a1e8397b10eb78";
-      sha256 = "sha256-7tXlevpGhg+73g53RAS8gEOglTf9fPdVMlTOn8r7XAk=";
+      rev = "release-24.05";
+      sha256 = "sha256-A+dBkSwp8ssHKV/WyXb9uqIYrHBqHvtSedU24Lq9lqw=";
   });
   dracula-theme-qt = pkgs.callPackage ./pkgs/dracula-theme-qt.nix {};
 in
@@ -143,6 +143,7 @@ in
   };
 
   stylix = {
+    enable = true;
     image = /. + config.home.homeDirectory
             + /.local/share/wallpapers/default.jpg;
     polarity = "dark";
