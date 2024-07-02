@@ -10,6 +10,23 @@
       <home-manager/nixos>
     ];
 
+  nixpkgs.overlays = [ (final: prev: {
+    haskellPackages = prev.haskellPackages.override {
+      overrides = hsSelf: hsSuper: {
+        xmonad-contrib  = prev.haskell.lib.overrideCabal hsSuper.xmonad-contrib (oa: {
+          patches = (oa.patches or [ ]) ++ [
+            (final.fetchpatch {
+              name = "fix-Steam-Flicker.diff";
+              url = "https://github.com/xmonad/xmonad-contrib/commit/700507fcd054c95fe97e58e1d16fc3fa7f9b4a34.diff";
+              hash = "sha256-XElWTFB666E+H9ezhKqPNanXXJW/IigXGJ/GfNWgtws=";
+              excludes = [ "CHANGES.md" ];
+            })
+          ];
+        });
+      };
+    };
+  }) ];
+
   # Bootloader.
   boot.loader = {
     systemd-boot.enable = true;
@@ -44,9 +61,11 @@
   nix.gc = {
     automatic = true;
     dates = "weekly";
-    persistent = true;
     options = "--delete-older-than 5d";
   };
+
+  # Optimize nix store
+  nix.settings.auto-optimise-store = true;
 
   # Set your time zone.
   time.timeZone = "America/Sao_Paulo";
@@ -85,16 +104,16 @@
   };
 
   # Auto-login
-  services.xserver.displayManager = {
+  services.displayManager = {
     defaultSession = "none+xmonad";
     autoLogin.enable = true;
     autoLogin.user = "thiago";
   };
 
   # Configure keymap in X11
-  services.xserver = {
+  services.xserver.xkb = {
     layout = "br";
-    xkbVariant = "";
+    variant = "";
   };
 
   # Configure console keymap
@@ -107,7 +126,7 @@
   };
   services.avahi = {
     enable = true; # Auto-detect printers
-    nssmdns = true;
+    nssmdns4 = true;
     openFirewall = true;
   };
   programs.system-config-printer.enable = true;
@@ -143,6 +162,10 @@
 
   # Allows applications to query and manipulate storage devices, e.g. automount
   services.udisks2.enable = true;
+  services.devmon.enable = true;
+
+  # Virtual filesystem. Make trash work in file managers
+  services.gvfs.enable = true;
 
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
@@ -154,13 +177,8 @@
     extraGroups = [ "networkmanager" "wheel" "libvirtd" "docker" "video" "scanner" "lp" ];
   };
 
-  fonts.fontconfig.enable = true;
-  fonts.packages = with pkgs; [
-    font-awesome
-    fira-code
-  ];
-
-  home-manager.users.thiago = import (/home/thiago +
+  home-manager.useGlobalPkgs = true;
+  home-manager.users.thiago = import (/. + config.users.users.thiago.home +
                                       /.config/myconfigs/nix/home-manager-config.nix);
 
   environment.localBinInPath = true;
@@ -222,7 +240,7 @@
       setSocketVariable = true;
     };
   };
-  
+
   # Games
   programs.steam.enable = true;
   # Wine games
