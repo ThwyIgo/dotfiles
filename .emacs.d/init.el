@@ -495,13 +495,16 @@ Default is 1000."
   :custom
   (git-gutter:update-interval 2))
 
+;; Highlight ocurrences of a symbol in the buffer
+(use-package symbol-overlay
+  :hook (prog-mode . symbol-overlay-mode))
+
 ;; Language server protocol support (smart text completion)
 ;; Eglot will be part of emacs 29.
 (use-package eglot
   :hook
   (c-mode . eglot-ensure)
   (c++-mode . eglot-ensure)
-  (java-mode . eglot-ensure)
   (haskell-mode . eglot-ensure)
   (nix-mode . eglot-ensure)
   :custom
@@ -562,10 +565,6 @@ Default is 1000."
   :hook
   (c-mode . clang-format+-mode)
   (c++-mode . clang-format+-mode))
-
-;; Eclipse JDT Language Server is hard to work with. eglot-java automates a lot of things
-(use-package eglot-java
-  :hook (java-mode . eglot-java-mode))
 
 ;; Install hls to enable lsp features for Haskell
 (use-package haskell-mode

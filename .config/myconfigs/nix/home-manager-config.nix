@@ -24,6 +24,7 @@ in
   home.stateVersion = "22.05";
   nixpkgs.config.allowUnfree = true;
   imports = [ stylix.homeManagerModules.stylix ];
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   home.packages = with pkgs; [
     # CL
@@ -123,6 +124,9 @@ in
   programs.ssh = {
     enable = true;
     addKeysToAgent = "30m";
+    matchBlocks = {
+      "*".identityFile = [ "~/.ssh/id_rsa" "~/.ssh/ufu" ];
+    };
   };
   services.ssh-agent.enable = true;
 
