@@ -569,7 +569,11 @@ Default is 1000."
 ;; Install hls to enable lsp features for Haskell
 (use-package haskell-mode
   :hook (haskell-mode . (lambda ()
-                          (push '("\\" . ?λ) prettify-symbols-alist)))
+                          (setq prettify-symbols-alist
+                                '(("\\"        . ?λ)
+                                  ("`elem`"    . ?∈)
+                                  ("`notElem`" . ?∉)
+                                  ("forall"    . ?∀)))))
   (haskell-mode . interactive-haskell-mode)
   :config
   (add-hook 'haskell-mode-hook 'prettify-symbols-mode 1)

@@ -40,6 +40,7 @@ in
     virt-manager
     tdesktop # Telegram
     discord
+    stremio
     spotify
     tenacity # Audacity
     zathura

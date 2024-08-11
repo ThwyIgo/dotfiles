@@ -196,11 +196,10 @@
     pfetch
     git
     unzip
-    gnumake
-    gcc
     acpilight
     xorg.xkill
     killall
+    ffmpegthumbnailer
 
     # Sysadmin
     virtiofsd
