@@ -149,8 +149,10 @@ in
 
   stylix = {
     enable = true;
-    image = /. + config.home.homeDirectory
-            + /.local/share/wallpapers/default.jpg;
+    image = pkgs.fetchurl {
+      url = "https://www.pixelstalk.net/wp-content/uploads/2016/11/Iceland-mountains-hd-wallpapers.jpg";
+      sha256 = "sha256-M+9/GE0POxFOJ0ydH8SOpbOIeuqUvjayq4JozRHzAzI=";
+    };
     polarity = "dark";
     base16Scheme = "${pkgs.base16-schemes}/share/themes/dracula.yaml";
     opacity.terminal = 0.9;
