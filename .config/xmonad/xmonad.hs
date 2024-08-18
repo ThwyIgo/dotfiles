@@ -292,7 +292,7 @@ myManageHook = composeAll
     , resource  =? "kdesktop"         --> doIgnore
     , isDialog                        --> doFloat
 
-    , className =? "KeePassXC" --> doShift (myWorkspaces !! 5)
+    , className =? "KeePassXC" <&&> willFloat =? False --> doShift (myWorkspaces !! 5)
     , className =? "Spotify"   --> doShift (myWorkspaces !! 4)
     ]
 
@@ -324,7 +324,7 @@ myLogHook = return ()
 --
 myStartupHook = do
   -- Don't delete the return ()
-  return () >> checkKeymap defaults (myKeys defaults)
+  -- return () >> checkKeymap defaults (myKeys defaults)
   spawnOnce "trayer --edge top --align right --SetDockType true --SetPartialStrut true --expand true --widthtype request --transparent true --alpha 0 --tint 0x000000 --height 25 --iconspacing 1"
   spawnOnce "nm-applet --sm-disable"
   spawnOnce "feh --bg-scale --randomize ~/.local/share/wallpapers/**"
