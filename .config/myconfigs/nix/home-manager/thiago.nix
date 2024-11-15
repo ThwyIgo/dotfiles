@@ -92,6 +92,11 @@ in
   programs.vscode = {
     enable = true;
     package = pkgs.vscodium;
+    extensions = with pkgs.vscode-extensions; [
+      dracula-theme.theme-dracula
+      ms-ceintl.vscode-language-pack-pt-br
+      tuttieee.emacs-mcx
+    ];
   };
   programs.alacritty = {
     enable = true;
@@ -114,6 +119,12 @@ in
 
   # automount
   services.udiskie.enable = true;
+
+  programs.git = {
+    enable = true;
+    userEmail = "thiagopachecorocha@hotmail.com";
+    userName = "ThwyIgo";
+  };
 
   programs.ssh = {
     enable = true;
@@ -176,6 +187,11 @@ in
       (map (a: {name = a; value = {enable = false;};}) [
                   "rofi" "emacs" "vscode"
                 ]);
+  };
+
+  services.random-background = {
+    enable = true;
+    imageDirectory = "%h/.local/share/wallpapers/**";
   };
 
   # 漢語

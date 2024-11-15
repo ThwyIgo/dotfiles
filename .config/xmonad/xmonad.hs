@@ -284,6 +284,7 @@ myLayout = toggleLayouts (noBorders Full) $ windowNavigation . smartBorders . av
 --
 myManageHook = composeAll
     [ className =? "MPlayer"          --> doFloat
+    , className =? "Alert"            --> doFloat
     , className =? "Gimp"             --> doFloat
     , className =? "Gnome-screenshot" --> doFloat
     , className =? "gnome-calculator" --> doFloat
@@ -324,10 +325,10 @@ myLogHook = return ()
 --
 myStartupHook = do
   -- Don't delete the return ()
-  -- return () >> checkKeymap defaults (myKeys defaults)
+  --return () >> checkKeymap defaults (myKeys defaults)
   spawnOnce "trayer --edge top --align right --SetDockType true --SetPartialStrut true --expand true --widthtype request --transparent true --alpha 0 --tint 0x000000 --height 25 --iconspacing 1"
   spawnOnce "nm-applet --sm-disable"
-  spawnOnce "feh --bg-scale --randomize ~/.local/share/wallpapers/**"
+  --spawnOnce "feh --bg-scale --randomize ~/.local/share/wallpapers/**"
   spawnOnce "picom -b"
   spawnOnce "xsetroot -cursor_name left_ptr"
   spawnOnce "kdeconnect-indicator"
