@@ -1,27 +1,23 @@
 { config, pkgs, ... }:
 {
-  imports =
-    [ # Include the results of the hardware scan.
-      /etc/nixos/hardware-configuration.nix
-      <home-manager/nixos>
-    ];
-
-  nixpkgs.overlays = [ (final: prev: {
-    haskellPackages = prev.haskellPackages.override {
-      overrides = hsSelf: hsSuper: {
-        xmonad-contrib  = prev.haskell.lib.overrideCabal hsSuper.xmonad-contrib (oa: {
-          patches = (oa.patches or [ ]) ++ [
-            (final.fetchpatch {
-              name = "fix-Steam-Flicker.diff";
-              url = "https://github.com/xmonad/xmonad-contrib/commit/700507fcd054c95fe97e58e1d16fc3fa7f9b4a34.diff";
-              hash = "sha256-XElWTFB666E+H9ezhKqPNanXXJW/IigXGJ/GfNWgtws=";
-              excludes = [ "CHANGES.md" ];
-            })
-          ];
-        });
+  nixpkgs.overlays = [
+    (final: prev: {
+      haskellPackages = prev.haskellPackages.override {
+        overrides = hsSelf: hsSuper: {
+          xmonad-contrib  = prev.haskell.lib.overrideCabal hsSuper.xmonad-contrib (oa: {
+            patches = (oa.patches or [ ]) ++ [
+              (final.fetchpatch {
+                name = "fix-Steam-Flicker.diff";
+                url = "https://github.com/xmonad/xmonad-contrib/commit/700507fcd054c95fe97e58e1d16fc3fa7f9b4a34.diff";
+                hash = "sha256-XElWTFB666E+H9ezhKqPNanXXJW/IigXGJ/GfNWgtws=";
+                excludes = [ "CHANGES.md" ];
+              })
+            ];
+          });
+        };
       };
-    };
-  }) ];
+    })
+  ];
 
   # Bootloader.
   boot.loader = {
@@ -31,14 +27,20 @@
     efi.efiSysMountPoint = "/boot/efi";
   };
 
-  system.autoUpgrade.enable = true;
-  system.autoUpgrade.operation = "boot";
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   networking.hostName = "PeaceNixArch"; # Define your hostname.
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Enable networking
-  networking.networkmanager.enable = true;
+  networking.networkmanager = {
+    enable = true;
+    #wifi.backend = "iwd";
+  };
+
+  zramSwap = {
+    enable = true;
+    algorithm = "zstd";
+  };
 
   # Garbage collection
   nix.gc = {
@@ -93,6 +95,13 @@
     autoLogin.user = "thiago";
   };
 
+  # systemd.targets = {
+  #   sleep.enable = false;
+  #   suspend.enable = false;
+  #   hibernate.enable = false;
+  #   hybrid-sleep.enable = false;
+  # };
+
   # Configure keymap in X11
   services.xserver.xkb = {
     layout = "br";
@@ -123,14 +132,9 @@
   services.pipewire = {
     enable = true;
     alsa.enable = true;
-    alsa.support32Bit = true;
     pulse.enable = true;
     # If you want to use JACK applications, uncomment this
     #jack.enable = true;
-
-    # use the example session manager (no others are packaged yet so this is enabled by default,
-    # no need to redefine it in your config for now)
-    #media-session.enable = true;
   };
 
   services.udev = {
@@ -146,12 +150,8 @@
   # Allows applications to query and manipulate storage devices, e.g. automount
   services.udisks2.enable = true;
   services.devmon.enable = true;
-
   # Virtual filesystem. Make trash work in file managers
   services.gvfs.enable = true;
-
-  # Enable touchpad support (enabled default in most desktopManager).
-  # services.xserver.libinput.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.thiago = {
@@ -161,8 +161,7 @@
   };
 
   home-manager.useGlobalPkgs = true;
-  home-manager.users.thiago = import (/. + config.users.users.thiago.home +
-                                      /.config/myconfigs/nix/home-manager-config.nix);
+  home-manager.users.thiago = import ./home-manager/thiago.nix;
 
   environment.localBinInPath = true;
 
@@ -232,10 +231,11 @@
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   # programs.mtr.enable = true;
-  # programs.gnupg.agent = {
-  #   enable = true;
-  #   enableSSHSupport = true;
-  # };
+  programs.gnupg.agent = {
+    enable = true;
+    #enableSSHSupport = true;
+  };
+  services.pcscd.enable = true;
 
   # List services that you want to enable:
 

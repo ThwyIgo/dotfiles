@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, stylix, ... }:
 let
   tex = (pkgs.texlive.combine {
     inherit (pkgs.texlive) scheme-basic
@@ -12,19 +12,12 @@ let
     rev = "c22e4b344fb9378c37190556617812aa04268789";
     hash = "sha256-/dGXzVdX8O4DfqIbW0L6+dsFsXAA7VFFoOJioSSRoAo=";
   }) {};
-  stylix = import ((import <nixpkgs> {}).fetchFromGitHub {
-      owner = "danth";
-      repo = "stylix";
-      rev = "release-24.05";
-      sha256 = "sha256-A+dBkSwp8ssHKV/WyXb9uqIYrHBqHvtSedU24Lq9lqw=";
-  });
-  dracula-theme-qt = pkgs.callPackage ./pkgs/dracula-theme-qt.nix {};
+  dracula-theme-qt = pkgs.callPackage ../pkgs/dracula-theme-qt.nix {};
 in
 {
   home.stateVersion = "22.05";
   nixpkgs.config.allowUnfree = true;
-  imports = [ stylix.homeManagerModules.stylix ];
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  imports = [ stylix ];
 
   home.packages = with pkgs; [
     # CL
