@@ -328,6 +328,7 @@ myStartupHook = do
   --return () >> checkKeymap defaults (myKeys defaults)
   spawnOnce "trayer --edge top --align right --SetDockType true --SetPartialStrut true --expand true --widthtype request --transparent true --alpha 0 --tint 0x000000 --height 25 --iconspacing 1"
   spawnOnce "nm-applet --sm-disable"
+  spawnOnce "blueman-applet"
   --spawnOnce "feh --bg-scale --randomize ~/.local/share/wallpapers/**"
   spawnOnce "picom -b"
   spawnOnce "xsetroot -cursor_name left_ptr"

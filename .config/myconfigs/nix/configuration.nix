@@ -37,6 +37,9 @@
     #wifi.backend = "iwd";
   };
 
+  hardware.bluetooth.enable = true;
+  services.blueman.enable = true;
+
   zramSwap = {
     enable = true;
     algorithm = "zstd";
@@ -88,6 +91,9 @@
     enableContribAndExtras = true;
   };
 
+  services.desktopManager.cosmic.enable = false;
+  services.displayManager.cosmic-greeter.enable = false;
+
   # Auto-login
   services.displayManager = {
     defaultSession = "none+xmonad";
@@ -126,7 +132,6 @@
   hardware.sane.enable = true;
 
   # Enable sound with pipewire.
-  sound.enable = true;
   hardware.pulseaudio.enable = false;
   security.rtkit.enable = true;
   services.pipewire = {
@@ -172,6 +177,7 @@
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     # CL
+    xorg.xinit
     alacritty
     micro
     htop
@@ -191,11 +197,11 @@
 
     # GUI
     librewolf
-    cinnamon.nemo-with-extensions
-    cinnamon.pix
+    nemo-with-extensions
+    pix
     celluloid
     libreoffice-still
-    gnome.gnome-calculator
+    gnome-calculator
     flameshot
     thunderbird
     gimp

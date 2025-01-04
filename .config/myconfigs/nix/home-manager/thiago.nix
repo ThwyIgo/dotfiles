@@ -22,6 +22,7 @@ in
   home.packages = with pkgs; [
     # CL
     mate.mate-polkit
+    alsa-utils
 
     # Libs
     (aspellWithDicts (dicts: with dicts; [ en pt_BR ]))
@@ -35,7 +36,6 @@ in
     discord
     stremio
     spotify
-    tenacity # Audacity
     zathura
     prismlauncher
     bottles
@@ -102,7 +102,7 @@ in
     enable = true;
     settings = {
       window.opacity = 0.9;
-      shell.program = "${pkgs.fish}/bin/fish";
+      terminal.shell.program = "${pkgs.fish}/bin/fish";
     };
   };
   programs.rofi = {
@@ -191,7 +191,7 @@ in
 
   services.random-background = {
     enable = true;
-    imageDirectory = "%h/.local/share/wallpapers/**";
+    imageDirectory = "%h/.local/share/wallpapers";
   };
 
   # 漢語
