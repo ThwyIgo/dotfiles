@@ -91,8 +91,8 @@
     enableContribAndExtras = true;
   };
 
-  services.desktopManager.cosmic.enable = false;
-  services.displayManager.cosmic-greeter.enable = false;
+  # services.desktopManager.cosmic.enable = false;
+  # services.displayManager.cosmic-greeter.enable = false;
 
   # Auto-login
   services.displayManager = {
@@ -194,6 +194,7 @@
     arandr
     pavucontrol
     xfce.xfce4-taskmanager
+    wireshark
 
     # GUI
     librewolf
@@ -209,6 +210,7 @@
     obs-studio
     simple-scan
   ];
+  programs.wireshark.enable = true;
   programs = {
     file-roller.enable = true;
     kdeconnect.enable = true;

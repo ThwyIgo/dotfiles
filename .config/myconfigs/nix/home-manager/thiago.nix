@@ -16,7 +16,7 @@ let
 in
 {
   home.stateVersion = "22.05";
-  nixpkgs.config.allowUnfree = true;
+  #nixpkgs.config.allowUnfree = true;
   imports = [ stylix ];
 
   home.packages = with pkgs; [
