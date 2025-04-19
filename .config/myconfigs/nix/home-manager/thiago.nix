@@ -1,11 +1,5 @@
 { config, pkgs, stylix, ... }:
 let
-  tex = (pkgs.texlive.combine {
-    inherit (pkgs.texlive) scheme-basic
-      dvisvgm dvipng # for preview and export as html
-      wrapfig amsmath ulem hyperref capt-of
-      latexmk; # org-latex-export-to-pdf
-  });
   session-quit = pkgs.callPackage (pkgs.fetchFromGitHub {
     owner = "ThwyIgo";
     repo = "session-quit";
@@ -26,7 +20,6 @@ in
 
     # Libs
     (aspellWithDicts (dicts: with dicts; [ en pt_BR ]))
-    tex
 
     # GUI
     session-quit
@@ -88,15 +81,6 @@ in
       enable = true;
       arguments = [ "-c" "-a ${pkgs.emacs}/bin/emacs" ];
     };
-  };
-  programs.vscode = {
-    enable = true;
-    package = pkgs.vscodium;
-    extensions = with pkgs.vscode-extensions; [
-      dracula-theme.theme-dracula
-      ms-ceintl.vscode-language-pack-pt-br
-      tuttieee.emacs-mcx
-    ];
   };
   programs.alacritty = {
     enable = true;

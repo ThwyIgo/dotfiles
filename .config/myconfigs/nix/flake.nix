@@ -5,11 +5,8 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-24.11";
     # nixpkgs.follows = "nixos-cosmic/nixpkgs-stable";
     # nixos-cosmic.url = "github:lilyinstarlight/nixos-cosmic";
-    home-manager = {
-      url = "github:nix-community/home-manager";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    stylix.url = "github:danth/stylix";
+    home-manager.url = "github:nix-community/home-manager/release-24.11";
+    stylix.url = "github:danth/stylix/release-24.11";
   };
 
   outputs = { self, nixpkgs, home-manager, stylix }: {

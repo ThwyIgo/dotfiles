@@ -3,6 +3,10 @@
 
 (setq mc/cmds-to-run-for-all
       '(
+        LaTeX-insert-item
+        LaTeX-insert-left-brace
+        TeX-insert-backslash
+        TeX-insert-dollar
         c-beginning-of-statement
         c-electric-brace
         c-electric-colon

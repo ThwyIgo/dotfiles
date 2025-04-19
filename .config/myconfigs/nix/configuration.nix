@@ -194,7 +194,6 @@
     arandr
     pavucontrol
     xfce.xfce4-taskmanager
-    wireshark
 
     # GUI
     librewolf
@@ -210,7 +209,6 @@
     obs-studio
     simple-scan
   ];
-  programs.wireshark.enable = true;
   programs = {
     file-roller.enable = true;
     kdeconnect.enable = true;

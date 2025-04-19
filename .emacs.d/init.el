@@ -350,6 +350,7 @@ Default is 1000."
   ;; (corfu-preselect 'prompt)      ;; Preselect the prompt
   ;; (corfu-on-exact-match nil)     ;; Configure handling of exact matches
   ;; (corfu-scroll-margin 5)        ;; Use scroll margin
+  (text-mode-ispell-word-completion nil)
 
   ;; Enable Corfu only for certain modes.
   ;; :hook ((prog-mode . corfu-mode)
@@ -481,6 +482,19 @@ Default is 1000."
   (which-key-idle-delay 2.0)
   :config
   (which-key-mode)
+  )
+
+(use-package auctex
+  :custom
+  (TeX-auto-save t)
+  (TeX-parse-self t)
+  (LaTeX-electric-left-right-brace t)
+  :hook
+  (TeX-mode . prettify-symbols-mode)
+  (LaTeX-mode . (lambda ()
+                  (push (list 'output-pdf "Zathura")
+                        TeX-view-program-selection)))
+  (doc-view-mode . (lambda () (display-line-numbers-mode -1)))
   )
 
 ;;;;; IDE-like features ;;;;
