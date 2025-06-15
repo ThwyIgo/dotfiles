@@ -3,10 +3,13 @@
 
 (setq mc/cmds-to-run-for-all
       '(
+        LaTeX-babel-insert-hyphen
         LaTeX-insert-item
         LaTeX-insert-left-brace
         TeX-insert-backslash
         TeX-insert-dollar
+        TeX-insert-sub-or-superscript
+        TeX-newline
         c-beginning-of-statement
         c-electric-brace
         c-electric-colon
@@ -26,6 +29,7 @@
         haskell-indentation-newline-and-indent
         ignore
         indent-for-tab-command
+        insert-char
         keyboard-escape-quit
         kill-region
         lsp-ui-doc--handle-mouse-movement
@@ -41,6 +45,7 @@
         org-shiftmetaright
         overwrite-mode
         prolog-inferior-self-insert-command
+        reindent-then-newline-and-indent
         ryanmarcus/backward-kill-word
         yaml-electric-backspace
         yaml-electric-dash-and-dot

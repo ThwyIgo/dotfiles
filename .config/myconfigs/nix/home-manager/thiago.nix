@@ -10,7 +10,7 @@ let
 in
 {
   home.stateVersion = "22.05";
-  #nixpkgs.config.allowUnfree = true;
+  nixpkgs.config.allowUnfree = true;
   imports = [ stylix ];
 
   home.packages = with pkgs; [
@@ -33,6 +33,7 @@ in
     prismlauncher
     bottles
     musescore
+    kdePackages.kdenlive
 
     # Programming
     nixd
@@ -180,7 +181,8 @@ in
 
   # 漢語
   i18n.inputMethod = {
-    enabled = "fcitx5";
+    enable = true;
+    type = "fcitx5";
     fcitx5.addons = with pkgs; [ fcitx5-chinese-addons ];
   };
 

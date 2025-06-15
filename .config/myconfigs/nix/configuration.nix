@@ -1,24 +1,5 @@
 { config, pkgs, ... }:
 {
-  nixpkgs.overlays = [
-    (final: prev: {
-      haskellPackages = prev.haskellPackages.override {
-        overrides = hsSelf: hsSuper: {
-          xmonad-contrib  = prev.haskell.lib.overrideCabal hsSuper.xmonad-contrib (oa: {
-            patches = (oa.patches or [ ]) ++ [
-              (final.fetchpatch {
-                name = "fix-Steam-Flicker.diff";
-                url = "https://github.com/xmonad/xmonad-contrib/commit/700507fcd054c95fe97e58e1d16fc3fa7f9b4a34.diff";
-                hash = "sha256-XElWTFB666E+H9ezhKqPNanXXJW/IigXGJ/GfNWgtws=";
-                excludes = [ "CHANGES.md" ];
-              })
-            ];
-          });
-        };
-      };
-    })
-  ];
-
   # Bootloader.
   boot.loader = {
     systemd-boot.enable = true;
@@ -59,8 +40,8 @@
   time.timeZone = "America/Sao_Paulo";
 
   # Select internationalisation properties.
-  i18n.defaultLocale = "pt_BR.utf8";
-  i18n.supportedLocales = [ "pt_BR.UTF-8/UTF-8" "zh_CN.UTF-8/UTF-8" ];
+  i18n.defaultLocale = "pt_BR.UTF-8";
+  i18n.extraLocales = [ "en_US.UTF-8/UTF-8" "zh_CN.UTF-8/UTF-8" ];
 
   # Enable the X11 windowing system.
   services.xserver.enable = true;
@@ -77,7 +58,7 @@
   };
 
   services.xserver.xautolock = rec {
-    enable = true;
+    enable = false;
     nowlocker = "${pkgs.betterlockscreen}/bin/betterlockscreen -l";
     time = 10;
     killtime = 20;
@@ -132,7 +113,7 @@
   hardware.sane.enable = true;
 
   # Enable sound with pipewire.
-  hardware.pulseaudio.enable = false;
+  services.pulseaudio.enable = false;
   security.rtkit.enable = true;
   services.pipewire = {
     enable = true;
@@ -165,7 +146,6 @@
     extraGroups = [ "networkmanager" "wheel" "libvirtd" "docker" "video" "scanner" "lp" ];
   };
 
-  home-manager.useGlobalPkgs = true;
   home-manager.users.thiago = import ./home-manager/thiago.nix;
 
   environment.localBinInPath = true;
@@ -190,6 +170,7 @@
     ffmpegthumbnailer
 
     # Sysadmin
+    ntfs3g
     virtiofsd
     arandr
     pavucontrol
@@ -205,7 +186,6 @@
     flameshot
     thunderbird
     gimp
-    kdenlive
     obs-studio
     simple-scan
   ];
