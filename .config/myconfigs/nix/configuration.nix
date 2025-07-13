@@ -29,8 +29,8 @@
   # Garbage collection
   nix.gc = {
     automatic = true;
-    dates = "weekly";
-    options = "--delete-older-than 5d";
+    dates = "monthly";
+    options = "--delete-older-than 7d";
   };
 
   # Optimize nix store
@@ -57,8 +57,13 @@
     };
   };
 
+  programs.i3lock = {
+    enable = true;
+    package = pkgs.betterlockscreen;
+  };
+
   services.xserver.xautolock = rec {
-    enable = false;
+    enable = true;
     nowlocker = "${pkgs.betterlockscreen}/bin/betterlockscreen -l";
     time = 10;
     killtime = 20;
