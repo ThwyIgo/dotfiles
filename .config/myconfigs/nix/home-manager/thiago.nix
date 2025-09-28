@@ -35,6 +35,20 @@ in
     musescore
     kdePackages.kdenlive
 
+    # Ardour
+    ardour
+    kapitonov-plugins-pack
+    gxplugins-lv2
+    zam-plugins
+    x42-plugins
+    gxplugins-lv2
+    lsp-plugins
+    calf
+    mda_lv2
+    rkrlv2
+    fomp
+    boops
+
     # Programming
     nixd
     (haskellPackages.ghcWithPackages (hpkgs: with hpkgs; [
