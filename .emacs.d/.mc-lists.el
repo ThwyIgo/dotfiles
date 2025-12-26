@@ -34,6 +34,7 @@
         kill-region
         lsp-ui-doc--handle-mouse-movement
         mark-sexp
+        nxml-electric-slash
         org-beginning-of-line
         org-cycle
         org-delete-char
@@ -44,6 +45,7 @@
         org-metaright
         org-self-insert-command
         org-shiftmetaright
+        org-yank
         overwrite-mode
         prolog-inferior-self-insert-command
         reindent-then-newline-and-indent

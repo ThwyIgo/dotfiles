@@ -27,11 +27,11 @@
   };
 
   # Garbage collection
-  nix.gc = {
-    automatic = true;
-    dates = "monthly";
-    options = "--delete-older-than 7d";
-  };
+  # nix.gc = {
+  #   automatic = true;
+  #   dates = "monthly";
+  #   options = "--delete-older-than 7d";
+  # };
 
   # Optimize nix store
   nix.settings.auto-optimise-store = true;
@@ -184,6 +184,7 @@
     # GUI
     librewolf
     nemo-with-extensions
+    file-roller
     pix
     celluloid
     libreoffice-still
@@ -195,7 +196,6 @@
     simple-scan
   ];
   programs = {
-    file-roller.enable = true;
     kdeconnect.enable = true;
   };
 

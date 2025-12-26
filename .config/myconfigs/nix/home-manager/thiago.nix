@@ -1,16 +1,9 @@
 { config, pkgs, stylix, ... }:
 let
-  session-quit = pkgs.callPackage (pkgs.fetchFromGitHub {
-    owner = "ThwyIgo";
-    repo = "session-quit";
-    rev = "c22e4b344fb9378c37190556617812aa04268789";
-    hash = "sha256-/dGXzVdX8O4DfqIbW0L6+dsFsXAA7VFFoOJioSSRoAo=";
-  }) {};
   dracula-theme-qt = pkgs.callPackage ../pkgs/dracula-theme-qt.nix {};
 in
 {
   home.stateVersion = "22.05";
-  nixpkgs.config.allowUnfree = true;
   imports = [ stylix ];
 
   home.packages = with pkgs; [
@@ -25,9 +18,9 @@ in
     session-quit
     keepassxc
     virt-manager
-    tdesktop # Telegram
+    telegram-desktop
     discord
-    stremio
+    #stremio
     spotify
     zathura
     prismlauncher
@@ -121,15 +114,18 @@ in
 
   programs.git = {
     enable = true;
-    userEmail = "thiagopachecorocha@hotmail.com";
-    userName = "ThwyIgo";
+    settings = {
+      user.email = "thiagopachecorocha@hotmail.com";
+      user.name = "ThwyIgo";
+    };
   };
 
   programs.ssh = {
     enable = true;
-    addKeysToAgent = "30m";
-    matchBlocks = {
-      "*".identityFile = [ "~/.ssh/id_rsa" "~/.ssh/ufu" ];
+    enableDefaultConfig = false;
+    matchBlocks."*" = {
+      addKeysToAgent = "30m";
+      identityFile = [ "~/.ssh/id_rsa" "~/.ssh/ufu" ];
     };
   };
   services.ssh-agent.enable = true;
@@ -165,7 +161,7 @@ in
         name = "DejaVu Serif";
       };
       sansSerif = {
-        package = pkgs.ubuntu_font_family;
+        package = pkgs.ubuntu-classic;
         name = "Ubuntu";
       };
       monospace = {
@@ -173,7 +169,7 @@ in
         name = "DejaVu Sans Mono";
       };
       emoji = {
-        package = pkgs.noto-fonts-emoji;
+        package = pkgs.noto-fonts-color-emoji;
         name = "Noto Color Emoji";
       };
     };
@@ -197,7 +193,7 @@ in
   i18n.inputMethod = {
     enable = true;
     type = "fcitx5";
-    fcitx5.addons = with pkgs; [ fcitx5-chinese-addons ];
+    fcitx5.addons = with pkgs; [ qt6Packages.fcitx5-chinese-addons ];
   };
 
   dconf.settings = {
