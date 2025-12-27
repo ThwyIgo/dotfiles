@@ -81,13 +81,18 @@ in
     };
   };
   programs.bash.enable = true;
-  programs.emacs.enable = true;
+  programs.emacs = {
+    enable = true;
+    package = (pkgs.emacsPackagesFor pkgs.emacs).emacsWithPackages (epkgs: [
+      epkgs.vterm
+    ]);
+  };
   services.emacs = {
     enable = true;
     defaultEditor = true;
     client = {
       enable = true;
-      arguments = [ "-c" "-a ${pkgs.emacs}/bin/emacs" ];
+      arguments = [ "-c" "-a emacs" ];
     };
   };
   programs.alacritty = {

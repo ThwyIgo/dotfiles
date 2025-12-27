@@ -1,4 +1,4 @@
-;; Emacs 28
+;; Emacs 30
 
 (setq warning-minimum-level :emergency) ;; Delete or change this line to :warning when editing the file.
 (setq custom-file (concat user-emacs-directory "custom.el"))
@@ -24,9 +24,10 @@
 (setq initial-scratch-message nil)
 
 ;; Enable tab-bar (prefix: C-x t)
-(setq tab-bar-show 1) ;; Show the tab-bar only when there's more than 2 tabs
-(setq tab-bar-close-button-show nil)
-(tab-bar-mode)
+(use-package tab-bar
+  :custom (tab-bar-show 1) ;; Show the tab-bar only when there's more than 2 tabs
+  :init (tab-bar-mode)
+  )
 
 ;; Emacs doesn't take the whole screen when in full screen mode in some window
 ;; managers. This fixes it.
@@ -83,28 +84,6 @@
         mode-line-misc-info             ;; IDK
         mode-line-end-spaces            ;; Mode line construct to put at the end of the mode line.
         ))
-
-;; org-mode
-(use-package org
-  :hook (org-mode . auto-fill-mode)
-  :custom
-  (org-edit-src-content-indentation 0)
-  (org-startup-indented t)
-  (org-preview-latex-default-process 'dvisvgm)
-  (org-latex-compiler "lualatex")
-  :config
-  (org-babel-do-load-languages
-   'org-babel-load-languages
-   '((haskell . t)
-     (emacs-lisp . t)))
-  (setq org-format-latex-options (plist-put org-format-latex-options :scale 1.7))
-  )
-(use-package org-sticky-header
-  :after (org)
-  :hook (org-mode . org-sticky-header-mode)
-  :custom
-  (org-sticky-header-always-show-header nil)
-  (org-sticky-header-full-path 'reversed))
 
 ;;; Other configs
 (electric-pair-mode t)
@@ -296,6 +275,28 @@ Default is 1000."
   ;; per mode with `ligature-mode'.
   (global-ligature-mode t))
 
+;; org-mode
+(use-package org
+  :hook (org-mode . auto-fill-mode)
+  :custom
+  (org-edit-src-content-indentation 0)
+  (org-startup-indented t)
+  (org-preview-latex-default-process 'dvisvgm)
+  (org-latex-compiler "lualatex")
+  :config
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((haskell . t)
+     (emacs-lisp . t)))
+  (setq org-format-latex-options (plist-put org-format-latex-options :scale 1.7))
+  )
+(use-package org-sticky-header
+  :after (org)
+  :hook (org-mode . org-sticky-header-mode)
+  :custom
+  (org-sticky-header-always-show-header nil)
+  (org-sticky-header-full-path 'reversed))
+
 ;; Set background color to strings that match color names
 (use-package rainbow-mode
   :hook (html-mode css-mode scss-mode js-mode))
@@ -440,6 +441,7 @@ Default is 1000."
                      ))
   (dashboard-set-heading-icons t)
   (dashboard-set-file-icons t)
+  (dashboard-icon-type 'all-the-icons)  ; use `all-the-icons' package
   )
 
 ;; Move a selection up and down the lines
@@ -514,7 +516,6 @@ Default is 1000."
   :hook (prog-mode . symbol-overlay-mode))
 
 ;; Language server protocol support (smart text completion)
-;; Eglot will be part of emacs 29.
 (use-package eglot
   :hook
   (c-mode . eglot-ensure)
@@ -541,6 +542,58 @@ Default is 1000."
   :config
   (flymake-mode 1))
 
+;; `term' is so bad that I had to replace it with `vterm'
+(use-package vterm
+  :config
+  (define-key vterm-mode-map (kbd "C-q") #'vterm-send-next-key))
+
+;; DAP support
+(use-package dape
+  ;;:preface
+  ;; By default dape shares the same keybinding prefix as `gud'
+  ;; If you do not want to use any prefix, set it to nil.
+  ;; (setq dape-key-prefix "\C-x\C-a")
+
+  ;:hook
+  ;; Save breakpoints on quit
+  ;; (kill-emacs . dape-breakpoint-save)
+  ;; Load breakpoints on startup
+  ;; (after-init . dape-breakpoint-load)
+
+  :custom
+  ;; Turn on global bindings for setting breakpoints with mouse
+  (dape-breakpoint-global-mode +1)
+
+  ;; Info buffers to the right
+  (dape-buffer-window-arrangement 'right)
+  ;; Info buffers like gud (gdb-mi)
+  ;; (dape-buffer-window-arrangement 'gud)
+  ;; (dape-info-hide-mode-line nil)
+
+  ;; Projectile users
+  ;; (dape-cwd-function #'projectile-project-root)
+
+  :config
+  ;; Pulse source line (performance hit)
+  (add-hook 'dape-display-source-hook #'pulse-momentary-highlight-one-line)
+
+  ;; Save buffers on startup, useful for interpreted languages
+  ;; (add-hook 'dape-start-hook (lambda () (save-some-buffers t t)))
+
+  ;; Kill compile buffer on build success
+  ;; (add-hook 'dape-compile-hook #'kill-buffer)
+  )
+
+;; For a more ergonomic Emacs and `dape' experience
+(use-package repeat
+  :custom
+  (repeat-mode +1))
+
+;; Left and right side windows occupy full frame height
+(use-package emacs
+  :custom
+  (window-sides-vertical t))
+
 ;; "C-<return>" to fold a code block
 (use-package origami
   :hook (prog-mode . origami-mode)
@@ -554,10 +607,6 @@ Default is 1000."
   :custom
   (eldoc-box-max-pixel-height 400)
   (eldoc-box-max-pixel-width 500))
-
-;; Modular debugger
-(use-package realgud)
-;; "M-x realgud:DEBUGGERNAME" to start debugging
 
 ;; Install clangd to enable lsp features for C/C++
 (use-package cc-mode

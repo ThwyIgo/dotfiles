@@ -7,7 +7,12 @@
  '(blink-cursor-mode nil)
  '(column-number-mode t)
  '(package-selected-packages
-   '(latex-preview-pane auctex all-the-icons symbol-overlay kind-icon savehist clang-format+ dashboard org-sticky-header popper which-key eldoc-cmake cmake-mode all-the-icons-dired groovy-mode rainbow-mode mood-line nix-mode eglot-java realgud corfu-terminal eldoc-box eglot corfu git-gutter magit origami haskell-mode neotree drag-stuff ligature multiple-cursors yasnippet-snippets yasnippet orderless save-hist vertico ace-window yascroll use-package dracula-theme auto-package-update))
+   '(ace-window all-the-icons-dired auctex auto-package-update clang-format+
+                cmake-mode corfu-terminal dape dashboard dracula-theme
+                drag-stuff eldoc-box eldoc-cmake git-gutter haskell-mode
+                kind-icon ligature magit mood-line multiple-cursors neotree
+                nix-mode orderless org-sticky-header origami popper rainbow-mode
+                symbol-overlay vertico vterm yascroll yasnippet-snippets))
  '(safe-local-variable-values '((ispell-local-dictionary . english))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
