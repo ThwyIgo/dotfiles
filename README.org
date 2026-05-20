@@ -5,9 +5,9 @@ home-manager and disko.
 
 * Status
 
-Not working.
+Usable!
 
-Reason: machine-id is not set up correctly.
+Reason: virtualization config in configuration.nix might be wrong.
 
 * Install steps
 
@@ -24,4 +24,5 @@ mkdir -p /mnt/persistent/etc/nixos
 cp -r * /mnt/persistent/etc/nixos
 nixos-generate-config --no-filesystems --root /mnt/persistent/
 mkpasswd -m sha-512 | sudo tee /mnt/persistent/etc/nixos/secrets/user-passwd.txt
+nixos-install --no-root-passwd --flake /mnt/persistent/etc/nixos#nixos
 #+end_src

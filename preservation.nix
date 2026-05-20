@@ -54,4 +54,18 @@
       "systemd-machine-id-setup --commit --root /persistent"
     ];
   };
+
+  boot.initrd.systemd.services.init-machine-id = {
+    description = "Initialize machine-id for preservation";
+    wantedBy = [ "initrd-root-fs.target" ];
+    after = [ "sysroot-persistent.mount" ];
+    unitConfig.DefaultDependencies = false;
+    serviceConfig.Type = "oneshot";
+    script = ''
+      mkdir -p /sysroot/persistent/etc
+      if [ ! -f /sysroot/persistent/etc/machine-id ]; then
+        echo "uninitialized" > /sysroot/persistent/etc/machine-id
+      fi
+    '';
+  };
 }
