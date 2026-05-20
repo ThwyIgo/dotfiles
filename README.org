@@ -7,8 +7,7 @@ home-manager and disko.
 
 Not working.
 
-Reason: user-passwd.txt is not read correctly and the system is installed
-without a user password, making it impossible to log in.
+Reason: machine-id is not set up correctly.
 
 * Install steps
 

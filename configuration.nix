@@ -72,7 +72,7 @@
     isNormalUser = true;
     extraGroups = [ "wheel" "networkmanager" ];
     # mkpasswd -m sha-512 | sudo tee /mnt/persistent/etc/nixos/user-passwd.txt
-    hashedPasswordFile = "/persistent/etc/nixos/user-passwd.txt";
+    hashedPasswordFile = "/etc/nixos/user-passwd.txt";
   };
   home-manager.users.user = ./home-manager/user.nix;
 
