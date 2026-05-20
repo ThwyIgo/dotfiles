@@ -23,5 +23,5 @@ sudo nix --experimental-features "nix-command flakes" run github:nix-community/d
 mkdir -p /mnt/persistent/etc/nixos
 cp -r * /mnt/persistent/etc/nixos
 nixos-generate-config --no-filesystems --root /mnt/persistent/
-mkpasswd -m sha-512 | sudo tee /mnt/persistent/etc/nixos/user-passwd.txt
+mkpasswd -m sha-512 | sudo tee /mnt/persistent/etc/nixos/secrets/user-passwd.txt
 #+end_src
