@@ -70,7 +70,7 @@
   users.users.user = {
     description = "";
     isNormalUser = true;
-    extraGroups = [ "wheel" "networkmanager" ];
+    extraGroups = [ "wheel" "networkmanager" "libvirtd" ];
     # mkpasswd -m sha-512 | sudo tee /mnt/persistent/etc/nixos/secrets/user-passwd.txt
     hashedPasswordFile = "/etc/nixos/secrets/user-passwd.txt";
   };

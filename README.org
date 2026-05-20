@@ -5,9 +5,10 @@ home-manager and disko.
 
 * Status
 
-Usable!
+Working!
 
-Reason: virtualization config in configuration.nix might be wrong.
+Remarks: Virtual network virbr0 might conflict with host network if installing
+on a paravirtualized machine.
 
 * Install steps
 
