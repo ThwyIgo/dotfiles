@@ -4,8 +4,14 @@
 
     preserveAt."/persistent" = {
       directories = [
-        "/etc/nixos"
-        "/etc/ssh"
+        {
+          directory = "/etc/nixos";
+          inInitrd = true;
+        }
+        {
+          directory = "/etc/ssh";
+          inInitrd = true;
+        }
         "/etc/NetworkManager/system-connections"
         "/var/lib/iwd"
         "/var/lib/bluetooth"
