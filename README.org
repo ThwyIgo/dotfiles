@@ -1,0 +1,28 @@
+* What is this?
+
+Me trying to install NixOS with LUKS, BTrFS, swap-file, impermanence,
+home-manager and disko.
+
+* Status
+
+Not working.
+
+Reason: user-passwd.txt is not read correctly and the system is installed
+without a user password, making it impossible to log in.
+
+* Install steps
+
+(Not exactly every step of what should be done, just some important commands to
+guide myself)
+
+#+begin_src shell
+sudo su
+#+end_src
+#+begin_src shell
+printf 'password' > luks-passwd.txt
+sudo nix --experimental-features "nix-command flakes" run github:nix-community/disko/latest -- --mode destroy,format,mount disko.nix
+mkdir -p /mnt/persistent/etc/nixos
+cp -r * /mnt/persistent/etc/nixos
+nixos-generate-config --no-filesystems --root /mnt/persistent/
+mkpasswd -m sha-512 | sudo tee /mnt/persistent/etc/nixos/user-passwd.txt
+#+end_src
