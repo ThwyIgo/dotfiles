@@ -1,29 +1,44 @@
 * What is this?
 
-Me trying to install NixOS with LUKS, BTrFS, swap-file, impermanence,
-home-manager and disko.
+A minimal NixOS config that uses LUKS, BTrFS, swap-file, impermanence,
+home-manager and disko. It has good and secure defaults.
 
 * Status
 
 Working!
 
-Remarks: Virtual network virbr0 might conflict with host network if installing
-on a paravirtualized machine.
+Remarks: Virtual network virbr0 might conflict with host network if
+installing on a paravirtualized machine.
 
 * Install steps
 
-(Not exactly every step of what should be done, just some important commands to
-guide myself)
+1. Boot nixos-minimal LiveCD.
+2. Find a way to put the files from this repository onto the LiveCD
+   (suggestions: git clone, curl, usb flash drive) and ~cd~ into it.
+3. ~sudo su~
+4. Create your LUKS password using ~printf 'password' >
+   luks-passwd.txt~.
+5. Check in which disk you want to install your system using ~lsblk~.
+6. Change =disko.nix= to make ~disko.devices.disk.main.device~ point
+   to the correct device.
+7. Run disko to format the disk: ~sudo nix --experimental-features
+   "nix-command flakes" run github:nix-community/disko/latest --
+   --mode destroy,format,mount disko.nix~.
+8. Copy your configuration files to the persistent directory: ~mkdir
+   -p /mnt/persistent/etc/nixos && cp -r * /mnt/persistent/etc/nixos~.
+   - Make sure you don't copy =luks-passwd.txt=.
+9. Generate =hardware-configuration.nix=: ~nixos-generate-config
+   --no-filesystems --root /mnt/persistent/~.
+10. Create =user='s password: ~mkpasswd -m sha-512 | sudo tee
+   /mnt/persistent/etc/nixos/secrets/user-passwd.txt~.
+11. Install NixOS: ~nixos-install --no-root-passwd --flake
+    /mnt/persistent/etc/nixos#nixos~.
+12. Reboot.
+ 
+* Hints
 
-#+begin_src shell
-sudo su
-#+end_src
-#+begin_src shell
-printf 'password' > luks-passwd.txt
-sudo nix --experimental-features "nix-command flakes" run github:nix-community/disko/latest -- --mode destroy,format,mount disko.nix
-mkdir -p /mnt/persistent/etc/nixos
-cp -r * /mnt/persistent/etc/nixos
-nixos-generate-config --no-filesystems --root /mnt/persistent/
-mkpasswd -m sha-512 | sudo tee /mnt/persistent/etc/nixos/secrets/user-passwd.txt
-nixos-install --no-root-passwd --flake /mnt/persistent/etc/nixos#nixos
-#+end_src
+- Add =/persistent/etc/nixos/secrets/= to =.gitignore=.
+- Never edit =/persistent/etc/nixos/hardware-configuration.nix= by
+  hand.
+- Never change ~boot.initrd.systemd.enable~ to false as this will
+  break hibernation and ~machine-id~.

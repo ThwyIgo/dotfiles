@@ -22,11 +22,6 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.timeout = 0; # Press Space to show boot menu
-  # Hibernation support
-  # To find the resume_offset, run:
-  # sudo btrfs inspect-internal map-swapfile -r /.swapvol/swapfile
-  # boot.resumeDevice = "/dev/mapper/crypted";
-  # boot.kernelParams = [ "resume_offset=XXXXX" ];
   boot.initrd.systemd.enable = true;
 
   #### NETWORK CONFIG ####
@@ -34,7 +29,7 @@
   networking.hostName = "nixos"; # Define your hostname.
   networking.networkmanager = {
     enable = true;
-    wifi.backend = "iwd";
+    wifi.backend = "iwd"; # If wifi is not working, change this to "wpa_supplicant"
   };
   networking.firewall = {
     allowedTCPPorts = [ ];
