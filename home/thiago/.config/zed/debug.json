@@ -1,0 +1,66 @@
+// Some example tasks for common languages.
+//
+// For more documentation on how to configure debug tasks,
+// see: https://zed.dev/docs/debugger
+[
+  {
+    "label": "Debug active Python file",
+    "adapter": "Debugpy",
+    "program": "$ZED_FILE",
+    "request": "launch",
+    "cwd": "$ZED_WORKTREE_ROOT",
+  },
+  {
+    "label": "Debug active JavaScript file",
+    "adapter": "JavaScript",
+    "program": "$ZED_FILE",
+    "request": "launch",
+    "cwd": "$ZED_WORKTREE_ROOT",
+    "type": "pwa-node",
+  },
+  {
+    "label": "JavaScript debug terminal",
+    "adapter": "JavaScript",
+    "request": "launch",
+    "cwd": "$ZED_WORKTREE_ROOT",
+    "console": "integratedTerminal",
+    "type": "pwa-node",
+  },
+  {
+    "adapter": "Java",
+    "request": "launch",
+    "label": "Debug Java",
+    // if your project has multiple entry points, specify the one to use:
+    // "mainClass": "com.myorganization.myproject.MyMainClass",
+    //
+    // this effectively sets a breakpoint at your program entry:
+    "stopOnEntry": false,
+    // the working directory for the debug process
+    "cwd": "$ZED_WORKTREE_ROOT",
+    "env": {
+      "AGENTES_URL": "10.3.192.00:0000",
+      "LOGGING_HUMAN_DIR": "logs",
+      "LOGGING_FILE_NAME": "logs/app.log",
+    },
+  },
+  {
+    "label": "Debug .NET Core App",
+    "adapter": "netcoredbg",
+    "request": "launch",
+    "program": "${ZED_WORKTREE_ROOT}/bin/Debug/net10.0/Example.dll",
+    "cwd": "${ZED_WORKTREE_ROOT}/bin/Debug/net10.0/",
+    "env": {
+      "ASPNETCORE_ENVIRONMENT": "Development",
+      "ASPNETCORE_URLS": "http://localhost:5243",
+    },
+    "build": {
+      "command": "dotnet",
+      "args": [
+        "build",
+        "${ZED_WORKTREE_ROOT}/Example/Example.csproj",
+        "-p:Configuration=Debug",
+        "-p:TargetFramework=net10.0",
+      ],
+    },
+  },
+]

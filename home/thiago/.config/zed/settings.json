@@ -1,0 +1,178 @@
+{
+  "semantic_tokens": "combined",
+  "cli_default_open_behavior": "existing_window",
+  "outline_panel": {
+    "dock": "left",
+  },
+  "git_panel": {
+    "dock": "left",
+  },
+  "agent_servers": {
+    "gemini": {
+      "type": "registry",
+    },
+  },
+  "diff_view_style": "split",
+  "edit_predictions": {
+    "mode": "subtle",
+    "ollama": {
+      "max_output_tokens": 64,
+      "model": "deepseek-coder:1.3b",
+    },
+    "provider": "ollama",
+  },
+  "format_on_save": "off",
+  "file_types": {
+    "XML": ["csproj"],
+  },
+  "languages": {
+    "YAML": {
+      "tab_size": 2,
+    },
+    "Java": {
+      "preferred_line_length": 120,
+    },
+    "Nix": { "language_servers": ["nixd"] },
+    "Python": { "language_servers": ["ty"] },
+  },
+  "lsp": {
+    "clangd": {
+      "binary": {
+        "arguments": [
+          "-background-index",
+          "-compile-commands-dir=build",
+          "--clang-tidy",
+        ],
+      },
+    },
+    "roslyn": {
+      "binary": {
+        "path": "OmniSharp",
+        "arguments": ["-lsp"],
+      },
+    },
+    "ty": {
+      "binary": {
+        "path": "ty",
+        "arguments": ["server"],
+      },
+    },
+    "jdtls": {
+      "settings": {
+        // Path to a JDK 21+ used to run JDTLS.
+        // Also accepts the legacy key "java.home".
+        //"java_home": "/path/to/your/JDK21+",
+        "lombok_support": true,
+        "jdk_auto_download": false,
+
+        // Controls when to check for updates for JDTLS, Lombok, and Debugger
+        // - "always" (default): Always check for and download the latest version
+        // - "once": Check for updates only if no local installation exists
+        // - "never": Never check for updates, only use existing local installations (errors if missing)
+        //
+        // Note: Invalid values will default to "always"
+        // If custom paths (below) are provided, check_updates is IGNORED for that component
+        "check_updates": "never",
+
+        // Use custom installations instead of managed downloads
+        // When these are set, the extension will not download or manage these components
+        "jdtls_launcher": "~/.local/share/zed/nix/jdtls/bin/jdtls",
+        "lombok_jar": "~/.local/share/zed/nix/lombok/lombok.jar",
+        "java_debug_jar": "~/.local/share/zed/nix/com.microsoft.java.debug.plugin.jar",
+      },
+    },
+  },
+  "dap": {
+    "netcoredbg": {
+      "binary": "netcoredbg",
+    },
+    "CodeLLDB": {
+      "binary": "~/.local/share/zed/debug_adapters/CodeLLDB/adapter/codelldb",
+    },
+  },
+  "git": {
+    "inline_blame": {
+      "show_commit_summary": true,
+      "delay_ms": 2000,
+    },
+  },
+  "language_models": {
+    "ollama": {
+      "api_url": "http://localhost:11434",
+    },
+  },
+  "collaboration_panel": {
+    "dock": "left",
+    "button": false,
+  },
+  "project_panel": {
+    "hide_hidden": false,
+    "hide_root": true,
+    "entry_spacing": "standard",
+    "dock": "left",
+  },
+  "bottom_dock_layout": "contained",
+  "tab_bar": {
+    "show_nav_history_buttons": false,
+  },
+  "tabs": {
+    "close_position": "left",
+    "file_icons": true,
+    "git_status": false,
+  },
+  "title_bar": {
+    "show_menus": false,
+    "show_sign_in": false,
+    "show_user_picture": true,
+  },
+  "debugger": {
+    "button": true,
+  },
+  "inlay_hints": {
+    "enabled": true,
+  },
+  "show_whitespaces": "trailing",
+  "indent_guides": {
+    "enabled": false,
+    "line_width": 1,
+  },
+  "toolbar": {
+    "code_actions": true,
+    "breadcrumbs": true,
+  },
+  "gutter": {
+    "min_line_number_digits": 3,
+  },
+  "auto_signature_help": true,
+  "cursor_shape": "block",
+  "cursor_blink": false,
+  "autosave": "on_focus_change",
+  "agent": {
+    "sidebar_side": "right",
+    "dock": "right",
+    "inline_assistant_model": {
+      "provider": "ollama",
+      "model": "qwen2.5-coder:7b",
+    },
+    "default_profile": "write",
+    "default_model": {
+      "provider": "ollama",
+      "model": "qwen2.5-coder:7b",
+    },
+    "model_parameters": [],
+  },
+  "terminal": {
+    "shell": {
+      "program": "fish",
+    },
+  },
+  "buffer_font_family": "Fira Code",
+  "ui_font_size": 18.0,
+  "buffer_font_size": 16.0,
+  "base_keymap": "Emacs",
+  "theme": {
+    "mode": "system",
+    "light": "Ayu Light",
+    "dark": "Ayu Mirage",
+  },
+}

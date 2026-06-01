@@ -1,0 +1,339 @@
+// Zed keymap
+//
+// For information on binding keys, see the Zed
+// documentation: https://zed.dev/docs/key-bindings
+//
+// To see the default key bindings run `zed: open default keymap`
+// from the command palette.
+[
+  {
+    "context": "!(left_dock == ProjectPanel)",
+    "bindings": {
+      "f8": "project_panel::ToggleFocus",
+    },
+  },
+  {
+    "context": "left_dock == ProjectPanel",
+    "bindings": {
+      "f8": "workspace::ToggleLeftDock",
+    },
+  },
+  {
+    "context": "!(left_dock == GitPanel)",
+    "bindings": {
+      "ctrl-x g": "git_panel::ToggleFocus",
+    },
+  },
+  {
+    "context": "left_dock == GitPanel",
+    "bindings": {
+      "ctrl-x g": "workspace::ToggleLeftDock"
+    }
+  },
+  {
+    "context": "Editor",
+    "bindings": {
+      "ctrl-o": "editor::NewlineAbove"
+    }
+  },
+  {
+    "context": "Editor",
+    "bindings": {
+      "shift-insert": "editor::KillRingYank"
+    }
+  },
+  {
+    "context": "Editor",
+    "bindings": {
+      "ctrl-y": "editor::Paste"
+    }
+  },
+  {
+    "context": "ProjectPanel",
+    "bindings": {
+      "ctrl-y": "project_panel::Paste"
+    }
+  },
+  {
+    "context": "Editor",
+    "bindings": {
+      "ctrl-alt-i": "editor::ShowCompletions"
+    }
+  },
+  {
+    "context": "(Editor && mode == full)",
+      "bindings": {
+      "ctrl-g": "editor::Cancel"
+    }
+  },
+  {
+    "context": "(Editor && (edit_prediction && (showing_completions || in_leading_whitespace)))",
+    "bindings": {
+      "alt-l": null
+    }
+  },
+  {
+    "context": "(Editor && edit_prediction)",
+    "bindings": {
+      "alt-l": null
+    }
+  },
+  {
+    "context": "Workspace",
+    "bindings": {
+      "ctrl-e": null
+    }
+  },
+  {
+    "context": "(Editor && (edit_prediction && (showing_completions || in_leading_whitespace)))",
+    "bindings": {
+      "alt-shift-e": "editor::AcceptNextLineEditPrediction"
+    }
+  },
+  {
+    "context": "(Editor && (edit_prediction && (showing_completions || in_leading_whitespace)))",
+    "bindings": {
+      "alt-j": null
+    }
+  },
+  {
+    "context": "(Editor && (edit_prediction && (showing_completions || in_leading_whitespace)))",
+    "bindings": {
+      "alt-k": null
+    }
+  },
+  {
+    "context": "Workspace",
+    "bindings": {
+      "ctrl-p": null
+    }
+  },
+  {
+    "bindings": {
+      "shift-f7": "debugger::StepInto"
+    }
+  },
+  {
+    "bindings": {
+      "ctrl-f11": null
+    }
+  },
+  {
+    "bindings": {
+      "shift-f11": null
+    }
+  },
+  {
+    "context": "Editor",
+    "bindings": {
+      "ctrl-|": null
+    }
+  },
+  {
+    "context": "Editor",
+    "bindings": {
+      "ctrl-m": null
+    }
+  },
+  {
+    "context": "AgentPanel",
+    "bindings": {
+      "ctrl-alt-n": null
+    }
+  },
+  {
+    "context": "Editor",
+    "bindings": {
+      "ctrl-alt-n": "editor::MoveToEnclosingBracket"
+    }
+  },
+  {
+    "context": "Editor",
+    "bindings": {
+      "ctrl-alt-p": "editor::MoveToEnclosingBracket"
+    }
+  },
+  {
+    "context": "AgentPanel",
+    "bindings": {
+      "ctrl-alt-p": null
+    }
+  },
+  {
+    "context": "Workspace",
+    "bindings": {
+      "ctrl-alt-p": null
+    }
+  },
+  {
+    "context": "Editor && mode == full && edit_prediction",
+    "unbind": {
+      "alt-]": "editor::NextEditPrediction"
+    }
+  },
+  {
+    "context": "Editor && mode == full && edit_prediction",
+    "unbind": {
+      "alt-[": "editor::PreviousEditPrediction"
+    }
+  },
+  {
+    "context": "EditPredictionContext > Editor",
+    "bindings": {
+      "shift-left": "dev::EditPredictionContextGoBack"
+    }
+  },
+  {
+    "context": "EditPredictionContext > Editor",
+    "unbind": {
+      "alt-left": "dev::EditPredictionContextGoBack"
+    }
+  },
+  {
+    "context": "EditPredictionContext > Editor",
+    "bindings": {
+      "shift-right": "dev::EditPredictionContextGoForward"
+    }
+  },
+  {
+    "context": "EditPredictionContext > Editor",
+    "unbind": {
+      "alt-right": "dev::EditPredictionContextGoForward"
+    }
+  },
+  {
+    "context": "Editor && edit_prediction",
+    "unbind": {
+      "alt-j": "editor::AcceptNextLineEditPrediction"
+    }
+  },
+  {
+    "context": "Editor && edit_prediction",
+    "unbind": {
+      "alt-k": "editor::AcceptNextWordEditPrediction"
+    }
+  },
+  {
+    "context": "Editor && edit_prediction && edit_prediction_mode == eager && !showing_completions",
+    "bindings": {
+      "enter": "editor::AcceptEditPrediction"
+    }
+  },
+  {
+    "context": "Editor && edit_prediction && edit_prediction_mode == eager && !showing_completions",
+    "unbind": {
+      "tab": "editor::AcceptEditPrediction"
+    }
+  },
+  {
+    "context": "Editor && edit_prediction",
+    "bindings": {
+      "shift-enter": "editor::AcceptEditPrediction"
+    }
+  },
+  {
+    "context": "Editor && edit_prediction",
+    "unbind": {
+      "alt-tab": "editor::AcceptEditPrediction"
+    }
+  },
+  {
+    "context": "AgentPanel",
+    "unbind": {
+      "ctrl-shift-e": "project_panel::ToggleFocus"
+    }
+  },
+  {
+    "context": "Workspace",
+    "unbind": {
+      "ctrl-shift-e": "project_panel::ToggleFocus"
+    }
+  },
+  {
+    "context": "Workspace",
+    "unbind": {
+      "ctrl-n": "workspace::NewFile"
+    }
+  },
+  {
+    "context": "Workspace",
+    "unbind": {
+      "ctrl-b": "workspace::ToggleLeftDock"
+    }
+  },
+  {
+    "unbind": {
+      "ctrl-o": "workspace::OpenFiles"
+    }
+  },
+  {
+    "context": "Editor",
+    "unbind": {
+      "ctrl-x": "editor::Cut"
+    }
+  },
+  {
+    "context": "Editor && mode == full",
+    "unbind": {
+      "ctrl-g": "go_to_line::Toggle"
+    }
+  },
+  {
+    "context": "Editor",
+    "unbind": {
+      "f8": [
+        "editor::GoToDiagnostic",
+        {
+          "severity": {
+            "min": "hint",
+            "max": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "context": "Editor",
+    "unbind": {
+      "shift-f8": [
+        "editor::GoToPreviousDiagnostic",
+        {
+          "severity": {
+            "min": "hint",
+            "max": "error"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "context": "Editor && showing_signature_help && !showing_completions",
+    "unbind": {
+      "ctrl-n": "editor::SignatureHelpNext"
+    }
+  },
+  {
+    "context": "Editor && showing_signature_help && !showing_completions",
+    "unbind": {
+      "ctrl-p": "editor::SignatureHelpPrevious"
+    }
+  },
+  {
+    "context": "Editor",
+    "bindings": {
+      "alt-c": "editor::ConvertToLowerCamelCase"
+    }
+  },
+  {
+    "context": "Editor",
+    "bindings": {
+      "alt-s": "editor::ConvertToSnakeCase"
+    }
+  },
+  {
+    "context": "Editor && edit_prediction",
+    "bindings": {
+      "alt-shift-f": "editor::AcceptNextWordEditPrediction"
+    }
+  }
+]
