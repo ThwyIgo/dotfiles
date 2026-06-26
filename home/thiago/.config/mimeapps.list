@@ -105,3 +105,4 @@ text/plain=dev.zed.Zed.desktop
 x-scheme-handler/mailto=thunderbird.desktop
 x-scheme-handler/terminal=com.system76.CosmicTerm.desktop
 x-scheme-handler/bruno=bruno.desktop
+x-scheme-handler/slack=slack.desktop

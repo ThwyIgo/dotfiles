@@ -130,14 +130,12 @@
   programs.ssh = {
     enable = true;
     enableDefaultConfig = false;
-    matchBlocks = {
+    settings = {
       "bitbucket.org" = {
-        identityFile = [ "~/.ssh/bitbucket-triliton_rsa" ];
-        addKeysToAgent = "30m";
+        IdentityFile = "~/.ssh/bitbucket-triliton_rsa";
       };
       "github.com" = {
-        identityFile = [ "~/.ssh/gh-ThwyIgo" ];
-        addKeysToAgent = "30m";
+        IdentityFile = "~/.ssh/gh-ThwyIgo";
       };
     };
   };
