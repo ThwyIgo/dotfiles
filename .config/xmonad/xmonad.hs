@@ -161,7 +161,7 @@ myKeys c =
     | (key, cmd) <- [ ("e", "emacsclient --alternate-editor=emacs -c")
                     , ("c", calculator)
                     , ("f", fileManager)
-                    , ("v", "pavucontrol")
+                    , ("v", "pwvucontrol")
                     , ("b", browser)
                     , ("m", emailClient)
                     , ("h", myTerminal ++ " -e htop")
@@ -326,7 +326,7 @@ myLogHook = return ()
 myStartupHook = do
   -- Don't delete the return ()
   --return () >> checkKeymap defaults (myKeys defaults)
-  spawnOnce "trayer --edge top --align right --SetDockType true --SetPartialStrut true --expand true --widthtype request --transparent true --alpha 0 --tint 0x000000 --height 25 --iconspacing 1"
+  spawnOnce "trayer --monitor primary --edge top --align right --SetDockType true --SetPartialStrut true --expand true --widthtype request --transparent true --alpha 0 --tint 0x000000 --height 25 --iconspacing 1"
   spawnOnce "nm-applet --sm-disable"
   spawnOnce "blueman-applet"
   --spawnOnce "feh --bg-scale --randomize ~/.local/share/wallpapers/**"

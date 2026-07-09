@@ -8,14 +8,15 @@ in
 
   home.packages = with pkgs; [
     # CL
-    mate.mate-polkit
-    alsa-utils
+    mate-polkit
+    pfetch
 
     # Libs
     (aspellWithDicts (dicts: with dicts; [ en pt_BR ]))
 
     # GUI
     session-quit
+    mission-center
     keepassxc
     virt-manager
     telegram-desktop
@@ -24,11 +25,31 @@ in
     spotify
     zathura
     prismlauncher
+    prismlauncher
     bottles
     musescore
     kdePackages.kdenlive
+    libreoffice-still
+    gnome-calculator
+    flameshot
+    thunderbird
+    gimp
+    obs-studio
+    simple-scan
+    librewolf
+    nemo-with-extensions
+    file-roller
+    pix
+    celluloid
 
-    # Ardour
+    # Games
+    lutris
+
+    # Audio
+    alsa-utils
+    qpwgraph
+    pwvucontrol
+    ## Ardour
     ardour
     kapitonov-plugins-pack
     gxplugins-lv2
@@ -128,11 +149,12 @@ in
   programs.ssh = {
     enable = true;
     enableDefaultConfig = false;
-    matchBlocks."*" = {
-      addKeysToAgent = "30m";
-      identityFile = [ "~/.ssh/id_rsa" "~/.ssh/ufu" ];
+    settings = {
+      "github.com" = {
+        IdentityFile = "~/.ssh/gh-ThwyIgo";
+      };
     };
-  };
+  };  
   services.ssh-agent.enable = true;
 
   fonts.fontconfig.enable = true;

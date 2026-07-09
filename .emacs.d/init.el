@@ -172,7 +172,6 @@ Default is 1000."
 (define-key my-mode-map (kbd "<right>") 'windmove-right)
 
 (global-set-key (kbd "C-c DEL") 'delete-trailing-whitespace)
-(global-set-key (kbd "M-q") 'fill-region)
 (global-set-key [C-backspace] 'ryanmarcus/backward-kill-word)
 (global-set-key (kbd "C-c n") 'duplicate-line)
 
@@ -468,7 +467,8 @@ Default is 1000."
           "\\*Async Shell Command\\*"
           help-mode
           compilation-mode
-          term-mode))
+          term-mode
+          vterm-mode))
   (popper-mode +1)
   (popper-echo-mode +1) ; For echo area hints
   :hook (term-mode . (lambda ()

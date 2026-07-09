@@ -67,7 +67,7 @@
     nowlocker = "${pkgs.betterlockscreen}/bin/betterlockscreen -l";
     time = 10;
     killtime = 20;
-    locker = "${pkgs.xorg.xset}/bin/xset dpms force off;" + nowlocker;
+    locker = "${pkgs.xset}/bin/xset dpms force off;" + nowlocker;
     killer = "/run/current-system/systemd/bin/systemctl suspend";
   };
 
@@ -127,6 +127,10 @@
     # If you want to use JACK applications, uncomment this
     jack.enable = true;
   };
+  security.pam.loginLimits = [
+    { domain = "@audio"; item = "memlock"; type = "-"; value = "unlimited"; }
+    { domain = "@audio"; item = "rtprio"; type = "-"; value = "99"; }
+  ];
 
   services.udev = {
     enable = true;
@@ -148,7 +152,7 @@
   users.users.thiago = {
     isNormalUser = true;
     description = "Thiago";
-    extraGroups = [ "networkmanager" "wheel" "libvirtd" "docker" "video" "scanner" "lp" ];
+    extraGroups = [ "networkmanager" "wheel" "libvirtd" "docker" "video" "audio" "scanner" "lp" ];
   };
 
   home-manager.users.thiago = import ./home-manager/thiago.nix;
@@ -162,48 +166,31 @@
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     # CL
-    xorg.xinit
+    xinit
     alacritty
     micro
     htop
-    pfetch
     git
     unzip
     acpilight
-    xorg.xkill
+    xkill
     killall
     ffmpegthumbnailer
 
     # Sysadmin
     ntfs3g
-    virtiofsd
     arandr
-    pavucontrol
-    xfce.xfce4-taskmanager
-
-    # GUI
-    librewolf
-    nemo-with-extensions
-    file-roller
-    pix
-    celluloid
-    libreoffice-still
-    gnome-calculator
-    flameshot
-    thunderbird
-    gimp
-    obs-studio
-    simple-scan
   ];
-  programs = {
-    kdeconnect.enable = true;
-  };
+  programs.kdeconnect.enable = true;
 
   # services.flatpak.enable = true;
   # xdg.portal.enable = true; # Required for flatpak
   # xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
 
-  virtualisation.libvirtd.enable = true;
+  virtualisation.libvirtd = {
+    enable = true;
+    qemu.vhostUserPackages = with pkgs; [ virtiofsd ];
+  };
   programs.dconf.enable = true;
   virtualisation.docker = {
     enable = true;
@@ -215,6 +202,7 @@
 
   # Games
   programs.steam.enable = true;
+  programs.gamemode.enable = true;
   # Wine games
   # hardware.opengl.driSupport32Bit = true;
   # services.samba.enable = true;
