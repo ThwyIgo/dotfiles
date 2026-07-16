@@ -29,6 +29,26 @@
   zramSwap.enable = true;
   console.keyMap = "br-abnt2";
 
+  boot = {
+    plymouth = {
+      enable = true;
+      theme = "rings";
+      themePackages = [
+        (pkgs.adi1090x-plymouth-themes.override {
+          selected_themes = [ "rings" ];
+        })
+      ];
+    };
+
+    consoleLogLevel = 3;
+    initrd.verbose = false;
+    kernelParams = [
+      "quiet"
+      "rd.udev.log_level=3"
+      "rd.systemd.show_status=auto"
+    ];
+  };
+
   networking.hostName = "Thiago-ambulante"; # Define your hostname.
   networking.networkmanager = {
     enable = true;
@@ -195,7 +215,7 @@
                      in builtins.seq (builtins.readFile drv) drv.outPath;
   	};
     realmFiles = [
-      ./config/portal-realm.json
+      # ./config/portal-realm.json
   	];
   };
 

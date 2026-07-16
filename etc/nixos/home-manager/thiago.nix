@@ -40,14 +40,11 @@
   };
   programs.fish = {
     enable = true;
-    functions = {
-      fish_right_prompt = "echo [(date '+%H:%M')]";
-    };
     shellInit = ''
-        set fish_color_user 5cf brblue
-        set fish_color_cwd brgreen
-        set fish_greeting
-      '';
+      set fish_color_user 5cf brblue
+      set fish_color_cwd brgreen
+      set fish_greeting
+    '';
   };
   programs.bash.enable = true;
   programs.starship = {
@@ -174,6 +171,7 @@
   };
   # See https://wiki.nixos.org/wiki/Virt-manager#Wayland
   home.pointerCursor = {
+    enable = true;
     gtk.enable = true;
     package = pkgs.vanilla-dmz;
     name = "Vanilla-DMZ";

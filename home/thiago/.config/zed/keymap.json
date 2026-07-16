@@ -335,5 +335,95 @@
     "bindings": {
       "alt-shift-f": "editor::AcceptNextWordEditPrediction"
     }
+  },
+  {
+    "context": "Pane",
+    "bindings": {
+      "ctrl-alt-c": "search::ToggleCaseSensitive"
+    }
+  },
+  {
+    "context": "Pane",
+    "unbind": {
+      "alt-c": "search::ToggleCaseSensitive"
+    }
+  },
+  {
+    "context": "Pane",
+    "bindings": {
+      "ctrl-alt-w": "search::ToggleWholeWord"
+    }
+  },
+  {
+    "context": "Pane",
+    "unbind": {
+      "alt-w": "search::ToggleWholeWord"
+    }
+  },
+  {
+    "context": "Pane",
+    "bindings": {
+      "ctrl-alt-r": "search::ToggleRegex"
+    }
+  },
+  {
+    "context": "Pane",
+    "unbind": {
+      "alt-r": "search::ToggleRegex"
+    }
+  },
+  {
+    "context": "Workspace",
+    "unbind": {
+      "ctrl-alt-r": "task::Rerun"
+    }
+  },
+  {
+    "context": "Editor",
+    "unbind": {
+      "ctrl-alt-h": "editor::DeleteToPreviousSubwordStart"
+    }
+  },
+  {
+    "context": "Pane",
+    "bindings": {
+      "ctrl-alt-h": "search::ToggleReplace"
+    }
+  },
+  {
+    "context": "Pane",
+    "unbind": {
+      "ctrl-alt-shift-h": "search::ToggleReplace"
+    }
+  },
+  {
+    "context": "Editor",
+    "bindings": {
+      "ctrl-alt-f": "editor::MoveToNextSubwordEnd"
+    }
+  },
+  {
+    "context": "Editor",
+    "unbind": {
+      "ctrl-alt-right": "editor::MoveToNextSubwordEnd"
+    }
+  },
+  {
+    "context": "Editor",
+    "bindings": {
+      "ctrl-alt-b": "editor::MoveToPreviousSubwordStart"
+    }
+  },
+  {
+    "context": "Editor",
+    "unbind": {
+      "ctrl-alt-left": "editor::MoveToPreviousSubwordStart"
+    }
+  },
+  {
+    "context": "Workspace",
+    "unbind": {
+      "ctrl-alt-b": "workspace::ToggleRightDock"
+    }
   }
 ]
