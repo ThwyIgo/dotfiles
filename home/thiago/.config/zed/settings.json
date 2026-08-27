@@ -13,8 +13,19 @@
     "dock": "left",
   },
   "agent_servers": {
-    "gemini": {
-      "type": "registry",
+    "antigravity-acp": {
+      "default_config_options": {
+        "mode": "auto_edit",
+        "model": "gemini-3.7-flash-high"
+      },
+      "favorite_config_option_values": {
+        "model": [
+          "gemini-3.7-flash-high",
+          "gemini-3.7-flash-medium",
+          "gemini-3.7-flash-low"
+        ]
+      },
+      "type": "registry"
     },
   },
   "diff_view_style": "split",

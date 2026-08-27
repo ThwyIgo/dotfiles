@@ -102,16 +102,16 @@ image/x-xfig=pix.desktop
 image/x-xpixmap=pix.desktop
 image/x-xwindowdump=pix.desktop
 text/plain=dev.zed.Zed.desktop
-x-scheme-handler/mailto=userapp-Thunderbird-JJCLS3.desktop
+x-scheme-handler/mailto=userapp-Thunderbird-NFXHS3.desktop
 x-scheme-handler/terminal=com.system76.CosmicTerm.desktop
 x-scheme-handler/bruno=bruno.desktop
 x-scheme-handler/slack=slack.desktop
-x-scheme-handler/mid=userapp-Thunderbird-JJCLS3.desktop
-message/rfc822=userapp-Thunderbird-JJCLS3.desktop
-x-scheme-handler/net.thunderbird=userapp-Thunderbird-KQ5JS3.desktop
+x-scheme-handler/mid=userapp-Thunderbird-NFXHS3.desktop
+message/rfc822=userapp-Thunderbird-NFXHS3.desktop
+x-scheme-handler/net.thunderbird=userapp-Thunderbird-JANIS3.desktop
 
 [Added Associations]
-x-scheme-handler/mailto=userapp-Thunderbird-JJCLS3.desktop;
-x-scheme-handler/mid=userapp-Thunderbird-JJCLS3.desktop;
-message/rfc822=userapp-Thunderbird-JJCLS3.desktop;
-x-scheme-handler/net.thunderbird=userapp-Thunderbird-KQ5JS3.desktop;
+x-scheme-handler/mailto=userapp-Thunderbird-NFXHS3.desktop;userapp-Thunderbird-JJCLS3.desktop;
+x-scheme-handler/mid=userapp-Thunderbird-NFXHS3.desktop;userapp-Thunderbird-JJCLS3.desktop;
+message/rfc822=userapp-Thunderbird-JJCLS3.desktop;userapp-Thunderbird-NFXHS3.desktop;
+x-scheme-handler/net.thunderbird=userapp-Thunderbird-JANIS3.desktop;userapp-Thunderbird-KQ5JS3.desktop;

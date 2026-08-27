@@ -132,6 +132,9 @@
     kdeconnect.enable = true;
     htop.enable = true;
   };
+  programs.nix-ld = {
+  	enable = true;
+  };
 
   virtualisation.libvirtd = {
     enable = true;
@@ -171,6 +174,15 @@
 
   # List services that you want to enable:
 
+  users.groups.certs = {};
+
+  services.nginx = {
+  	enable = true;
+  	config = builtins.readFile ./config/nginx.cfg;
+  	enableReload = true;
+  	group = "certs";
+  };
+
   services.mongodb = {
     enable = true;
   	package = pkgs.mongodb-ce;
@@ -182,6 +194,7 @@
     package = pkgs.postgresql_18;
     extensions = ps: with ps; [ timescaledb ];
     settings.shared_preload_libraries = "timescaledb";
+    enableTCPIP = true;
     authentication = ''
         # Tipo  Banco   Usuário  Endereço        Método
         local   all     root    trust
@@ -204,18 +217,21 @@
   	enable = true;
   	initialAdminPassword = "admin";
   	settings = {
-  	  http-port = 8081;
   	  hostname = "localhost";
   	  http-enabled = true;
-  	  hostname-strict-https = false;
+  	  http-port = 8081;
+  	  https-port = 8082;
+  	  http-relative-path = "/keycloak";
   	};
+  	sslCertificate = "/etc/nixos/config/fullchain.pem";
+  	sslCertificateKey = "/etc/nixos/config/privkey.pem";
   	database = {
       createLocally = false;
       passwordFile = let drv = pkgs.writeText "PostgreSQL-password" "keycloak";
                      in builtins.seq (builtins.readFile drv) drv.outPath;
   	};
     realmFiles = [
-      # ./config/portal-realm.json
+      ./config/portal-realm.json
   	];
   };
 
@@ -255,7 +271,7 @@
     PHYSIS_MONGO_DB = "mongodb://localhost";
     KAFKA_BROKER_1 = "localhost:9092";
     PHYSIS_POSTGRESQL = "Server=localhost;Port=5432;Database=postgres;User Id=postgres;Password=1234;";
-    Keycloak__ClientSecret = "xGNa1jvTDtRlnxguAdqebGH3EQCfXMD7";
+    SSL_CERT_FILE = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
   };
 
   # Enable the OpenSSH daemon.
@@ -268,7 +284,7 @@
   };
 
   # Open ports in the firewall.
-  networking.firewall.allowedTCPPorts = [ 8080 ];
+  networking.firewall.allowedTCPPorts = [ 8080 8081 60000 8443 ];
   networking.firewall.allowedTCPPortRanges = [
     {
       from = 60000;

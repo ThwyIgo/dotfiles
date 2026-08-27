@@ -4,7 +4,6 @@
 
   home.packages = with pkgs; [
     # GUI
-    mission-center
     keepassxc
     virt-manager
     winapps
@@ -13,7 +12,7 @@
     thunderbird
     pix
     obs-studio
-    libreoffice-still
+    libreoffice-stable
     ## Dicionários para LibreOffice
     (hunspell.withDicts (dicts: with dicts;
       [pt_BR en_US]))
@@ -22,8 +21,8 @@
     # Programming
     bruno
     dbgate
-    jetbrains.idea-oss
     dotnetCorePackages.sdk_10_0
+    antigravity-ide
 
     # Fonts
     fira-code
@@ -77,14 +76,15 @@
       lua-language-server
       ty
       ruff
+      angular-language-server
       clang-tools
-      lldb
-      gdb
       neocmakelsp
+      nginx-language-server
       bash-language-server
       shellcheck
       netcoredbg
-      angular-language-server
+      lldb
+      gdb
     ];
   };
   programs.zed-editor-extensions = {
