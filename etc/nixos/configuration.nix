@@ -233,6 +233,12 @@
     realmFiles = [
       ./config/portal-realm.json
   	];
+    plugins = [
+      (pkgs.runCommand "keycloak-org-group-id-mapper" {} ''
+        mkdir -p $out
+        cp ${./config/keycloak-org-group-id-mapper.jar} $out/
+      '')
+    ];
   };
 
   services.apache-kafka = {
