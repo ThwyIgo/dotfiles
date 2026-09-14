@@ -23,9 +23,18 @@
       url = "github:qwadrox/zed-netcoredbg";
       flake = false;
     };
+
+    keycloak-portal-theme = {
+      url = ./config/keycloak/themes;
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
-  outputs = inputs@{ self, nixpkgs, home-manager, impermanence, winapps, zed-extensions, ... }: {
+  outputs = inputs@{ self, nixpkgs, home-manager, impermanence, winapps, zed-extensions, keycloak-portal-theme, ... }: {
     nixosConfigurations.Thiago-ambulante = nixpkgs.lib.nixosSystem {
+      specialArgs = {
+      	inherit keycloak-portal-theme;
+      };
+      
       modules = [
         {
           nixpkgs.overlays = [

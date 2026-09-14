@@ -22,7 +22,6 @@
     bruno
     dbgate
     dotnetCorePackages.sdk_10_0
-    antigravity-ide
 
     # Fonts
     fira-code
@@ -56,10 +55,7 @@
     dfgit = "git --git-dir=$HOME/.dotfiles --work-tree=/";
     dfgitlog = "dfgit log --decorate --oneline --graph";
   };
-  services.kdeconnect = {
-    enable = true;
-    indicator = true;
-  };
+  services.kdeconnect.enable = true;
   services.ollama = {
     enable = true;
     acceleration = "cuda";
@@ -85,6 +81,8 @@
       netcoredbg
       lldb
       gdb
+
+      python3
     ];
   };
   programs.zed-editor-extensions = {

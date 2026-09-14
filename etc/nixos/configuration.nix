@@ -2,7 +2,7 @@
 # your system. Help is available in the configuration.nix(5) man page, on
 # https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
 
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, keycloak-portal-theme, ... }:
 
 {
   imports =
@@ -231,14 +231,17 @@
                      in builtins.seq (builtins.readFile drv) drv.outPath;
   	};
     realmFiles = [
-      ./config/portal-realm.json
+      ./config/keycloak/portal-realm.json
   	];
     plugins = [
       (pkgs.runCommand "keycloak-org-group-id-mapper" {} ''
         mkdir -p $out
-        cp ${./config/keycloak-org-group-id-mapper.jar} $out/
+        cp ${./config/keycloak/keycloak-org-group-id-mapper.jar} $out/
       '')
     ];
+    themes = {
+      portal = keycloak-portal-theme.packages.${pkgs.stdenv.hostPlatform.system}.keycloak-theme-portal;
+    };
   };
 
   services.apache-kafka = {
