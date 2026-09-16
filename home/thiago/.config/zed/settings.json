@@ -22,7 +22,7 @@
         ]
       },
       "default_config_options": {
-        "mode": "default",
+        "mode": "auto_edit",
         "model": "gemini-3.8-flash-high"
       },
       "type": "registry"

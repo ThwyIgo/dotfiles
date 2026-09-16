@@ -1,5 +1,5 @@
 <#import "template.ftl" as layout>
-<@layout.registrationLayout displayMessage=messagesPerField.exists('global') displayRequiredFields=false cardClass="card-wide"; section>
+<@layout.registrationLayout displayMessage=true displayRequiredFields=false cardClass="card-wide"; section>
     <#if section = "breadcrumb">
         <nav class="portal-breadcrumb">
             <a href="${url.loginUrl}">${msg("home")}</a>
@@ -12,79 +12,92 @@
     <#elseif section = "form">
         <form id="kc-register-form" class="portal-form" action="${url.registrationAction}" method="post">
             <#if !realm.registrationEmailAsUsername>
-                <input type="hidden" id="username" name="username" />
+                <input type="hidden" id="username" name="username" value="${(register.formData['username']!(register.formData['email']!''))}" />
             </#if>
+            <input type="hidden" id="skin" name="skin" value="${(register.formData['skin']!'LIGHT')}" />
 
             <div class="portal-grid">
                 <!-- Nome completo -->
                 <div class="portal-form-group">
-                    <div class="portal-input-wrapper <#if messagesPerField.existsError('firstName')>has-error</#if>">
+                    <div class="portal-input-wrapper <#if messagesPerField.existsError('firstName', 'lastName')>has-error</#if>">
                         <input type="text" id="firstName" name="firstName" value="${(register.formData['firstName']!'')}" placeholder=" " required />
                         <label for="firstName" class="portal-input-label">${msg("fullNameRequired")}</label>
                         <span class="material-icons portal-input-icon">input</span>
                     </div>
                     <#if messagesPerField.existsError('firstName')>
                         <span class="portal-error-msg">${kcSanitize(messagesPerField.get('firstName'))?no_esc}</span>
+                    <#elseif messagesPerField.existsError('lastName')>
+                        <span class="portal-error-msg">${kcSanitize(messagesPerField.get('lastName'))?no_esc}</span>
                     </#if>
                 </div>
 
                 <!-- Email -->
                 <div class="portal-form-group">
-                    <div class="portal-input-wrapper <#if messagesPerField.existsError('email')>has-error</#if>">
+                    <div class="portal-input-wrapper <#if messagesPerField.existsError('email', 'username')>has-error</#if>">
                         <input type="email" id="email" name="email" value="${(register.formData['email']!'')}" autocomplete="email" placeholder=" " required />
                         <label for="email" class="portal-input-label">${msg("emailRequired")}</label>
                         <span class="material-icons portal-input-icon">mail_outline</span>
                     </div>
                     <#if messagesPerField.existsError('email')>
                         <span class="portal-error-msg">${kcSanitize(messagesPerField.get('email'))?no_esc}</span>
+                    <#elseif messagesPerField.existsError('username')>
+                        <span class="portal-error-msg">${kcSanitize(messagesPerField.get('username'))?no_esc}</span>
                     </#if>
                 </div>
 
                 <!-- CPF -->
                 <div class="portal-form-group">
-                    <div class="portal-input-wrapper <#if messagesPerField.existsError('cpf')>has-error</#if>">
+                    <div class="portal-input-wrapper <#if messagesPerField.existsError('cpf', 'user.attributes.cpf')>has-error</#if>">
                         <input type="text" id="cpf" name="cpf" value="${(register.formData['cpf']!'')}" placeholder=" " required />
                         <label for="cpf" class="portal-input-label">${msg("cpfRequired")}</label>
                         <span class="material-icons portal-input-icon">badge</span>
                     </div>
                     <#if messagesPerField.existsError('cpf')>
                         <span class="portal-error-msg">${kcSanitize(messagesPerField.get('cpf'))?no_esc}</span>
+                    <#elseif messagesPerField.existsError('user.attributes.cpf')>
+                        <span class="portal-error-msg">${kcSanitize(messagesPerField.get('user.attributes.cpf'))?no_esc}</span>
                     </#if>
                 </div>
 
                 <!-- Celular -->
                 <div class="portal-form-group">
-                    <div class="portal-input-wrapper <#if messagesPerField.existsError('phoneNumber')>has-error</#if>">
+                    <div class="portal-input-wrapper <#if messagesPerField.existsError('phoneNumber', 'user.attributes.phoneNumber')>has-error</#if>">
                         <input type="tel" id="phoneNumber" name="phoneNumber" value="${(register.formData['phoneNumber']!'')}" placeholder=" " required />
                         <label for="phoneNumber" class="portal-input-label">${msg("phoneRequired")}</label>
                         <span class="material-icons portal-input-icon">phone</span>
                     </div>
                     <#if messagesPerField.existsError('phoneNumber')>
                         <span class="portal-error-msg">${kcSanitize(messagesPerField.get('phoneNumber'))?no_esc}</span>
+                    <#elseif messagesPerField.existsError('user.attributes.phoneNumber')>
+                        <span class="portal-error-msg">${kcSanitize(messagesPerField.get('user.attributes.phoneNumber'))?no_esc}</span>
                     </#if>
                 </div>
 
                 <!-- Setor -->
                 <div class="portal-form-group">
-                    <div class="portal-input-wrapper <#if messagesPerField.existsError('department')>has-error</#if>">
+                    <div class="portal-input-wrapper <#if messagesPerField.existsError('department', 'user.attributes.department')>has-error</#if>">
                         <input type="text" id="department" name="department" value="${(register.formData['department']!'')}" placeholder=" " required />
                         <label for="department" class="portal-input-label">${msg("departmentRequired")}</label>
                         <span class="material-icons portal-input-icon">work_outline</span>
                     </div>
                     <#if messagesPerField.existsError('department')>
                         <span class="portal-error-msg">${kcSanitize(messagesPerField.get('department'))?no_esc}</span>
+                    <#elseif messagesPerField.existsError('user.attributes.department')>
+                        <span class="portal-error-msg">${kcSanitize(messagesPerField.get('user.attributes.department'))?no_esc}</span>
                     </#if>
                 </div>
 
                 <!-- Matrícula -->
                 <div class="portal-form-group">
-                    <div class="portal-input-wrapper <#if messagesPerField.existsError('registration')>has-error</#if>">
+                    <div class="portal-input-wrapper <#if messagesPerField.existsError('registration', 'user.attributes.registration')>has-error</#if>">
                         <input type="text" id="registration" name="registration" value="${(register.formData['registration']!'')}" placeholder=" " required />
                         <label for="registration" class="portal-input-label">${msg("registrationRequired")}</label>
                         <span class="material-icons portal-input-icon">school</span>
                     </div>
                     <#if messagesPerField.existsError('registration')>
                         <span class="portal-error-msg">${kcSanitize(messagesPerField.get('registration'))?no_esc}</span>
+                    <#elseif messagesPerField.existsError('user.attributes.registration')>
+                        <span class="portal-error-msg">${kcSanitize(messagesPerField.get('user.attributes.registration'))?no_esc}</span>
                     </#if>
                 </div>
 
@@ -102,13 +115,15 @@
 
                 <!-- Confirmar senha -->
                 <div class="portal-form-group">
-                    <div class="portal-input-wrapper <#if messagesPerField.existsError('password-confirm')>has-error</#if>">
+                    <div class="portal-input-wrapper <#if messagesPerField.existsError('password-confirm', 'passwordConfirm')>has-error</#if>">
                         <input type="password" id="password-confirm" name="password-confirm" autocomplete="new-password" placeholder=" " required />
                         <label for="password-confirm" class="portal-input-label">${msg("passwordConfirmRequired")}</label>
                         <span class="material-icons portal-input-icon password-toggle" data-target="password-confirm">visibility</span>
                     </div>
                     <#if messagesPerField.existsError('password-confirm')>
                         <span class="portal-error-msg">${kcSanitize(messagesPerField.get('password-confirm'))?no_esc}</span>
+                    <#elseif messagesPerField.existsError('passwordConfirm')>
+                        <span class="portal-error-msg">${kcSanitize(messagesPerField.get('passwordConfirm'))?no_esc}</span>
                     </#if>
                 </div>
             </div>

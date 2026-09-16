@@ -62,14 +62,20 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Registration form password match validation
+    // Registration form validation & prep
     const regForm = document.getElementById('kc-register-form');
     const password = document.getElementById('password');
     const passwordConfirm = document.getElementById('password-confirm');
 
-    if (regForm && password && passwordConfirm) {
+    if (regForm) {
         regForm.addEventListener('submit', (e) => {
-            if (password.value !== passwordConfirm.value) {
+            const regEmail = regForm.querySelector('#email');
+            const regUsername = regForm.querySelector('#username');
+            if (regUsername && regEmail && (!regUsername.value || regUsername.value.trim() === '')) {
+                regUsername.value = regEmail.value.trim();
+            }
+
+            if (password && passwordConfirm && password.value !== passwordConfirm.value) {
                 e.preventDefault();
                 let err = document.getElementById('password-mismatch-error');
                 if (!err) {
