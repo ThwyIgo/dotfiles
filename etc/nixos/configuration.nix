@@ -217,7 +217,7 @@
   	enable = true;
   	initialAdminPassword = "admin";
   	settings = {
-  	  hostname = "localhost";
+  	  hostname = "10.3.192.74";
   	  http-enabled = true;
   	  http-port = 8081;
   	  https-port = 8082;
@@ -293,7 +293,7 @@
   };
 
   # Open ports in the firewall.
-  networking.firewall.allowedTCPPorts = [ 8080 8081 60000 8443 ];
+  networking.firewall.allowedTCPPorts = [ 80 443 8080 8081 60000 8443 ];
   networking.firewall.allowedTCPPortRanges = [
     {
       from = 60000;

@@ -22,13 +22,13 @@
         ]
       },
       "default_config_options": {
-        "mode": "yolo",
+        "mode": "default",
         "model": "gemini-3.8-flash-high"
       },
       "type": "registry"
     },
   },
-  "diff_view_style": "unified",
+  "diff_view_style": "split",
   "edit_predictions": {
     "mode": "subtle",
     "ollama": {
