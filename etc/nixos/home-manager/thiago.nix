@@ -10,7 +10,6 @@
     spotify
     zathura
     thunderbird
-    pix
     obs-studio
     libreoffice-stable
     ## Dicionários para LibreOffice
@@ -22,19 +21,24 @@
     bruno
     dbgate
     dotnetCorePackages.sdk_10_0
+    antigravity-ide
 
     # Fonts
     fira-code
   ];
   programs.librewolf = {
     enable = true;
-    languagePacks = [ "pt-BR" "en-US" ];
+    languagePacks = [ "pt-BR" "en-US" "de" ];
     settings = {
       "widget.gtk.libadwaita-colors.enabled" = false;
       "identity.fxaccounts.enabled" = true;
       "privacy.clearOnShutdown.history" = false;
       "privacy.clearOnShutdown.downloads" = false;
     };
+  };
+  programs.chromium = {
+    enable = true;
+    package = pkgs.ungoogled-chromium;
   };
   programs.fish = {
     enable = true;
@@ -99,8 +103,6 @@
     ".local/share/zed/nix/com.microsoft.java.debug.plugin.jar".source = "${pkgs.vscode-extensions.vscjava.vscode-java-debug}/share/vscode/extensions/vscjava.vscode-java-debug/server/com.microsoft.java.debug.plugin-0.53.2.jar";
   };
 
-  programs.vscodium.enable = true;
-
   programs.emacs = {
     enable = true;
     package = pkgs.emacs-pgtk;
@@ -130,7 +132,7 @@
         IdentityFile = "~/.ssh/bitbucket-triliton_rsa";
       };
       "github.com" = {
-        IdentityFile = "~/.ssh/gh-ThwyIgo";
+        IdentityFile = [ "~/.ssh/gh-ThwyIgo" "~/.ssh/gh-alan-petrobras" ];
       };
     };
   };

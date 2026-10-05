@@ -278,7 +278,7 @@
   environment.sessionVariables = {
     LIBVIRT_DEFAULT_URI = "qemu:///system";
     PHYSIS_MONGO_DB = "mongodb://localhost";
-    KAFKA_BROKER_1 = "localhost:9092";
+    Kafka__BootstrapServers = "localhost:9092";
     PHYSIS_POSTGRESQL = "Server=localhost;Port=5432;Database=postgres;User Id=postgres;Password=1234;";
     SSL_CERT_FILE = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
   };

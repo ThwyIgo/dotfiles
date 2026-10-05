@@ -938,14 +938,13 @@
         }
       ],
       "defaultClientScopes": [
-        "web-origins",
         "service_account",
+        "web-origins",
         "acr",
         "roles",
         "profile",
         "basic",
         "organization:*",
-        "organization-groups-ids",
         "email"
       ],
       "optionalClientScopes": [
@@ -953,7 +952,8 @@
         "phone",
         "organization",
         "offline_access",
-        "microprofile-jwt"
+        "microprofile-jwt",
+        "organization-groups-ids"
       ],
       "authorizationSettings": {
         "allowRemoteResourceManagement": true,
@@ -1017,7 +1017,6 @@
         "profile",
         "basic",
         "organization:*",
-        "organization-groups-ids",
         "email"
       ],
       "optionalClientScopes": [
@@ -1026,7 +1025,8 @@
         "organization",
         "offline_access",
         "microprofile-jwt",
-        "portal-backend-aud"
+        "portal-backend-aud",
+        "organization-groups-ids"
       ]
     },
     {
@@ -1424,14 +1424,29 @@
       },
       "protocolMappers": [
         {
+          "id": "6d08c7aa-8450-499b-8f9a-ac7f623f4e2a",
+          "name": "account audience",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-audience-mapper",
+          "consentRequired": false,
+          "config": {
+            "included.client.audience": "account",
+            "id.token.claim": "false",
+            "lightweight.claim": "false",
+            "access.token.claim": "true",
+            "introspection.token.claim": "false"
+          }
+        },
+        {
           "id": "e9b537a2-c238-403a-ab9f-e6fc86111417",
           "name": "audience resolve",
           "protocol": "openid-connect",
           "protocolMapper": "oidc-audience-resolve-mapper",
           "consentRequired": false,
           "config": {
+            "lightweight.claim": "false",
             "introspection.token.claim": "true",
-            "access.token.claim": "true"
+            "access.token.claim": "false"
           }
         },
         {
@@ -1441,12 +1456,16 @@
           "protocolMapper": "oidc-usermodel-client-role-mapper",
           "consentRequired": false,
           "config": {
-            "user.attribute": "foo",
             "introspection.token.claim": "true",
+            "multivalued": "true",
+            "userinfo.token.claim": "false",
+            "user.attribute": "foo",
+            "id.token.claim": "false",
+            "lightweight.claim": "false",
             "access.token.claim": "true",
             "claim.name": "resource_access.${client_id}.roles",
             "jsonType.label": "String",
-            "multivalued": "true"
+            "usermodel.clientRoleMapping.clientId": "realm-management"
           }
         },
         {
@@ -1815,25 +1834,6 @@
       ]
     },
     {
-      "id": "2596c051-cdb2-4ee8-8854-6a2a57436a69",
-      "name": "saml_organization",
-      "description": "Organization Membership",
-      "protocol": "saml",
-      "attributes": {
-        "display.on.consent.screen": "false"
-      },
-      "protocolMappers": [
-        {
-          "id": "e2aac862-af0e-4cec-b235-46739dde99da",
-          "name": "organization",
-          "protocol": "saml",
-          "protocolMapper": "saml-organization-membership-mapper",
-          "consentRequired": false,
-          "config": {}
-        }
-      ]
-    },
-    {
       "id": "b1415fb8-1d06-4c31-8d4d-e0fab99f9218",
       "name": "phone",
       "description": "OpenID Connect built-in scope: phone",
@@ -1879,34 +1879,21 @@
       ]
     },
     {
-      "id": "650fe01a-136f-4cc3-a10d-acd4344d456a",
-      "name": "address",
-      "description": "OpenID Connect built-in scope: address",
-      "protocol": "openid-connect",
+      "id": "2596c051-cdb2-4ee8-8854-6a2a57436a69",
+      "name": "saml_organization",
+      "description": "Organization Membership",
+      "protocol": "saml",
       "attributes": {
-        "include.in.token.scope": "true",
-        "consent.screen.text": "${addressScopeConsentText}",
-        "display.on.consent.screen": "true"
+        "display.on.consent.screen": "false"
       },
       "protocolMappers": [
         {
-          "id": "4029c240-8e33-463f-b244-c2aaa60df490",
-          "name": "address",
-          "protocol": "openid-connect",
-          "protocolMapper": "oidc-address-mapper",
+          "id": "e2aac862-af0e-4cec-b235-46739dde99da",
+          "name": "organization",
+          "protocol": "saml",
+          "protocolMapper": "saml-organization-membership-mapper",
           "consentRequired": false,
-          "config": {
-            "user.attribute.formatted": "formatted",
-            "user.attribute.country": "country",
-            "introspection.token.claim": "true",
-            "user.attribute.postal_code": "postal_code",
-            "userinfo.token.claim": "true",
-            "user.attribute.street": "street",
-            "id.token.claim": "true",
-            "user.attribute.region": "region",
-            "access.token.claim": "true",
-            "user.attribute.locality": "locality"
-          }
+          "config": {}
         }
       ]
     },
@@ -1943,6 +1930,38 @@
           }
         }
       ]
+    },
+    {
+      "id": "650fe01a-136f-4cc3-a10d-acd4344d456a",
+      "name": "address",
+      "description": "OpenID Connect built-in scope: address",
+      "protocol": "openid-connect",
+      "attributes": {
+        "include.in.token.scope": "true",
+        "consent.screen.text": "${addressScopeConsentText}",
+        "display.on.consent.screen": "true"
+      },
+      "protocolMappers": [
+        {
+          "id": "4029c240-8e33-463f-b244-c2aaa60df490",
+          "name": "address",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-address-mapper",
+          "consentRequired": false,
+          "config": {
+            "user.attribute.formatted": "formatted",
+            "user.attribute.country": "country",
+            "introspection.token.claim": "true",
+            "user.attribute.postal_code": "postal_code",
+            "userinfo.token.claim": "true",
+            "user.attribute.street": "street",
+            "id.token.claim": "true",
+            "user.attribute.region": "region",
+            "access.token.claim": "true",
+            "user.attribute.locality": "locality"
+          }
+        }
+      ]
     }
   ],
   "defaultDefaultClientScopes": [
@@ -1955,8 +1974,7 @@
     "acr",
     "basic",
     "organization:*",
-    "AuthnContextClassRef",
-    "organization-groups-ids"
+    "AuthnContextClassRef"
   ],
   "defaultOptionalClientScopes": [
     "offline_access",
@@ -1964,7 +1982,8 @@
     "phone",
     "microprofile-jwt",
     "organization",
-    "portal-backend-aud"
+    "portal-backend-aud",
+    "organization-groups-ids"
   ],
   "browserSecurityHeaders": {
     "contentSecurityPolicyReportOnly": "",
@@ -1999,14 +2018,14 @@
         "subComponents": {},
         "config": {
           "allowed-protocol-mapper-types": [
-            "oidc-full-name-mapper",
-            "saml-user-property-mapper",
-            "oidc-address-mapper",
-            "oidc-usermodel-property-mapper",
-            "oidc-usermodel-attribute-mapper",
             "saml-user-attribute-mapper",
+            "oidc-full-name-mapper",
+            "oidc-usermodel-property-mapper",
+            "oidc-sha256-pairwise-sub-mapper",
+            "oidc-address-mapper",
             "saml-role-list-mapper",
-            "oidc-sha256-pairwise-sub-mapper"
+            "oidc-usermodel-attribute-mapper",
+            "saml-user-property-mapper"
           ]
         }
       },
@@ -2050,14 +2069,14 @@
         "subComponents": {},
         "config": {
           "allowed-protocol-mapper-types": [
-            "oidc-address-mapper",
-            "saml-user-property-mapper",
-            "oidc-usermodel-attribute-mapper",
             "oidc-sha256-pairwise-sub-mapper",
-            "saml-user-attribute-mapper",
-            "oidc-usermodel-property-mapper",
             "oidc-full-name-mapper",
-            "saml-role-list-mapper"
+            "oidc-address-mapper",
+            "saml-user-attribute-mapper",
+            "saml-user-property-mapper",
+            "saml-role-list-mapper",
+            "oidc-usermodel-property-mapper",
+            "oidc-usermodel-attribute-mapper"
           ]
         }
       },
@@ -3130,7 +3149,7 @@
     "acr.loa.map": "{}",
     "darkMode": "true"
   },
-  "keycloakVersion": "26.7.3",
+  "keycloakVersion": "26.7.4",
   "userManagedAccessAllowed": false,
   "organizationsEnabled": true,
   "verifiableCredentialsEnabled": false,
