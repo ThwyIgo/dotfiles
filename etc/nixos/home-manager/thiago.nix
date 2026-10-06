@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, minimal-emacs-src, ... }:
 {
   home.stateVersion = "25.05";
 
@@ -108,6 +108,14 @@
     package = pkgs.emacs-pgtk;
     extraPackages = epkgs: [ epkgs.vterm ];
   };
+
+  xdg.enable = true;
+  xdg.configFile = lib.pipe (builtins.readDir minimal-emacs-src) [
+    (lib.filterAttrs (name: type: type == "regular" && lib.hasSuffix ".el" name))
+    (lib.mapAttrs' (name: _: lib.nameValuePair "emacs/${name}" {
+      source = "${minimal-emacs-src}/${name}";
+    }))
+  ];
 
   programs.git = {
     enable = true;

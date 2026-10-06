@@ -23,6 +23,10 @@
       url = "github:qwadrox/zed-netcoredbg";
       flake = false;
     };
+    minimal-emacs-src = {
+      url = "github:jamescherti/minimal-emacs.d";
+      flake = false;
+    };
 
     keycloak-portal-theme = {
       url = ./config/keycloak/themes;
@@ -66,6 +70,9 @@
         {
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
+          home-manager.extraSpecialArgs = {
+            inherit (inputs) minimal-emacs-src;
+          };
           home-manager.users.thiago = ./home-manager/thiago.nix;
           home-manager.sharedModules = [
             zed-extensions.homeManagerModules.default
