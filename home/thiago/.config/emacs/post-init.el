@@ -37,6 +37,12 @@
 
 (add-to-list 'load-path (expand-file-name "lisp" minimal-emacs-user-directory))
 
+(let ((inhibit-redisplay t))
+  ;; Disable all active themes
+  (mapc #'disable-theme custom-enabled-themes)
+  ;; Load the built-in theme
+  (load-theme 'modus-vivendi t))
+
 ;; Auto-revert in Emacs is a feature that automatically updates the
 ;; contents of a buffer to reflect changes made to the underlying file
 ;; on disk.

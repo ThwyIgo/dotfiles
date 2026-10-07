@@ -113,6 +113,14 @@
       treesit-grammars.with-all-grammars
     ];
   };
+  services.emacs = {
+    enable = true;
+    defaultEditor = true;
+    client = {
+      enable = true;
+      arguments = [ "-c" "-a" "emacs" ];
+    };
+  };
 
   xdg.enable = true;
   xdg.configFile = lib.pipe (builtins.readDir minimal-emacs-src) [
@@ -134,6 +142,7 @@
       ".directory"
       ".Trash-*"
       ".nfs*"
+      ".dir-locals.el"
     ];
   };
 
@@ -170,11 +179,6 @@
   services.ssh-agent.enable = true;
 
   fonts.fontconfig.enable = true;
-
-  home.sessionVariables = {
-    VISUAL = pkgs.zed-editor.meta.mainProgram + " -w";
-    EDITOR = pkgs.micro.meta.mainProgram;
-  };
 
   dconf.settings = {
     "org/virt-manager/virt-manager/connections" = {
