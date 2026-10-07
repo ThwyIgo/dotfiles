@@ -827,10 +827,9 @@
 ;; Keep unmodified buffers A/B/C at session end
 (setq ediff-keep-variants t)
 
-;; Automatically apply verified, safe file-local variables. This eliminates
-;; confirmation prompts when loading files, while ensuring that unauthorized or
-;; risky configurations are silently ignored.
-(setq enable-local-variables :safe)
+;; Configure dir-locals
+(setq enable-local-variables t)
+(setq enable-local-eval 'maybe)
 
 ;; (use-package treesit-auto
 ;;   :config
@@ -934,5 +933,34 @@
         ("<down>" . 'windmove-down)
         ("<left>" . 'windmove-left)
         ("<right>" . 'windmove-right)))
+
+;; File templates
+
+(defvar my-dir-locals-template-dir
+  (expand-file-name "templates/dir-locals" minimal-emacs-user-directory)
+  "Directory containing .dir-locals template files.")
+
+(defun insert-dir-locals-template ()
+  "Prompt the user to choose a template from `my-dir-locals-template-dir' and insert it."
+  (interactive)
+  (let* ((files (when (file-directory-p my-dir-locals-template-dir)
+                  (directory-files my-dir-locals-template-dir t "\\.el\\'")))
+         (choices (mapcar (lambda (f) (cons (file-name-base f) f)) files)))
+    (if (null choices)
+        (message "No templates found in %s" my-dir-locals-template-dir)
+      (let* ((name (completing-read "Choose .dir-locals template: " (mapcar #'car choices) nil t))
+             (tpl-file (alist-get name choices nil nil #'equal)))
+        (when tpl-file
+          (insert-file-contents tpl-file)
+          (goto-char (point-min)))))))
+
+(use-package autoinsert
+  :init
+  (auto-insert-mode 1)
+  :config
+  (setq auto-insert-query nil) ; Don't ask "Perform auto-insert?", jump straight to the picker
+  (define-auto-insert
+    '("\\.dir-locals\\.el\\'" . "Directory Local Variables")
+    #'insert-dir-locals-template))
 
 (require 'programming-config)

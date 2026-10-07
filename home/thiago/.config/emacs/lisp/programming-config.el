@@ -46,6 +46,68 @@
 ;; "C-h-." display symbol help
 ;; "M-g i" or "imenu" search definition IN THE CURRENT FILE
 
+(use-package dape
+  ;; :preface
+  ;; By default dape shares the same keybinding prefix as `gud'
+  ;; If you do not want to use any prefix, set it to nil.
+  ;; (setq dape-key-prefix "\C-x\C-a")
+
+  ;; :hook
+  ;; Save breakpoints on quit
+  ;; (kill-emacs . dape-breakpoint-save)
+  ;; Load breakpoints on startup
+  ;; (after-init . dape-breakpoint-load)
+
+  :custom
+  ;; Turn on global bindings for setting breakpoints with mouse
+  (dape-breakpoint-global-mode +1)
+
+  ;; Info buffers to the right
+  ;; (dape-buffer-window-arrangement 'right)
+  ;; Info buffers like gud (gdb-mi)
+  ;; (dape-buffer-window-arrangement 'gud)
+  ;; (dape-info-hide-mode-line nil)
+
+  ;; Projectile users
+  ;; (dape-cwd-function #'projectile-project-root)
+
+  :config
+  ;; Pulse source line (performance hit)
+  (add-hook 'dape-display-source-hook #'pulse-momentary-highlight-one-line)
+
+  ;; Save buffers on startup, useful for interpreted languages
+  ;; (add-hook 'dape-start-hook (lambda () (save-some-buffers t t)))
+
+  ;; Kill compile buffer on build success
+  ;; (add-hook 'dape-compile-hook #'kill-buffer)
+  )
+;; Configure dape by customizing the variable dape-configs
+
+(put 'dape-configs 'safe-local-variable #'listp)
+
+;; Left and right side windows occupy full frame height
+;; When nil:
+;; +------------------------------------+
+;; |            TOP WINDOW              |  <-
+;; +---------+----------------+---------+
+;; |  LEFT   |  BUFFER PRINC. |  RIGHT  |
+;; +---------+----------------+---------+
+;; |           BOTTOM WINDOW            |  <-
+;; +------------------------------------+
+;; When not nil:
+;; +----+--------------------------+----+
+;; |    |        TOP WINDOW        |    |
+;; | L  +--------------------------+  R |
+;; | E  |                          |  I |
+;; | F  |     BUFFER PRINCIPAL     |  G |  <-
+;; | T  |                          |  H |
+;; |    +--------------------------+  T |
+;; |    |      BOTTOM WINDOW       |    |
+;; +----+--------------------------+----+
+(use-package emacs
+  :custom
+  (window-sides-vertical t))
+
 (add-hook 'c-ts-mode-hook #'treesit-fold-mode)
 (add-hook 'c++-ts-mode-hook #'treesit-fold-mode)
 (add-hook 'php-ts-mode-hook #'treesit-fold-mode)
