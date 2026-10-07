@@ -22,9 +22,29 @@
     dbgate
     dotnetCorePackages.sdk_10_0
     antigravity-ide
+    python3
 
     # Fonts
     fira-code
+  ] ++ [
+    # LSP
+    nixd
+    package-version-server
+    omnisharp-roslyn
+    lua-language-server
+    ty
+    ruff
+    angular-language-server
+    clang-tools
+    neocmakelsp
+    nginx-language-server
+    bash-language-server
+    shellcheck
+
+    # Debuggers
+    netcoredbg
+    lldb
+    gdb
   ];
   programs.librewolf = {
     enable = true;
@@ -69,25 +89,7 @@
 
   programs.zed-editor = {
     enable = true;
-    extraPackages = with pkgs; [
-      nixd
-      package-version-server
-      omnisharp-roslyn
-      lua-language-server
-      ty
-      ruff
-      angular-language-server
-      clang-tools
-      neocmakelsp
-      nginx-language-server
-      bash-language-server
-      shellcheck
-      netcoredbg
-      lldb
-      gdb
-
-      python3
-    ];
+    extraPackages = with pkgs; [];
   };
   programs.zed-editor-extensions = {
     enable = true;
@@ -106,7 +108,10 @@
   programs.emacs = {
     enable = true;
     package = pkgs.emacs-pgtk;
-    extraPackages = epkgs: [ epkgs.vterm ];
+    extraPackages = epkgs: with epkgs; [
+      vterm
+      treesit-grammars.with-all-grammars
+    ];
   };
 
   xdg.enable = true;
