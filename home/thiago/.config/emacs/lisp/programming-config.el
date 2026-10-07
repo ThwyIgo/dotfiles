@@ -32,6 +32,7 @@
   (setq eglot-events-buffer-config '(:size 0 :format short))
   ;; Disable automatic code action indicators to reduce background polling
   (setq eglot-code-action-indications nil)
+  (put 'eglot-flymake-backend 'flymake-always-safe t)
 
   :hook ((eglot-connect . eldoc-mode)
          (rust-mode . eglot-ensure)

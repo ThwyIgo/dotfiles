@@ -737,9 +737,6 @@
   (setq pixel-scroll-precision-use-momentum nil) ; Precise/smoother scrolling
   (pixel-scroll-precision-mode 1))
 
-;; Display the time in the modeline
-(display-time-mode 1)
-
 ;; Paren match highlighting
 (show-paren-mode 1)
 
