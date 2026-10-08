@@ -38,8 +38,8 @@
          (rust-mode . eglot-ensure)
          (nix-ts-mode . eglot-ensure)
          (lua-ts-mode . eglot-ensure)
-         (rust-mode . eglot-ensure)
-         (csharp-ts-mode . eglot-ensure)))
+         (csharp-ts-mode . eglot-ensure)
+         (haskell-mode . eglot-ensure)))
 ;; Eglot keybindings:
 ;; "M-." goto symbol definition
 ;; "M-," go back (after "M-.")
@@ -166,9 +166,13 @@
 (use-package rust-mode
   :commands rust-mode
   :mode ("\\.rs\\'" . rust-mode)
-  :hook (rust-ts-mode . treesit-fold-mode)
+  :hook
+  (rust-ts-mode . treesit-fold-mode)
+  (rust-ts-mode . prettify-symbols-mode)
   :init
-  (setq rust-mode-treesitter-derive t))
+  (setq rust-mode-treesitter-derive t)
+  :custom
+  (rust-format-on-save t))
 
 ;; Major mode for editing crontab files
 (use-package crontab-mode
@@ -209,18 +213,25 @@
   :commands jenkinsfile-mode
   :mode ("Jenkinsfile\\'" . jenkinsfile-mode))
 
-;; Support for Haskell
-;; (use-package haskell-ts-mode
-;;   :vc (:url "https://github.com/dschrempf/haskell-ts-mode" :rev :newest)
-;;   :custom
-;;   ;; Optional; both differ from the default.
-;;   (haskell-ts-font-lock-level 3)
-;;   (haskell-ts-prettify-symbols t))
-
 (use-package csharp-mode
   :commands csharp-ts-mode
   :mode ("\\.cs\\'" . csharp-ts-mode)
   :hook (csharp-ts-mode . treesit-fold-mode))
+
+(use-package haskell-mode
+  :mode ("\\.hs\\'" . haskell-mode)
+  :hook (haskell-mode . (lambda ()
+                          (setq prettify-symbols-alist
+                                '(("\\"        . ?λ)
+                                  ("`elem`"    . ?∈)
+                                  ("`notElem`" . ?∉)
+                                  ("forall"    . ?∀)))))
+  (haskell-mode . interactive-haskell-mode)
+  :config
+  (add-hook 'haskell-mode-hook 'prettify-symbols-mode 1)
+  :custom
+  (haskell-interactive-popup-errors nil))
+;; "C-c C-l" Start Haskell REPL
 
 (provide 'programming-config)
 ;;; programming-config.el ends here
