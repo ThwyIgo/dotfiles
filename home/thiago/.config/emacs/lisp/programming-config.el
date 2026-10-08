@@ -233,5 +233,100 @@
   (haskell-interactive-popup-errors nil))
 ;; "C-c C-l" Start Haskell REPL
 
+(use-package project
+  :ensure nil
+  :bind (:map project-prefix-map
+         ("r" . project-run))
+  :config
+  (defcustom project-run-commands nil
+    "Alist de comandos para executar no projeto.
+Cada item deve ser no formato:
+  (NOME . COMANDO)
+ou
+  (NOME COMANDO :env (...))
+ou
+  (NOME :command COMANDO :env (...))
+
+Onde :env pode ser uma lista de strings (\"VAR=VAL\"), uma plist (:VAR \"VAL\")
+ou uma alist ((\"VAR\" . \"VAL\")). As variáveis definidas em :env têm precedência
+sobre `compilation-environment'."
+    :type '(alist :key-type string :value-type sexp)
+    :group 'project)
+
+  (put 'project-run-commands 'safe-local-variable #'listp)
+
+  (defun project-run--normalize-env (env)
+    "Normaliza ENV para uma lista de strings no formato \"VAR=VAL\"."
+    (cond
+     ((null env) nil)
+     ;; alist: (("VAR" . "VAL") ...)
+     ((and (consp env) (consp (car env)))
+      (mapcar (lambda (pair) (format "%s=%s" (car pair) (cdr pair))) env))
+     ;; plist: (:VAR "VAL" ...)
+     ((and (consp env) (keywordp (car env)))
+      (let (res)
+        (while env
+          (let ((k (car env))
+                (v (cadr env)))
+            (setq env (cddr env))
+            (push (format "%s=%s" (substring (symbol-name k) 1) v) res)))
+        (nreverse res)))
+     ;; lista de strings: ("VAR=VAL" ...)
+     ((and (listp env) (stringp (car env)))
+      env)
+     (t nil)))
+
+  (defun project-run--parse-task (spec)
+    "Retorna um cons cell (COMANDO . LISTA-ENV) a partir de SPEC."
+    (cond
+     ((stringp spec)
+      (cons spec nil))
+     ((and (listp spec) (keywordp (car spec)))
+      (cons (plist-get spec :command)
+            (project-run--normalize-env (plist-get spec :env))))
+     ((and (consp spec) (stringp (car spec)))
+      (let* ((cmd (car spec))
+             (rest (cdr spec))
+             (env (if (keywordp (car rest))
+                      (plist-get rest :env)
+                    (car rest))))
+        (cons cmd (project-run--normalize-env env))))
+     (t
+      (cons nil nil))))
+
+  (defun project-run (&optional edit-cmd)
+    "Pergunta qual tarefa de execução de `project-run-commands' executar.
+Executa o comando no diretório raiz do projeto atual via `compile'.
+Variáveis definidas no :env da tarefa são injetadas em `compilation-environment'.
+Com prefix argument EDIT-CMD (\\[universal-argument]), permite editar o comando
+antes de executá-lo."
+    (interactive "P")
+    (let* ((pr (project-current t))
+           (root (project-root pr))
+           (default-directory root)
+           (compilation-buffer-name-function
+            (or (bound-and-true-p project-compilation-buffer-name-function)
+                compilation-buffer-name-function)))
+      (unless project-run-commands
+        (user-error "Nenhuma tarefa configurada em `project-run-commands' para este projeto"))
+      (let* ((choice (if (= (length project-run-commands) 1)
+                         (caar project-run-commands)
+                       (completing-read "Executar tarefa: "
+                                        (mapcar #'car project-run-commands)
+                                        nil t)))
+             (task-spec (alist-get choice project-run-commands nil nil #'equal))
+             (parsed (project-run--parse-task task-spec))
+             (cmd (car parsed))
+             (task-env (cdr parsed)))
+        (unless cmd
+          (user-error "Comando não encontrado para a tarefa: %s" choice))
+        (when edit-cmd
+          (setq cmd (read-shell-command "Comando: " cmd)))
+        (let ((compilation-environment (append task-env (bound-and-true-p compilation-environment))))
+          (compile cmd)))))
+
+  (add-to-list 'project-switch-commands '(project-run "Run task" "r")))
+
 (provide 'programming-config)
 ;;; programming-config.el ends here
+
