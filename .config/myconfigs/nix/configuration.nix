@@ -8,6 +8,9 @@
     efi.efiSysMountPoint = "/boot/efi";
   };
 
+  # Fix slow wi-fi if bluetooth is on
+  hardware.enableRedistributableFirmware = true;
+
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   networking.hostName = "PeaceNixArch"; # Define your hostname.

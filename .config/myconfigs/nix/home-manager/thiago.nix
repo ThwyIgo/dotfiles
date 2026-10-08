@@ -1,4 +1,4 @@
-{ config, pkgs, stylix, ... }:
+{ config, lib, pkgs, stylix, minimal-emacs-src, ... }:
 let
   dracula-theme-qt = pkgs.callPackage ../pkgs/dracula-theme-qt.nix {};
 in
@@ -21,10 +21,10 @@ in
     virt-manager
     telegram-desktop
     discord
+    teamspeak6-client
     #stremio
     spotify
     zathura
-    prismlauncher
     prismlauncher
     bottles
     musescore
@@ -62,7 +62,8 @@ in
     rkrlv2
     fomp
     boops
-
+    noise-repellent
+    
     # Programming
     nixd
     (haskellPackages.ghcWithPackages (hpkgs: with hpkgs; [
@@ -71,6 +72,10 @@ in
       xmonad-contrib
     ]))
     haskell-language-server
+    jetbrains.idea
+    maven
+    antigravity-ide
+    python3
 
     # Window Manager stuff
     haskellPackages.xmobar
@@ -85,6 +90,7 @@ in
     emacs-all-the-icons-fonts
     monocraft
   ];
+  programs.java.enable = true;
   programs.fish = {
     enable = true;
     functions = {
@@ -102,20 +108,39 @@ in
     };
   };
   programs.bash.enable = true;
+
   programs.emacs = {
     enable = true;
-    package = (pkgs.emacsPackagesFor pkgs.emacs).emacsWithPackages (epkgs: [
-      epkgs.vterm
-    ]);
+    package = pkgs.emacs;
+    extraPackages = epkgs: with epkgs; [
+      vterm
+      treesit-grammars.with-all-grammars
+    ];
   };
   services.emacs = {
     enable = true;
     defaultEditor = true;
     client = {
       enable = true;
-      arguments = [ "-c" "-a emacs" ];
+      arguments = [ "-c" "-a" "emacs" ];
     };
   };
+
+  xdg.enable = true;
+  xdg.configFile = lib.pipe (builtins.readDir minimal-emacs-src) [
+    (lib.filterAttrs (name: type: type == "regular" && lib.hasSuffix ".el" name))
+    (lib.mapAttrs' (name: _: lib.nameValuePair "emacs/${name}" {
+      source = "${minimal-emacs-src}/${name}";
+    }))
+  ] // {
+    "qt5ct/qt5ct.conf".text = ''
+      [Appearance]
+      color_scheme_path=${dracula-theme-qt}/share/qt5ct/colors/Dracula.conf
+      custom_palette=true
+      style=Breeze
+    '';
+  };
+
   programs.alacritty = {
     enable = true;
     settings = {
@@ -144,6 +169,14 @@ in
       user.email = "thiagopachecorocha@hotmail.com";
       user.name = "ThwyIgo";
     };
+    ignores = [
+      "*~"
+      ".fuse_hidden*"
+      ".directory"
+      ".Trash-*"
+      ".nfs*"
+      ".dir-locals.el"
+    ];
   };
 
   programs.ssh = {
@@ -162,15 +195,6 @@ in
   qt = {
     enable = true;
     platformTheme.name = "qtct";
-  };
-
-  xdg.configFile = {
-    "qt5ct/qt5ct.conf".text = ''
-      [Appearance]
-      color_scheme_path=${dracula-theme-qt}/share/qt5ct/colors/Dracula.conf
-      custom_palette=true
-      style=Breeze
-    '';
   };
 
   stylix = {
