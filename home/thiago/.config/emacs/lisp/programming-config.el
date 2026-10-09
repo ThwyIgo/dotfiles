@@ -255,13 +255,35 @@ sobre `compilation-environment'."
 
   (put 'project-run-commands 'safe-local-variable #'listp)
 
+  (defun project-run--substitute-env (val)
+    "Substitui referências a variáveis de ambiente em VAL.
+Suporta referências como ${VAR}, $VAR e valores padrão ${VAR:-padrao}."
+    (if (stringp val)
+        (let ((expanded (replace-regexp-in-string
+                         "\\${\\([A-Za-z0-9_]+\\):-\\([^}]*\\)}"
+                         (lambda (match)
+                           (let* ((var (match-string 1 match))
+                                  (def (match-string 2 match))
+                                  (env-val (getenv var)))
+                             (if (and env-val (not (string-empty-p env-val)))
+                                 env-val
+                               def)))
+                         val t)))
+          (substitute-env-vars expanded))
+      val))
+
   (defun project-run--normalize-env (env)
-    "Normaliza ENV para uma lista de strings no formato \"VAR=VAL\"."
+    "Normaliza ENV para uma lista de strings no formato \"VAR=VAL\".
+Expande variáveis de ambiente referenciadas nos valores (ex: ${VAR}/BAZ)."
     (cond
      ((null env) nil)
      ;; alist: (("VAR" . "VAL") ...)
      ((and (consp env) (consp (car env)))
-      (mapcar (lambda (pair) (format "%s=%s" (car pair) (cdr pair))) env))
+      (mapcar (lambda (pair)
+                (format "%s=%s"
+                        (car pair)
+                        (project-run--substitute-env (cdr pair))))
+              env))
      ;; plist: (:VAR "VAL" ...)
      ((and (consp env) (keywordp (car env)))
       (let (res)
@@ -269,11 +291,14 @@ sobre `compilation-environment'."
           (let ((k (car env))
                 (v (cadr env)))
             (setq env (cddr env))
-            (push (format "%s=%s" (substring (symbol-name k) 1) v) res)))
+            (push (format "%s=%s"
+                          (substring (symbol-name k) 1)
+                          (project-run--substitute-env v))
+                  res)))
         (nreverse res)))
      ;; lista de strings: ("VAR=VAL" ...)
      ((and (listp env) (stringp (car env)))
-      env)
+      (mapcar #'project-run--substitute-env env))
      (t nil)))
 
   (defun project-run--parse-task (spec)
