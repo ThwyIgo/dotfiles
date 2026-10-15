@@ -63,6 +63,12 @@
   ;; Turn on global bindings for setting breakpoints with mouse
   (dape-breakpoint-global-mode +1)
 
+  :init
+  ;; Flymake binds `<left-fringe> <mouse-1>` to `flymake-show-buffer-diagnostics`.
+  ;; Unset it so clicks in the fringe toggle breakpoints via dape instead.
+  (with-eval-after-load 'flymake
+    (keymap-unset flymake-mode-map "<left-fringe> <mouse-1>" t))
+
   ;; Info buffers to the right
   ;; (dape-buffer-window-arrangement 'right)
   ;; Info buffers like gud (gdb-mi)

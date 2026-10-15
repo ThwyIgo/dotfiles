@@ -21,7 +21,7 @@
     bruno
     dbgate
     dotnetCorePackages.sdk_10_0
-    antigravity-ide
+    antigravity-cli
     python3
 
     # Fonts

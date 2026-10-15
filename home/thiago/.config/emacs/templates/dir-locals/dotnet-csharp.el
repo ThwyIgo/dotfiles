@@ -26,7 +26,7 @@
                                   :cwd ,(expand-file-name "foo/bin/Debug/net10.0/" root)
                                   :program ,(expand-file-name "foo/bin/Debug/net10.0/bar.dll" root)
                                   :env (:ASPNETCORE_ENVIRONMENT "Development"
-                                                                :ConnectionStrings__DefaultConnection "Server=localhost;Port=5432;Database=foo;User Id=postgres;Password=1234;")))
+                                                                :ConnectionStrings__DefaultConnection ,(project-run--substitute-env "Server=${DB_HOST:-localhost};Port=5432;Database=foo;User Id=postgres;Password=${DB_PASS:-1234};")))
                    (add-to-list 'dape-configs
                                 `(debug-foo-dev
                                   modes (csharp-mode csharp-ts-mode)
@@ -38,4 +38,4 @@
                                   :cwd ,(expand-file-name "foo/bin/Debug/net10.0/" root)
                                   :program ,(expand-file-name "foo/bin/Debug/net10.0/bar.dll" root)
                                   :env (:ASPNETCORE_ENVIRONMENT "Development"
-                                                                :ConnectionStrings__DefaultConnection "Server=192.168.1.0;Port=5432;User Id=postgres;Password=4321;Database=foo"))))))))
+                                                                :ConnectionStrings__DefaultConnection ,(project-run--substitute-env "Server=${REMOTE_DB_HOST:-192.168.1.0};Port=5432;User Id=postgres;Password=${REMOTE_DB_PASS:-4321};Database=foo"))))))))
