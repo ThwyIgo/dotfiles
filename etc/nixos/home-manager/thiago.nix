@@ -94,15 +94,9 @@
   programs.zed-editor-extensions = {
     enable = true;
     packages = with pkgs.zed-extensions; [
-      dockerfile docker-compose java sql lua csharp log nix nginx org neocmake
-      toml xml netcoredbg angular
+      dockerfile docker-compose java sql lua log nix nginx org neocmake toml
+      xml angular
     ];
-  };
-  home.file = {
-    ".local/share/zed/debug_adapters/CodeLLDB".source = "${pkgs.vscode-extensions.vadimcn.vscode-lldb}/share/vscode/extensions/vadimcn.vscode-lldb/";
-    ".local/share/zed/nix/jdtls/".source = toString pkgs.jdt-language-server;
-    ".local/share/zed/nix/lombok/lombok.jar".source = "${pkgs.lombok.out}/share/java/lombok.jar";
-    ".local/share/zed/nix/com.microsoft.java.debug.plugin.jar".source = "${pkgs.vscode-extensions.vscjava.vscode-java-debug}/share/vscode/extensions/vscjava.vscode-java-debug/server/com.microsoft.java.debug.plugin-0.53.2.jar";
   };
 
   programs.emacs = {

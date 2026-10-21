@@ -19,10 +19,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    zed-netcoredbg-src = {
-      url = "github:qwadrox/zed-netcoredbg";
-      flake = false;
-    };
     minimal-emacs-src = {
       url = "github:jamescherti/minimal-emacs.d";
       flake = false;
@@ -38,26 +34,12 @@
       specialArgs = {
       	inherit keycloak-portal-theme;
       };
-      
+
       modules = [
         {
           nixpkgs.overlays = [
             zed-extensions.overlays.default
             (final: prev: {
-              zed-extensions = prev.zed-extensions // {
-                netcoredbg = prev.buildZedRustExtension {
-                  name = "netcoredbg";
-                  version = "1.0.0";
-                  src = inputs.zed-netcoredbg-src;
-                  cargoPatches = [ ./patches/zed-netcoredbg-Cargo.lock.patch ];
-                  cargoHash = "sha256-wgDzJRj2gqrckyFr72gXxulLwzCxhJ2aXEnlPggCZQ8=";
-
-                  meta = with prev.lib; {
-                    description = "NetCoreDbg extension for Zed";
-                    license = licenses.mit;
-                  };
-                };
-              };
               winapps = winapps.packages."${prev.stdenv.hostPlatform.system}".winapps;
               winapps-launcher = winapps.packages."${prev.stdenv.hostPlatform.system}".winapps-launcher;
             })
