@@ -698,6 +698,12 @@
 ;; Set the fringes to match the pixel height of a character. This ensures the
 ;; fringe is wide enough, scaling dynamically with the current font size.
 (fringe-mode (frame-char-width))
+(when (daemonp)
+  (add-hook 'server-after-make-frame-hook
+            (lambda (&optional frame)
+              (with-selected-frame (or frame (selected-frame))
+                (when (display-graphic-p)
+                  (set-fringe-mode (frame-char-width)))))))
 
 ;; When Delete Selection mode is enabled, typed text replaces the selection
 ;; if the selection is active.
@@ -707,6 +713,7 @@
 (setq line-number-mode t)
 (setq column-number-mode t)
 (setq mode-line-position-column-line-format '("%l:%C"))
+(setq-default mode-line-percent-position nil)
 
 ;; Display of line numbers in the buffer:
 ;; Read: https://www.jamescherti.com/emacs-display-line-numbers-mode-performance/

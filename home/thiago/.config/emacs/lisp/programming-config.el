@@ -26,13 +26,20 @@
 (use-package eglot
   :commands (eglot-ensure
              eglot-rename
+             eglot-code-actions
              eglot-format-buffer)
+  :bind (:map eglot-mode-map
+              ("<f2>" . eglot-rename))
   :config
   (setq eglot-sync-connect nil)
   (setq eglot-events-buffer-config '(:size 0 :format short))
   ;; Disable automatic code action indicators to reduce background polling
   (setq eglot-code-action-indications nil)
   (put 'eglot-flymake-backend 'flymake-always-safe t)
+
+  (with-eval-after-load 'embark
+    (keymap-set embark-general-map "c" #'eglot-code-actions)
+    (push #'embark--ignore-target (alist-get #'eglot-code-actions embark-target-injection-hooks)))
 
   :hook ((eglot-connect . eldoc-mode)
          (rust-mode . eglot-ensure)
@@ -41,6 +48,7 @@
          (csharp-ts-mode . eglot-ensure)
          (haskell-mode . eglot-ensure)))
 ;; Eglot keybindings:
+;; "<f2>" rename symbol at point
 ;; "M-." goto symbol definition
 ;; "M-," go back (after "M-.")
 ;; "M-?" find references to a symbol
@@ -242,7 +250,7 @@
 (use-package project
   :ensure nil
   :bind (:map project-prefix-map
-         ("r" . project-run))
+              ("r" . project-run))
   :config
   (defcustom project-run-commands nil
     "Alist de comandos para executar no projeto.
@@ -360,4 +368,3 @@ antes de executá-lo."
 
 (provide 'programming-config)
 ;;; programming-config.el ends here
-
