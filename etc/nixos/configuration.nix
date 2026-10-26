@@ -23,7 +23,6 @@
     cryptroot = {
       # Obtenha o UUID com `blkid /dev/vda2 -s PARTUUID`
       device = "/dev/disk/by-partuuid/975b7376-5b01-4991-89ae-27c12eae4442";
-      preLVM = true;
     };
   };
   zramSwap.enable = true;
@@ -41,7 +40,6 @@
     };
 
     consoleLogLevel = 3;
-    initrd.verbose = false;
     kernelParams = [
       "quiet"
       "rd.udev.log_level=3"
@@ -54,7 +52,7 @@
     enable = true;
     wifi.backend = "iwd";
   };
-  
+
   # Set your time zone.
   time.timeZone = "America/Sao_Paulo";
 
@@ -70,7 +68,7 @@
 
   services.displayManager.cosmic-greeter.enable = true;
   services.desktopManager.cosmic.enable = true;
-  
+
   services.displayManager.autoLogin = {
     enable = true;
     user = "thiago";
@@ -99,7 +97,7 @@
 
   # Enable touchpad support (enabled default in most desktopManager).
   # services.libinput.enable = true;
-  
+
   # Não mostrar mensagem de "boas vindas" do sudo
   security.sudo.extraConfig = "Defaults  lecture=\"never\"";
 
@@ -124,7 +122,7 @@
     git
     unzip
     killall
-  
+
     # Sysadmin
     ntfs3g
   ];
@@ -254,7 +252,7 @@
   	      "CONTROLLER://0.0.0.0:9093"
   	    ];
   	    "advertised.listeners" = [
-  	      "PLAINTEXT://10.3.192.74:9092" 
+  	      "PLAINTEXT://10.3.192.74:9092"
   	    ];
   	    "listener.security.protocol.map" = [
   	      "PLAINTEXT:PLAINTEXT"
