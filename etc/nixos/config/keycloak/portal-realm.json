@@ -91,6 +91,17 @@
       }
     ],
     "client": {
+      "portal-back": [
+        {
+          "id": "b04c208d-d1f6-4a9d-ad1d-7042550079e0",
+          "name": "uma_protection",
+          "composite": false,
+          "clientRole": true,
+          "containerId": "e44c15b9-45b0-4baf-b36f-20c8c99ecd49",
+          "attributes": {}
+        }
+      ],
+      "portal-front": [],
       "realm-management": [
         {
           "id": "4e9f8c1d-3818-4774-93a6-b0b8f779ce8f",
@@ -342,18 +353,7 @@
       ],
       "security-admin-console": [],
       "admin-cli": [],
-      "portal-backend": [
-        {
-          "id": "b04c208d-d1f6-4a9d-ad1d-7042550079e0",
-          "name": "uma_protection",
-          "composite": false,
-          "clientRole": true,
-          "containerId": "e44c15b9-45b0-4baf-b36f-20c8c99ecd49",
-          "attributes": {}
-        }
-      ],
       "account-console": [],
-      "portal-frontend": [],
       "broker": [
         {
           "id": "df63d212-43e2-4f11-b327-264a805ffecc",
@@ -362,16 +362,6 @@
           "composite": false,
           "clientRole": true,
           "containerId": "aeba02a0-6e3e-4d9b-838f-5cfdd196eb49",
-          "attributes": {}
-        }
-      ],
-      "bruno": [
-        {
-          "id": "7ef68cca-94f8-4ed1-bd7c-e178826eb4cc",
-          "name": "uma_protection",
-          "composite": false,
-          "clientRole": true,
-          "containerId": "16cac2e9-a3b3-436e-839e-682725330dbe",
           "attributes": {}
         }
       ],
@@ -522,45 +512,24 @@
   "webAuthnPolicyPasswordlessExtraOrigins": [],
   "users": [
     {
-      "id": "2180ce58-2481-4dd7-b2ac-afbac3e339ff",
-      "username": "service-account-bruno",
-      "emailVerified": false,
-      "enabled": true,
-      "createdTimestamp": 1783613478603,
-      "totp": false,
-      "serviceAccountClientId": "bruno",
-      "disableableCredentialTypes": [],
-      "requiredActions": [],
-      "realmRoles": [
-        "default-roles-portal"
-      ],
-      "clientRoles": {
-        "bruno": [
-          "uma_protection"
-        ]
-      },
-      "notBefore": 0,
-      "groups": []
-    },
-    {
       "id": "d994d9e2-deb2-4e1e-b752-97713a4e09bc",
-      "username": "service-account-portal-backend",
+      "username": "service-account-portal-back",
       "emailVerified": false,
       "enabled": true,
       "createdTimestamp": 1783614518156,
       "totp": false,
-      "serviceAccountClientId": "portal-backend",
+      "serviceAccountClientId": "portal-back",
       "disableableCredentialTypes": [],
       "requiredActions": [],
       "realmRoles": [
         "default-roles-portal"
       ],
       "clientRoles": {
+        "portal-back": [
+          "uma_protection"
+        ],
         "realm-management": [
           "realm-admin"
-        ],
-        "portal-backend": [
-          "uma_protection"
         ]
       },
       "notBefore": 0,
@@ -782,98 +751,8 @@
       ]
     },
     {
-      "id": "16cac2e9-a3b3-436e-839e-682725330dbe",
-      "clientId": "bruno",
-      "name": "Bruno",
-      "description": "Client para testar requisições através do aplicativo Bruno",
-      "rootUrl": "",
-      "adminUrl": "",
-      "baseUrl": "",
-      "surrogateAuthRequired": false,
-      "enabled": true,
-      "alwaysDisplayInConsole": false,
-      "clientAuthenticatorType": "client-secret",
-      "secret": "hj3tw2s2ZHlWPFwVUvGAx17mDxA1QgHX",
-      "redirectUris": [
-        "/*"
-      ],
-      "webOrigins": [
-        "/*"
-      ],
-      "notBefore": 0,
-      "bearerOnly": false,
-      "consentRequired": false,
-      "standardFlowEnabled": false,
-      "implicitFlowEnabled": false,
-      "directAccessGrantsEnabled": false,
-      "serviceAccountsEnabled": true,
-      "authorizationServicesEnabled": true,
-      "publicClient": false,
-      "frontchannelLogout": true,
-      "protocol": "openid-connect",
-      "attributes": {
-        "realm_client": "false",
-        "oidc.ciba.grant.enabled": "false",
-        "client.secret.creation.time": "1783613478",
-        "backchannel.logout.session.required": "true",
-        "oauth2.jwt.authorization.grant.enabled": "false",
-        "standard.token.exchange.enabled": "false",
-        "post.logout.redirect.uris": "+",
-        "oauth2.device.authorization.grant.enabled": "false",
-        "pkce.code.challenge.method": "S256",
-        "backchannel.logout.revoke.offline.tokens": "false",
-        "dpop.bound.access.tokens": "false"
-      },
-      "authenticationFlowBindingOverrides": {},
-      "fullScopeAllowed": true,
-      "nodeReRegistrationTimeout": -1,
-      "protocolMappers": [
-        {
-          "id": "f3bb7e4f-f4d2-4777-b0cc-25006704de9d",
-          "name": "auto-aud",
-          "protocol": "openid-connect",
-          "protocolMapper": "oidc-audience-mapper",
-          "consentRequired": false,
-          "config": {
-            "included.client.audience": "bruno",
-            "id.token.claim": "false",
-            "lightweight.claim": "false",
-            "introspection.token.claim": "true",
-            "access.token.claim": "true",
-            "userinfo.token.claim": "false"
-          }
-        }
-      ],
-      "defaultClientScopes": [
-        "service_account",
-        "web-origins",
-        "acr",
-        "roles",
-        "profile",
-        "basic",
-        "organization:*",
-        "organization-groups-ids",
-        "email"
-      ],
-      "optionalClientScopes": [
-        "address",
-        "phone",
-        "organization",
-        "offline_access",
-        "microprofile-jwt"
-      ],
-      "authorizationSettings": {
-        "allowRemoteResourceManagement": true,
-        "policyEnforcementMode": "ENFORCING",
-        "resources": [],
-        "policies": [],
-        "scopes": [],
-        "decisionStrategy": "UNANIMOUS"
-      }
-    },
-    {
       "id": "e44c15b9-45b0-4baf-b36f-20c8c99ecd49",
-      "clientId": "portal-backend",
+      "clientId": "portal-back",
       "name": "Backend do portal Physis IoT",
       "description": "",
       "rootUrl": "",
@@ -966,7 +845,7 @@
     },
     {
       "id": "57b2dc26-3c62-49ba-8e9b-e7b3ac160002",
-      "clientId": "portal-frontend",
+      "clientId": "portal-front",
       "name": "Frontend do portal Physis IoT",
       "description": "",
       "rootUrl": "",
@@ -1025,8 +904,8 @@
         "organization",
         "offline_access",
         "microprofile-jwt",
-        "portal-backend-aud",
-        "organization-groups-ids"
+        "organization-groups-ids",
+        "portal-back-aud"
       ]
     },
     {
@@ -1147,7 +1026,7 @@
   "clientScopes": [
     {
       "id": "5830648f-a50f-4f27-8b76-26e883673298",
-      "name": "portal-backend-aud",
+      "name": "portal-back-aud",
       "description": "",
       "protocol": "openid-connect",
       "attributes": {
@@ -1159,18 +1038,17 @@
       },
       "protocolMappers": [
         {
-          "id": "8beba44e-780e-496c-a9cf-7d6d114753b3",
-          "name": "portal-backend-aud",
+          "id": "4ca1112b-649c-4828-b419-16b3e812596a",
+          "name": "portal-back-aud",
           "protocol": "openid-connect",
           "protocolMapper": "oidc-audience-mapper",
           "consentRequired": false,
           "config": {
-            "included.client.audience": "portal-backend",
+            "included.client.audience": "portal-back",
             "id.token.claim": "false",
             "lightweight.claim": "false",
-            "introspection.token.claim": "true",
             "access.token.claim": "true",
-            "userinfo.token.claim": "false"
+            "introspection.token.claim": "true"
           }
         }
       ]
@@ -1433,8 +1311,9 @@
             "included.client.audience": "account",
             "id.token.claim": "false",
             "lightweight.claim": "false",
+            "introspection.token.claim": "false",
             "access.token.claim": "true",
-            "introspection.token.claim": "false"
+            "userinfo.token.claim": "false"
           }
         },
         {
@@ -1982,8 +1861,8 @@
     "phone",
     "microprofile-jwt",
     "organization",
-    "portal-backend-aud",
-    "organization-groups-ids"
+    "organization-groups-ids",
+    "portal-back-aud"
   ],
   "browserSecurityHeaders": {
     "contentSecurityPolicyReportOnly": "",
@@ -2018,14 +1897,14 @@
         "subComponents": {},
         "config": {
           "allowed-protocol-mapper-types": [
-            "saml-user-attribute-mapper",
             "oidc-full-name-mapper",
+            "saml-user-property-mapper",
+            "saml-user-attribute-mapper",
+            "oidc-usermodel-attribute-mapper",
+            "saml-role-list-mapper",
             "oidc-usermodel-property-mapper",
             "oidc-sha256-pairwise-sub-mapper",
-            "oidc-address-mapper",
-            "saml-role-list-mapper",
-            "oidc-usermodel-attribute-mapper",
-            "saml-user-property-mapper"
+            "oidc-address-mapper"
           ]
         }
       },
@@ -2069,13 +1948,13 @@
         "subComponents": {},
         "config": {
           "allowed-protocol-mapper-types": [
-            "oidc-sha256-pairwise-sub-mapper",
-            "oidc-full-name-mapper",
-            "oidc-address-mapper",
             "saml-user-attribute-mapper",
+            "oidc-address-mapper",
             "saml-user-property-mapper",
             "saml-role-list-mapper",
+            "oidc-full-name-mapper",
             "oidc-usermodel-property-mapper",
+            "oidc-sha256-pairwise-sub-mapper",
             "oidc-usermodel-attribute-mapper"
           ]
         }
@@ -3149,7 +3028,7 @@
     "acr.loa.map": "{}",
     "darkMode": "true"
   },
-  "keycloakVersion": "26.7.4",
+  "keycloakVersion": "26.7.5",
   "userManagedAccessAllowed": false,
   "organizationsEnabled": true,
   "verifiableCredentialsEnabled": false,
