@@ -118,21 +118,13 @@
   # You can use https://search.nixos.org/ to find more packages (and options).
   environment.systemPackages = with pkgs; [
     # CL
-    micro-with-wl-clipboard
-    git
-    unzip
     killall
-
-    # Sysadmin
-    ntfs3g
   ];
   programs = {
     kdeconnect.enable = true;
     htop.enable = true;
   };
-  programs.nix-ld = {
-  	enable = true;
-  };
+  programs.nix-ld.enable = true;
 
   virtualisation.libvirtd = {
     enable = true;

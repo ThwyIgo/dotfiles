@@ -130,6 +130,10 @@
 (add-hook 'html-ts-mode-hook #'treesit-fold-mode)
 (add-hook 'bash-ts-mode-hook #'treesit-fold-mode)
 
+(use-package envrc
+  :ensure t
+  :hook (after-init . envrc-global-mode))
+
 ;; Configure built-in sgml-mode to automatically enable
 ;; `sgml-electric-tag-pair-mode' in `html-mode' and `mhtml-mode', providing
 ;; automatic insertion of matching closing tags.

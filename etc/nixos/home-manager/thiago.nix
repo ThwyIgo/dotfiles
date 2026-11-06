@@ -116,6 +116,11 @@
     };
   };
 
+  programs.direnv = {
+    enable = true;
+    nix-direnv.enable = true;
+  };
+
   xdg.enable = true;
   xdg.configFile = lib.pipe (builtins.readDir minimal-emacs-src) [
     (lib.filterAttrs (name: type: type == "regular" && lib.hasSuffix ".el" name))
