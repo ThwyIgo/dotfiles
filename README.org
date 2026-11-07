@@ -47,3 +47,28 @@ installing on a paravirtualized machine.
   break hibernation and ~machine-id~.
 - If you ever run out of space in the LiveCD, try running
   ~nix-collect-garbage~.
+
+* Testing in a Virtual Machine (QEMU)
+
+You can build and test this NixOS configuration inside an isolated QEMU virtual machine without touching your host disks:
+
+1. Navigate to the configuration directory:
+   #+begin_src sh
+   cd persistent/etc/nixos
+   #+end_src
+
+2. Build the VM:
+   #+begin_src sh
+   nix build .#nixosConfigurations.nixos.config.system.build.vm
+   #+end_src
+
+3. Run the virtual machine:
+   #+begin_src sh
+   ./result/bin/run-nixos-vm
+   #+end_src
+
+   /Note: If you are running on a headless system or without a display server, you can run it directly in terminal mode:/
+   #+begin_src sh
+   QEMU_OPTS="-nographic" ./result/bin/run-nixos-vm
+   #+end_src
+
