@@ -171,14 +171,12 @@
     # CL
     xinit
     alacritty
-    micro
     htop
     git
     unzip
     acpilight
     xkill
     killall
-    ffmpegthumbnailer
 
     # Sysadmin
     ntfs3g

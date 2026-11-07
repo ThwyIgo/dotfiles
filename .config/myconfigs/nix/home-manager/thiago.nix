@@ -12,7 +12,9 @@ in
     pfetch
 
     # Libs
-    (aspellWithDicts (dicts: with dicts; [ en pt_BR ]))
+    (hunspell.withDicts (dicts: with dicts;
+      [pt_BR en_US]))
+    ffmpegthumbnailer
 
     # GUI
     session-quit
@@ -26,7 +28,6 @@ in
     spotify
     zathura
     prismlauncher
-    bottles
     musescore
     kdePackages.kdenlive
     libreoffice-still
@@ -41,6 +42,7 @@ in
     file-roller
     pix
     celluloid
+    qbittorrent
 
     # Games
     lutris
@@ -63,7 +65,7 @@ in
     fomp
     boops
     noise-repellent
-    
+
     # Programming
     nixd
     (haskellPackages.ghcWithPackages (hpkgs: with hpkgs; [
@@ -72,9 +74,7 @@ in
       xmonad-contrib
     ]))
     haskell-language-server
-    jetbrains.idea
-    maven
-    antigravity-ide
+    antigravity
     python3
 
     # Window Manager stuff
@@ -88,7 +88,6 @@ in
     # Fonts
     fira-code
     emacs-all-the-icons-fonts
-    monocraft
   ];
   programs.java.enable = true;
   programs.fish = {
@@ -187,7 +186,7 @@ in
         IdentityFile = "~/.ssh/gh-ThwyIgo";
       };
     };
-  };  
+  };
   services.ssh-agent.enable = true;
 
   fonts.fontconfig.enable = true;
