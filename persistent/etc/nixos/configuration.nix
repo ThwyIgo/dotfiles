@@ -18,10 +18,20 @@
 
   #### BOOTLOADER CONFIG ####
 
-  # Use the systemd-boot EFI boot loader.
-  boot.loader.systemd-boot.enable = true;
+  # Use the Limine EFI boot loader.
+  boot.loader.limine = {
+    enable = true;
+    enableEditor = false;
+    # Hide menu unless a key is pressed during the timeout window
+    extraConfig = ''
+      quiet: yes
+    '';
+    # If testing in a UEFI VM without persistent NVRAM, set:
+    # efiInstallAsRemovable = true;
+  };
+  # Set to false if using efiInstallAsRemovable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-  boot.loader.timeout = 0; # Press Space to show boot menu
+  boot.loader.timeout = 1;
   boot.initrd.systemd.enable = true;
 
   #### NETWORK CONFIG ####
