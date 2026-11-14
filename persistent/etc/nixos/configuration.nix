@@ -32,7 +32,6 @@
   # Set to false if using efiInstallAsRemovable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.timeout = 1;
-  boot.initrd.systemd.enable = true;
 
   #### NETWORK CONFIG ####
 

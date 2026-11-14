@@ -37,7 +37,7 @@
             type = "luks";
             name = "crypted";
             # use `printf 'password' > luks-passwd.txt` to create the password file
-            passwordFile = "/home/nixos/host/luks-passwd.txt";
+            passwordFile = "/tmp/luks-passwd.txt";
             settings = {
               allowDiscards = true;
             };

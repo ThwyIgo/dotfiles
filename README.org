@@ -16,8 +16,7 @@ installing on a paravirtualized machine.
 2. Find a way to put the files from this repository onto the LiveCD
    (suggestions: git clone, curl, usb flash drive) and ~cd~ into it.
 3. ~sudo su~.
-4. Create your LUKS password using ~printf 'password' >
-   luks-passwd.txt~.
+4. Create your LUKS password using ~printf 'password' > /tmp/luks-passwd.txt~.
 5. Check in which disk you want to install your system using ~lsblk~.
 6. Change =disko.nix= to make ~disko.devices.disk.main.device~ point
    to the correct device.
@@ -27,48 +26,34 @@ installing on a paravirtualized machine.
 8. Run disko to format the disk:
    ~sudo nix --experimental-features "nix-command flakes" run github:nix-community/disko/latest --
    --mode destroy,format,mount disko.nix~.
-9. Copy your configuration files to the persistent directory: ~mkdir
-   -p /mnt/persistent/etc/nixos && cp -r * /mnt/persistent/etc/nixos~.
+9. Copy your configuration files to the persistent directory: ~mkdir -p /mnt/persistent/etc/nixos &&
+   cp -r * /mnt/persistent/etc/nixos~.
    - Make sure you don't copy =luks-passwd.txt=.
-10. Generate =hardware-configuration.nix=: ~nixos-generate-config
-    --no-filesystems --root /mnt/persistent/~.
-11. Create =user='s password: ~mkpasswd -m sha-512 | sudo tee
-   /mnt/persistent/etc/nixos/secrets/user-passwd.txt~.
-12. Install NixOS: ~nixos-install --no-root-passwd --flake
-    /mnt/persistent/etc/nixos#nixos~.
+10. Generate =hardware-configuration.nix=: ~nixos-generate-config --no-filesystems --root /mnt/persistent/~.
+11. Create =user='s password: ~mkpasswd -m sha-512 > /mnt/persistent/etc/nixos/secrets/user-passwd.txt~.
+12. Install NixOS: ~nixos-install --no-root-passwd --flake /mnt/persistent/etc/nixos#nixos~.
 13. Reboot.
- 
+
 * Hints
 
 - Add =/persistent/etc/nixos/secrets/= to =.gitignore=.
-- Never edit =/persistent/etc/nixos/hardware-configuration.nix= by
-  hand.
-- Never change ~boot.initrd.systemd.enable~ to false as this will
-  break hibernation and ~machine-id~.
-- If you ever run out of space in the LiveCD, try running
-  ~nix-collect-garbage~.
+- Never edit =/persistent/etc/nixos/hardware-configuration.nix= by hand.
+- If you ever run out of space in the LiveCD, try running ~nix-collect-garbage~.
 
 * Testing in a Virtual Machine (QEMU)
-
-You can build and test this NixOS configuration inside an isolated QEMU virtual machine without touching your host disks:
 
 1. Navigate to the configuration directory:
    #+begin_src sh
    cd persistent/etc/nixos
    #+end_src
 
-2. Build the VM:
+2. Build and run the virtual machine:
+   #+begin_src sh
+   nix run .#nixosConfigurations.nixos.config.system.build.vm
+   #+end_src
+
+   /Note: If running on a headless system without a display server, pass =QEMU_OPTS="-nographic"=:
    #+begin_src sh
    nix build .#nixosConfigurations.nixos.config.system.build.vm
-   #+end_src
-
-3. Run the virtual machine:
-   #+begin_src sh
-   ./result/bin/run-nixos-vm
-   #+end_src
-
-   /Note: If you are running on a headless system or without a display server, you can run it directly in terminal mode:/
-   #+begin_src sh
    QEMU_OPTS="-nographic" ./result/bin/run-nixos-vm
    #+end_src
-
