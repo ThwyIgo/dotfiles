@@ -15,6 +15,7 @@
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   nix.channel.enable = false;
   nix.settings.auto-optimise-store = true;
+  nix.settings.allowed-users = [ "@wheel" ];
 
   #### BOOTLOADER CONFIG ####
 
@@ -51,6 +52,46 @@
     "efi=disable_early_pci_dma" # Remove if any PCI device fails to initialize at boot
   ];
 
+  #### SECURITY / HARDENING CONFIG ####
+
+  security.apparmor.enable = true;
+
+  boot.kernel.sysctl = {
+    # Prevent replacing the running kernel without breaking hibernation
+    "kernel.kexec_load_disabled" = 1;
+
+    # Hide kernel pointers and restrict kernel logs
+    "kernel.kptr_restrict" = 2;
+    "kernel.dmesg_restrict" = 1;
+
+    # Restrict ptrace to parent/child processes
+    "kernel.yama.ptrace_scope" = 1;
+
+    # Disable unprivileged eBPF and harden BPF JIT
+    "kernel.unprivileged_bpf_disabled" = 1;
+    "net.core.bpf_jit_harden" = 2;
+
+    # Filesystem and core dump hardening
+    "fs.protected_symlinks" = 1;
+    "fs.protected_hardlinks" = 1;
+    "fs.protected_fifos" = 2;
+    "fs.protected_regular" = 2;
+    "fs.suid_dumpable" = 0;
+
+    # Network stack hardening
+    "net.ipv4.conf.all.accept_redirects" = 0;
+    "net.ipv4.conf.default.accept_redirects" = 0;
+    "net.ipv6.conf.all.accept_redirects" = 0;
+    "net.ipv6.conf.default.accept_redirects" = 0;
+    "net.ipv4.conf.all.send_redirects" = 0;
+    "net.ipv4.conf.default.send_redirects" = 0;
+    "net.ipv4.icmp_echo_ignore_broadcasts" = 1;
+    "net.ipv4.tcp_syncookies" = 1;
+    # Loose reverse path filtering (2) preserves compatibility with VPNs and libvirt bridges
+    "net.ipv4.conf.all.rp_filter" = 2;
+    "net.ipv4.conf.default.rp_filter" = 2;
+  };
+
   #### NETWORK CONFIG ####
 
   networking.hostName = "nixos"; # Define your hostname.
@@ -82,8 +123,9 @@
 
   environment.localBinInPath = true;
 
-  # Don't show sudo welcome message
+  # Don't show sudo welcome message and restrict sudo execution to wheel
   security.sudo.extraConfig = "Defaults  lecture=\"never\"";
+  security.sudo.execWheelOnly = true;
 
   #### USERS CONFIG ####
 
