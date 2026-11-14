@@ -43,13 +43,14 @@
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.timeout = 1;
 
-  # Enable IOMMU and strict DMA protection
+  # Enable IOMMU, strict DMA protection, and TPM2 PCR 15 volume-key measurement
   boot.kernelParams = [
     "intel_iommu=on"
     "amd_iommu=force_isolation"
     "iommu.passthrough=0"
     "iommu.strict=1" # Remove if I/O performance is slow. You'll be vulnerable to some very sophisticated attacks.
     "efi=disable_early_pci_dma" # Remove if any PCI device fails to initialize at boot
+    "systemd.tpm2_measured_os=1"
   ];
 
   #### SECURITY / HARDENING CONFIG ####

@@ -40,7 +40,10 @@
             passwordFile = "/tmp/luks-passwd.txt";
             settings = {
               allowDiscards = true;
-              crypttabExtraOpts = [ "tpm2-device=auto" ];
+              crypttabExtraOpts = [
+                "tpm2-device=auto"
+                "tpm2-measure-pcr=yes"
+              ];
             };
             content = {
               type = "btrfs";
