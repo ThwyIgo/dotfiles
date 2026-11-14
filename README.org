@@ -1,7 +1,7 @@
 * What is this?
 
 A minimal NixOS config that uses LUKS, BTrFS, swap-file, impermanence,
-home-manager and disko. It has good and secure defaults.
+home-manager, disko and secure-boot with TPM auto-unlock.
 
 * Status
 
@@ -31,11 +31,26 @@ installing on a paravirtualized machine.
     - Make sure you don't copy =luks-passwd.txt=.
 11. Generate =hardware-configuration.nix=: ~nixos-generate-config --no-filesystems --root /mnt/persistent/~.
 12. Create =user='s password: ~mkpasswd -m sha-512 > /mnt/persistent/etc/nixos/secrets/user-passwd.txt~.
-13. Install NixOS: ~nixos-install --no-root-passwd --flake /mnt/persistent/etc/nixos#nixos~.
+13. (Optional, if ~KEK~ or ~db~ variables already exist in UEFI NVRAM) Remove the immutable flag from ~efivars~ so ~sbctl~ can update them:
+    ~chattr -i /sys/firmware/efi/efivars/{PK,KEK,db}-* 2>/dev/null || true~.
+14. Install NixOS: ~nixos-install --no-root-passwd --no-channel-copy --flake /mnt/persistent/etc/nixos#nixos~.
     - This automatically generates the Secure Boot keys, enrolls them into UEFI (if in Setup Mode), and signs Limine.
-14. Persist the generated Secure Boot keys (since =/= is tmpfs and =preservation= hasn't mounted =/var/lib/sbctl= yet):
+15. Persist the generated Secure Boot keys (since =/= is tmpfs and =preservation= hasn't mounted =/var/lib/sbctl= yet):
     ~mkdir -p /mnt/persistent/var/lib/sbctl && cp -a /mnt/var/lib/sbctl/. /mnt/persistent/var/lib/sbctl/~.
-15. Reboot. (Depending on your motherboard, Secure Boot will already be active; if not, enable Secure Boot in UEFI/BIOS settings).
+16. Reboot. (Depending on your motherboard, Secure Boot will already be active; if not, enable Secure Boot in UEFI/BIOS settings).
+
+* TPM2 Auto-Unlock for LUKS
+
+This step must be run *once manually after the first reboot* into the installed system (with Secure Boot active and a TPM 2.0 device present). It cannot be done from the LiveCD because PCR 7 changes once the UEFI transitions from Setup Mode to User Mode with Secure Boot enabled.
+
+1. Check the LUKS partition path with ~lsblk -f~ (with disko, it is usually =/dev/disk/by-partlabel/disk-main-luks=).
+2. Enroll the TPM2 key bound to PCR 0 (UEFI firmware) and PCR 7 (Secure Boot state/keys):
+   #+begin_src sh
+   sudo systemd-cryptenroll --tpm2-device=auto --tpm2-pcrs=0+7 /dev/disk/by-partlabel/disk-main-luks
+   #+end_src
+   - Enter your existing LUKS passphrase when prompted.
+   - Keep your passphrase keyslot as a fallback in case firmware/Secure Boot state changes.
+3. Reboot — LUKS will now unlock automatically without asking for a passphrase on all subsequent boots.
 
 * Hints
 
@@ -68,7 +83,9 @@ installing on a paravirtualized machine.
 3. In *Overview*:
    - Set *Chipset* to ~Q35~ (required for Secure Boot / SMM).
    - Set *Firmware* to a UEFI Secure Boot option (e.g., ~UEFI x86_64: .../OVMF_CODE.secboot.fd~ or ~OVMF_CODE_4M.secboot.fd~).
-   - Click *Apply* and then *Begin Installation*.
+   - Click *Apply*.
+   - Optional (for LUKS TPM2 auto-unlock): click *Add Hardware* -> *TPM* -> Type: *Emulated*, Model: *CRB*, Version: *2.0*.
+   - Click *Begin Installation*.
 4. Enter OVMF UEFI setup to put Secure Boot into *Setup Mode* (default OVMF secboot NVRAM may have pre-enrolled keys that block the unsigned NixOS LiveCD):
    - Press =ESC= or =F2= at the TianoCore splash screen.
    - Navigate to *Device Manager* -> *Secure Boot Configuration*.
