@@ -52,6 +52,25 @@ This step must be run *once manually after the first reboot* into the installed 
    - Keep your passphrase keyslot as a fallback in case firmware/Secure Boot state changes.
 3. Reboot — LUKS will now unlock automatically without asking for a passphrase on all subsequent boots.
 
+* Verifying IOMMU / PCI Devices
+
+Because =boot.kernelParams= enables strict IOMMU and ~efi=disable_early_pci_dma~, check after booting (and after suspend/resume) that no PCI device failed to initialize:
+
+1. Check kernel logs for errors or IOMMU/PCI faults:
+   #+begin_src sh
+   sudo dmesg -l err,crit,alert,emerg
+   sudo dmesg | grep -iE 'pci|iommu|dmar|amd-vi|probe.*failed|fault'
+   #+end_src
+2. Verify that essential PCI devices (NVMe/SATA, GPU, network/Wi-Fi, audio, USB) have a ~Kernel driver in use~:
+   #+begin_src sh
+   nix-shell -p pciutils --run "lspci -k"
+   #+end_src
+3. Check for failed systemd units:
+   #+begin_src sh
+   systemctl --failed
+   #+end_src
+4. If a device fails to initialize or breaks after suspend, try removing ~efi=disable_early_pci_dma~ (or ~iommu.strict=1~ if experiencing I/O slowdowns) from =configuration.nix=.
+
 * Hints
 
 - Add =/persistent/etc/nixos/secrets/= to =.gitignore=.
