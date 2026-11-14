@@ -22,6 +22,7 @@
         "/var/lib/bluetooth"
         "/var/lib/systemd/backlight"
         "/var/lib/systemd/timers"
+        "/var/lib/sbctl"
         "/var/log"
         {
           directory = "/var/lib/nixos";

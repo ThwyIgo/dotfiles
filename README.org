@@ -12,27 +12,30 @@ installing on a paravirtualized machine.
 
 * Install steps
 
-1. Boot nixos-minimal LiveCD.
-2. Find a way to put the files from this repository onto the LiveCD
+1. Enter UEFI/BIOS settings and put Secure Boot into *Setup Mode* (clear/erase Secure Boot keys, keeping Secure Boot enabled if your firmware allows it).
+2. Boot nixos-minimal LiveCD.
+3. Find a way to put the files from this repository onto the LiveCD
    (suggestions: git clone, curl, usb flash drive) and ~cd~ into it.
-3. ~sudo su~.
-4. Create your LUKS password using ~printf 'password' > /tmp/luks-passwd.txt~.
-5. Check in which disk you want to install your system using ~lsblk~.
-6. Change =disko.nix= to make ~disko.devices.disk.main.device~ point
+4. ~sudo su~.
+5. Create your LUKS password using ~printf 'password' > /tmp/luks-passwd.txt~.
+6. Check in which disk you want to install your system using ~lsblk~.
+7. Change =disko.nix= to make ~disko.devices.disk.main.device~ point
    to the correct device.
-7. Change =disko.nix= to make
+8. Change =disko.nix= to make
    ~disko.devices.disk.main.content.partitions.luks.content.passwordFile~
    point to the =luks-passwd.txt= you created.
-8. Run disko to format the disk:
-   ~sudo nix --experimental-features "nix-command flakes" run github:nix-community/disko/latest --
+9. Run disko to format the disk:
+   ~nix --experimental-features "nix-command flakes" run disko/latest --
    --mode destroy,format,mount disko.nix~.
-9. Copy your configuration files to the persistent directory: ~mkdir -p /mnt/persistent/etc/nixos &&
-   cp -r * /mnt/persistent/etc/nixos~.
-   - Make sure you don't copy =luks-passwd.txt=.
-10. Generate =hardware-configuration.nix=: ~nixos-generate-config --no-filesystems --root /mnt/persistent/~.
-11. Create =user='s password: ~mkpasswd -m sha-512 > /mnt/persistent/etc/nixos/secrets/user-passwd.txt~.
-12. Install NixOS: ~nixos-install --no-root-passwd --flake /mnt/persistent/etc/nixos#nixos~.
-13. Reboot.
+10. Copy your configuration files to the persistent directory: ~cp -r /tmp/host/persistent/* /mnt/persistent/~.
+    - Make sure you don't copy =luks-passwd.txt=.
+11. Generate =hardware-configuration.nix=: ~nixos-generate-config --no-filesystems --root /mnt/persistent/~.
+12. Create =user='s password: ~mkpasswd -m sha-512 > /mnt/persistent/etc/nixos/secrets/user-passwd.txt~.
+13. Install NixOS: ~nixos-install --no-root-passwd --flake /mnt/persistent/etc/nixos#nixos~.
+    - This automatically generates the Secure Boot keys, enrolls them into UEFI (if in Setup Mode), and signs Limine.
+14. Persist the generated Secure Boot keys (since =/= is tmpfs and =preservation= hasn't mounted =/var/lib/sbctl= yet):
+    ~mkdir -p /mnt/persistent/var/lib/sbctl && cp -a /mnt/var/lib/sbctl/. /mnt/persistent/var/lib/sbctl/~.
+15. Reboot. (Depending on your motherboard, Secure Boot will already be active; if not, enable Secure Boot in UEFI/BIOS settings).
 
 * Hints
 
@@ -57,3 +60,21 @@ installing on a paravirtualized machine.
    nix build .#nixosConfigurations.nixos.config.system.build.vm
    QEMU_OPTS="-nographic" ./result/bin/run-nixos-vm
    #+end_src
+
+* Secure Boot in virt-manager
+
+1. Create a new VM in ~virt-manager~ with the NixOS minimal ISO.
+2. On the last step, check *Customize configuration before install* and click *Finish*.
+3. In *Overview*:
+   - Set *Chipset* to ~Q35~ (required for Secure Boot / SMM).
+   - Set *Firmware* to a UEFI Secure Boot option (e.g., ~UEFI x86_64: .../OVMF_CODE.secboot.fd~ or ~OVMF_CODE_4M.secboot.fd~).
+   - Click *Apply* and then *Begin Installation*.
+4. Enter OVMF UEFI setup to put Secure Boot into *Setup Mode* (default OVMF secboot NVRAM may have pre-enrolled keys that block the unsigned NixOS LiveCD):
+   - Press =ESC= or =F2= at the TianoCore splash screen.
+   - Navigate to *Device Manager* -> *Secure Boot Configuration*.
+   - Ensure *Attempt Secure Boot* is checked.
+   - Set *Secure Boot Mode* to *Custom Mode*.
+   - Open *Custom Secure Boot Options* -> *PK Options* -> *Delete PK* (this puts OVMF into *Setup Mode*).
+   - Save (=F10=) and *Reset* the VM so it boots into the NixOS LiveCD.
+5. Follow the *Install steps* above (starting from step 3). On the first reboot after installation, Secure Boot will already be active.
+6. After logging into the installed system, you can verify with ~sudo sbctl status~ and ~sudo sbctl verify~.

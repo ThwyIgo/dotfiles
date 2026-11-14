@@ -22,6 +22,15 @@
   boot.loader.limine = {
     enable = true;
     enableEditor = false;
+    secureBoot = {
+      enable = true;
+      autoGenerateKeys = true;
+      autoEnrollKeys = {
+        enable = true;
+        # Omit --firmware-builtin if the motherboard lack dbDefault (as OVMF and some boards)
+        extraArgs = [ "--microsoft" "--firmware-builtin" ];
+      };
+    };
     # Hide menu unless a key is pressed during the timeout window
     extraConfig = ''
       quiet: yes
@@ -86,6 +95,7 @@
   # You can use https://search.nixos.org/ to find more packages (and options).
   environment.systemPackages = with pkgs; [
     killall
+    sbctl
   ];
   programs = {
     htop.enable = true;
