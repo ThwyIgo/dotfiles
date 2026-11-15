@@ -18,10 +18,16 @@
           inInitrd = true;
         }
         "/etc/NetworkManager/system-connections"
+        {
+          directory = "/etc/cups";
+          inInitrd = true;
+        }
         "/var/lib/iwd"
         "/var/lib/bluetooth"
         "/var/lib/systemd/backlight"
+        "/var/lib/systemd/rfkill"
         "/var/lib/systemd/timers"
+        "/var/lib/AccountsService"
         "/var/lib/sbctl"
         "/var/log"
         {

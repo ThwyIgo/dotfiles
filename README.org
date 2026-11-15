@@ -29,15 +29,15 @@ installing on a paravirtualized machine.
 9. Run disko to format both disks:
    ~nix --experimental-features "nix-command flakes" run disko/latest --
    --mode destroy,format,mount disko.nix~.
-10. Generate the LUKS keyfile for the ~/home~ disk inside =/mnt/persistent/etc/secrets/= and enroll it into the second disk using =/tmp/luks-passwd.txt=:
+10. Copy your configuration files to the persistent directory: ~cp -r /tmp/host/persistent/* /mnt/persistent/~.
+    - Make sure you don't copy =luks-passwd.txt=.
+11. Generate the LUKS keyfile for the ~/home~ disk inside =/mnt/persistent/etc/secrets/= and enroll it into the second disk using =/tmp/luks-passwd.txt=:
     #+begin_src sh
     mkdir -p -m 0700 /mnt/persistent/etc/secrets
     dd if=/dev/urandom of=/mnt/persistent/etc/secrets/home.key bs=64 count=1
     chmod 0400 /mnt/persistent/etc/secrets/home.key
     cryptsetup luksAddKey --key-file /tmp/luks-passwd.txt /dev/disk/by-partlabel/disk-home-luks /mnt/persistent/etc/secrets/home.key
     #+end_src
-11. Copy your configuration files to the persistent directory: ~cp -r /tmp/host/persistent/* /mnt/persistent/~.
-    - Make sure you don't copy =luks-passwd.txt=.
 12. Generate =hardware-configuration.nix=: ~nixos-generate-config --no-filesystems --root /mnt/persistent/~.
 13. Create =user='s password: ~mkpasswd -m sha-512 > /mnt/persistent/etc/secrets/user-passwd.txt && chmod 0400 /mnt/persistent/etc/secrets/user-passwd.txt~.
 14. (Optional, if ~KEK~ or ~db~ variables already exist in UEFI NVRAM) Remove the immutable flag from ~efivars~ so ~sbctl~ can update them:
