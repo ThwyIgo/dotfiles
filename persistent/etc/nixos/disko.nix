@@ -60,11 +60,6 @@
                   mountpoint = "/nix";
                 };
 
-                "/home" = {
-                  mountOptions = ["subvol=home" "compress=zstd"];
-                  mountpoint = "/home";
-                };
-
                 "/var/lib/libvirt" = {
                   mountOptions = ["subvol=libvirt" "noatime" "compress=zstd"];
                   mountpoint = "/var/lib/libvirt";
@@ -75,6 +70,40 @@
                   mountOptions = ["subvol=swap" "noatime" "nodatacow"];
                   # `free -g`
                   swap.swapfile.size = "4G";
+                };
+              };
+            };
+          };
+        };
+      };
+    };
+  };
+
+  disko.devices.disk.home = {
+    device = "/dev/vdb";
+    type = "disk";
+    content = {
+      type = "gpt";
+      partitions = {
+        luks = {
+          size = "100%";
+          content = {
+            type = "luks";
+            name = "crypted-home";
+            passwordFile = "/tmp/luks-passwd.txt";
+            settings = {
+              allowDiscards = true;
+              # Skip initrd unlock so stage 2 /etc/crypttab unlocks it after /persistent is mounted
+              crypttabExtraOpts = [ "noauto" ];
+            };
+            content = {
+              type = "btrfs";
+              extraArgs = ["-f"];
+
+              subvolumes = {
+                "/home" = {
+                  mountOptions = ["subvol=home" "compress=zstd"];
+                  mountpoint = "/home";
                 };
               };
             };

@@ -23,26 +23,30 @@ installing on a paravirtualized machine.
 4. ~sudo su~.
 5. Create a strong, high-entropy fallback LUKS passphrase using ~printf 'your-strong-passphrase' > /tmp/luks-passwd.txt~.
    - If an attacker resets the UEFI/BIOS or clears Secure Boot keys, the fTPM will refuse to auto-unlock and your disk security will rely entirely on the entropy of this passphrase against offline brute-force attacks.
-6. Check in which disk you want to install your system using ~lsblk~.
-7. Change =disko.nix= to make ~disko.devices.disk.main.device~ point
-   to the correct device.
-8. Change =disko.nix= to make
-   ~disko.devices.disk.main.content.partitions.luks.content.passwordFile~
-   point to the =luks-passwd.txt= you created.
-9. Run disko to format the disk:
+6. Check which disks you want to install your system and ~/home~ on using ~lsblk~.
+7. Change =disko.nix= to make ~disko.devices.disk.main.device~ (system root, e.g. ~/dev/vda~) and ~disko.devices.disk.home.device~ (~/home~, e.g. ~/dev/vdb~) point to the correct devices.
+8. Verify in =disko.nix= that ~passwordFile~ on both ~main~ and ~home~ LUKS partitions points to the =luks-passwd.txt= you created.
+9. Run disko to format both disks:
    ~nix --experimental-features "nix-command flakes" run disko/latest --
    --mode destroy,format,mount disko.nix~.
-10. Copy your configuration files to the persistent directory: ~cp -r /tmp/host/persistent/* /mnt/persistent/~.
+10. Generate the LUKS keyfile for the ~/home~ disk inside =/mnt/persistent/etc/secrets/= and enroll it into the second disk using =/tmp/luks-passwd.txt=:
+    #+begin_src sh
+    mkdir -p -m 0700 /mnt/persistent/etc/secrets
+    dd if=/dev/urandom of=/mnt/persistent/etc/secrets/home.key bs=64 count=1
+    chmod 0400 /mnt/persistent/etc/secrets/home.key
+    cryptsetup luksAddKey --key-file /tmp/luks-passwd.txt /dev/disk/by-partlabel/disk-home-luks /mnt/persistent/etc/secrets/home.key
+    #+end_src
+11. Copy your configuration files to the persistent directory: ~cp -r /tmp/host/persistent/* /mnt/persistent/~.
     - Make sure you don't copy =luks-passwd.txt=.
-11. Generate =hardware-configuration.nix=: ~nixos-generate-config --no-filesystems --root /mnt/persistent/~.
-12. Create =user='s password: ~mkpasswd -m sha-512 > /mnt/persistent/etc/nixos/secrets/user-passwd.txt~.
-13. (Optional, if ~KEK~ or ~db~ variables already exist in UEFI NVRAM) Remove the immutable flag from ~efivars~ so ~sbctl~ can update them:
+12. Generate =hardware-configuration.nix=: ~nixos-generate-config --no-filesystems --root /mnt/persistent/~.
+13. Create =user='s password: ~mkpasswd -m sha-512 > /mnt/persistent/etc/secrets/user-passwd.txt && chmod 0400 /mnt/persistent/etc/secrets/user-passwd.txt~.
+14. (Optional, if ~KEK~ or ~db~ variables already exist in UEFI NVRAM) Remove the immutable flag from ~efivars~ so ~sbctl~ can update them:
     ~chattr -i /sys/firmware/efi/efivars/{PK,KEK,db}-* 2>/dev/null || true~.
-14. Install NixOS: ~nixos-install --no-root-passwd --no-channel-copy --flake /mnt/persistent/etc/nixos#nixos~.
+15. Install NixOS: ~nixos-install --no-root-passwd --no-channel-copy --flake /mnt/persistent/etc/nixos#nixos~.
     - This automatically generates the Secure Boot keys, enrolls them into UEFI (if in Setup Mode), and signs Limine.
-15. Persist the generated Secure Boot keys (since =/= is tmpfs and =preservation= hasn't mounted =/var/lib/sbctl= yet):
+16. Persist the generated Secure Boot keys (since =/= is tmpfs and =preservation= hasn't mounted =/var/lib/sbctl= yet):
     ~mkdir -p /mnt/persistent/var/lib/sbctl && cp -a /mnt/var/lib/sbctl/. /mnt/persistent/var/lib/sbctl/~.
-16. Reboot and enter UEFI/BIOS settings:
+17. Reboot and enter UEFI/BIOS settings:
     - Ensure *Secure Boot* is active (*User Mode*).
     - Disable booting from external media (USB, network/PXE, optical drives) and lock the boot order.
     - Set a strong *UEFI/BIOS Supervisor Password* so firmware settings and the one-time boot menu cannot be accessed without authentication.
@@ -82,7 +86,7 @@ Because =boot.kernelParams= enables strict IOMMU and ~efi=disable_early_pci_dma~
 
 * Hints
 
-- Add =/persistent/etc/nixos/secrets/= to =.gitignore=.
+- Keep secrets in =/persistent/etc/secrets/= (outside =/persistent/etc/nixos/=) so Nix Flakes never copies them into =/nix/store=.
 - Never edit =/persistent/etc/nixos/hardware-configuration.nix= by hand.
 - If you ever run out of space in the LiveCD, try running ~nix-collect-garbage~.
 

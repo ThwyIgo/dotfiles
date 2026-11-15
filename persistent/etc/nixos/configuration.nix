@@ -28,7 +28,7 @@
       autoGenerateKeys = true;
       autoEnrollKeys = {
         enable = true;
-        # Omit --firmware-builtin if the motherboard lack dbDefault (as OVMF and some boards)
+        # Omit --firmware-builtin if the motherboard lacks dbDefault (as OVMF and some boards)
         extraArgs = [ "--microsoft" "--firmware-builtin" ];
       };
     };
@@ -42,6 +42,11 @@
   # Set to false if using efiInstallAsRemovable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.timeout = 1;
+
+  # Unlock /home in stage 2 using the keyfile stored on /persistent
+  environment.etc."crypttab".text = ''
+    crypted-home /dev/disk/by-partlabel/disk-home-luks /persistent/etc/secrets/home.key discard
+  '';
 
   # Enable IOMMU, strict DMA protection, and TPM2 PCR 15 volume-key measurement
   boot.kernelParams = [
@@ -136,8 +141,8 @@
     description = "";
     isNormalUser = true;
     extraGroups = [ "wheel" "networkmanager" "libvirtd" ];
-    # mkpasswd -m sha-512 | sudo tee /mnt/persistent/etc/nixos/secrets/user-passwd.txt
-    hashedPasswordFile = "/etc/nixos/secrets/user-passwd.txt";
+    # mkpasswd -m sha-512 | sudo tee /persistent/etc/secrets/user-passwd.txt
+    hashedPasswordFile = "/persistent/etc/secrets/user-passwd.txt";
   };
   home-manager.users.user = ./home-manager/user.nix;
 
