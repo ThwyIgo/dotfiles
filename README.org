@@ -3,6 +3,33 @@
 A minimal NixOS config that uses LUKS, BTrFS, swap-file, impermanence,
 home-manager, disko and secure-boot with TPM auto-unlock.
 
+** Overview
+
+#+begin_src artist
++---------------------------------+  +--------------+
+|            /dev/vda             |  |   /dev/vdb   |
++-------+-------------------------+  +--------------+
+|  ESP  |       crypted           |  | crypted-home |
+| FAT32 |        LUKS2            |  |    LUKS2     |
+|       |        BTrFS            |  |    BTrFS     |
++-------+-------------------------+  +--------------+
+| /boot | /persistent Subvol      |  | /home Subvol |
+|       +-------------------------+  +--------------+
+|       | /nix Subvol             |
+|       +-------------------------+  +-------+
+|       | /swap Subvol + swapfile |  | tmpfs |
+|       +--------------------------  +-------+
+|       | /var/lib/libvirt Subvol |  | /     |
++-------+-------------------------+  +-------+
+#+end_src
+
+#+begin_src artist
+TPM → auto-unlocks → "crypted" partition
+
+"crypted" partition → has "crypted-home" partition keyfile
+"crypted" partition → auto-unlocks → "crypted-home" partition
+#+end_src
+
 * Status
 
 Working!
@@ -89,24 +116,6 @@ Because =boot.kernelParams= enables strict IOMMU and ~efi=disable_early_pci_dma~
 - Keep secrets in =/persistent/etc/secrets/= (outside =/persistent/etc/nixos/=) so Nix Flakes never copies them into =/nix/store=.
 - Never edit =/persistent/etc/nixos/hardware-configuration.nix= by hand.
 - If you ever run out of space in the LiveCD, try running ~nix-collect-garbage~.
-
-* Testing in a Virtual Machine (QEMU)
-
-1. Navigate to the configuration directory:
-   #+begin_src sh
-   cd persistent/etc/nixos
-   #+end_src
-
-2. Build and run the virtual machine:
-   #+begin_src sh
-   nix run .#nixosConfigurations.nixos.config.system.build.vm
-   #+end_src
-
-   /Note: If running on a headless system without a display server, pass =QEMU_OPTS="-nographic"=:
-   #+begin_src sh
-   nix build .#nixosConfigurations.nixos.config.system.build.vm
-   QEMU_OPTS="-nographic" ./result/bin/run-nixos-vm
-   #+end_src
 
 * Secure Boot in virt-manager
 
