@@ -1,40 +1,8 @@
 {
   "nodes": {
-    "flake-compat": {
-      "locked": {
-        "lastModified": 1733328505,
-        "narHash": "sha256-NeCCThCEP3eCl2l/+27kNNK7QrwZB1IJCrXfrbv5oqU=",
-        "rev": "ff81ac966bb2cae68946d5ed5fc4994f96d0ffec",
-        "revCount": 69,
-        "type": "tarball",
-        "url": "https://api.flakehub.com/f/pinned/edolstra/flake-compat/1.1.0/01948eb7-9cba-704f-bbf3-3fa956735b52/source.tar.gz?rev=ff81ac966bb2cae68946d5ed5fc4994f96d0ffec&revCount=69"
-      },
-      "original": {
-        "type": "tarball",
-        "url": "https://flakehub.com/f/edolstra/flake-compat/1.tar.gz"
-      }
-    },
     "flake-utils": {
       "inputs": {
         "systems": "systems"
-      },
-      "locked": {
-        "lastModified": 1731533236,
-        "narHash": "sha256-l0KFg5HjrsfsO/JpG+r7fRrqm12kzFHyUHqHCVpMMbI=",
-        "owner": "numtide",
-        "repo": "flake-utils",
-        "rev": "11707dc2f618dd54ca8739b309ec4fc024de578b",
-        "type": "github"
-      },
-      "original": {
-        "owner": "numtide",
-        "repo": "flake-utils",
-        "type": "github"
-      }
-    },
-    "flake-utils_2": {
-      "inputs": {
-        "systems": "systems_2"
       },
       "locked": {
         "lastModified": 1731533236,
@@ -57,11 +25,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1793032858,
-        "narHash": "sha256-tZHSKW8a3Dx1tCrN+ZGEqZ2nTBnry0kj2mX1UsMPl1w=",
+        "lastModified": 1794963576,
+        "narHash": "sha256-+CPrP74GDJ63f7bgEFC9Av4hbxc7K9WUNv1ZVRifRe8=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "fb8d92387cd566d2517ed246fb6dc131873a41d0",
+        "rev": "2b13c9cb3aa20653e6f8ee0b7f8331a53ea9b0a9",
         "type": "github"
       },
       "original": {
@@ -106,44 +74,49 @@
       },
       "parent": []
     },
-    "minimal-emacs-src": {
-      "flake": false,
+    "luciole": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
       "locked": {
-        "lastModified": 1791725981,
-        "narHash": "sha256-P7wGcycW2fVwpBeW9ZasYxJHONYFOUkBbuVatdBRdzU=",
-        "owner": "jamescherti",
-        "repo": "minimal-emacs.d",
-        "rev": "0916b1890604372daf70036762f92965f9bb5b47",
+        "lastModified": 1795062523,
+        "narHash": "sha256-M0fW1rZWz3cVIWDtnWUx4GnnzoWOEJUa4bhfqKLyTRs=",
+        "owner": "noctalia-dev",
+        "repo": "luciole",
+        "rev": "0b37f2cc760c241ce2cf78dbdc4744f18a5b66b7",
         "type": "github"
       },
       "original": {
-        "owner": "jamescherti",
-        "repo": "minimal-emacs.d",
+        "owner": "noctalia-dev",
+        "repo": "luciole",
         "type": "github"
       }
     },
-    "nix-filter": {
+    "minimal-emacs-src": {
+      "flake": false,
       "locked": {
-        "lastModified": 1757882181,
-        "narHash": "sha256-+cCxYIh2UNalTz364p+QYmWHs0P+6wDhiWR4jDIKQIU=",
-        "owner": "numtide",
-        "repo": "nix-filter",
-        "rev": "59c44d1909c72441144b93cf0f054be7fe764de5",
+        "lastModified": 1794024313,
+        "narHash": "sha256-Sh4XXZ58To+fGD5Bx1XITOFEJfbmHB76tUvFaMBGdWc=",
+        "owner": "jamescherti",
+        "repo": "minimal-emacs.d",
+        "rev": "e797e802a1298d5656cfaaf107f59bbf1d6eed00",
         "type": "github"
       },
       "original": {
-        "owner": "numtide",
-        "repo": "nix-filter",
+        "owner": "jamescherti",
+        "repo": "minimal-emacs.d",
         "type": "github"
       }
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1792773339,
-        "narHash": "sha256-rZLrzrC6i+jnTAlvPZHogKDulY7WWDEv9hJeHieO7Zw=",
+        "lastModified": 1794890597,
+        "narHash": "sha256-lME2lHoDHAaSHP3/okgiVoJ0icVEvsQH8LeU3We7tcc=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "3ec636362e1816bc2f0888fa0fa2c69f1bc9e504",
+        "rev": "04906337b6d53e8bb0eaf0470ae9f070a4d4eb55",
         "type": "github"
       },
       "original": {
@@ -158,31 +131,9 @@
         "home-manager": "home-manager",
         "impermanence": "impermanence",
         "keycloak-portal-theme": "keycloak-portal-theme",
+        "luciole": "luciole",
         "minimal-emacs-src": "minimal-emacs-src",
-        "nixpkgs": "nixpkgs",
-        "winapps": "winapps",
-        "zed-extensions": "zed-extensions"
-      }
-    },
-    "rust-overlay": {
-      "inputs": {
-        "nixpkgs": [
-          "zed-extensions",
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1788077403,
-        "narHash": "sha256-c20YZQKzQ27qC6Wh729fWRTpI7oV4+7Ur4icKssD4Wc=",
-        "owner": "oxalica",
-        "repo": "rust-overlay",
-        "rev": "89e26eeaafa88a2ede4778734acc794ff0299beb",
-        "type": "github"
-      },
-      "original": {
-        "owner": "oxalica",
-        "repo": "rust-overlay",
-        "type": "github"
+        "nixpkgs": "nixpkgs"
       }
     },
     "systems": {
@@ -197,65 +148,6 @@
       "original": {
         "owner": "nix-systems",
         "repo": "default",
-        "type": "github"
-      }
-    },
-    "systems_2": {
-      "locked": {
-        "lastModified": 1681028828,
-        "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
-        "owner": "nix-systems",
-        "repo": "default",
-        "rev": "da67096a3b9bf56a91d16901293e51ba5b49a27e",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nix-systems",
-        "repo": "default",
-        "type": "github"
-      }
-    },
-    "winapps": {
-      "inputs": {
-        "flake-compat": "flake-compat",
-        "flake-utils": "flake-utils_2",
-        "nix-filter": "nix-filter",
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1792151336,
-        "narHash": "sha256-8d3MAVKCwIU14I67TVWxEff/WqoH7jNuy75huO3QRws=",
-        "owner": "winapps-org",
-        "repo": "winapps",
-        "rev": "f5c9ee3951046c28f2aaf3a0b3b16c9a1c0a09e9",
-        "type": "github"
-      },
-      "original": {
-        "owner": "winapps-org",
-        "repo": "winapps",
-        "type": "github"
-      }
-    },
-    "zed-extensions": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ],
-        "rust-overlay": "rust-overlay"
-      },
-      "locked": {
-        "lastModified": 1793003687,
-        "narHash": "sha256-a8Usib+uDDpE2TuTPK+BNQ6tFz8y3njwGtq1bEOXQZA=",
-        "owner": "DuskSystems",
-        "repo": "nix-zed-extensions",
-        "rev": "337d9cf0968d6d089ff707d8cbdb10222ea3d509",
-        "type": "github"
-      },
-      "original": {
-        "owner": "DuskSystems",
-        "repo": "nix-zed-extensions",
         "type": "github"
       }
     }

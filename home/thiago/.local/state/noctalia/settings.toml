@@ -1,0 +1,156 @@
+config_version = 20
+
+[bar.default]
+end = [
+    "media",
+    "tray",
+    "notifications",
+    "network",
+    "bluetooth",
+    "volume",
+    "brightness",
+    "battery",
+    "control-center",
+    "session"
+]
+margin_ends = "0%"
+radius = 0
+shadow = false
+start = [ "workspaces", "active_window" ]
+thickness = 20
+
+[battery]
+warning_threshold = 20
+
+[bluetooth]
+connection_notifications = true
+
+[brightness]
+minimum_brightness = 0.0099999997764825821
+
+[control_center.calendar]
+show_events_card = false
+
+[desktop_widgets]
+enabled = false
+
+[location]
+address = "Uberlândia, Brasil"
+
+[lockscreen_widgets]
+enabled = false
+schema_version = 2
+widget_order = [ "lockscreen-login-box@HDMI-A-1", "lockscreen-login-box@eDP-1" ]
+
+    [lockscreen_widgets.grid]
+    cell_size = 16
+    major_interval = 4
+    visible = true
+
+    [lockscreen_widgets.widget."lockscreen-login-box@HDMI-A-1"]
+    box_height = 196.0
+    box_width = 810.0
+    cx = 960.0
+    cy = 898.0
+    output = "HDMI-A-1"
+    placement_height = 1080.0
+    placement_width = 1920.0
+    rotation = 0.0
+    type = "login_box"
+
+        [lockscreen_widgets.widget."lockscreen-login-box@HDMI-A-1".settings]
+        background_color = "surface_container"
+        background_opacity = 0.88
+        background_radius = 12.0
+        center_password_text = false
+        input_opacity = 1.0
+        input_radius = 6.0
+        layout = "regular"
+        show_caps_lock = true
+        show_keyboard_layout = true
+        show_login_button = true
+        show_media = true
+        show_media_controls = true
+        show_password_reveal = true
+        show_session_buttons = true
+        show_unlock_hint = true
+        show_weather = true
+
+    [lockscreen_widgets.widget."lockscreen-login-box@eDP-1"]
+    box_height = 196.0
+    box_width = 810.0
+    cx = 960.0
+    cy = 898.0
+    output = "eDP-1"
+    placement_height = 1080.0
+    placement_width = 1920.0
+    rotation = 0.0
+    type = "login_box"
+
+        [lockscreen_widgets.widget."lockscreen-login-box@eDP-1".settings]
+        background_color = "surface_container"
+        background_opacity = 0.88
+        background_radius = 12.0
+        center_password_text = false
+        input_opacity = 1.0
+        input_radius = 6.0
+        layout = "regular"
+        show_caps_lock = true
+        show_keyboard_layout = true
+        show_login_button = true
+        show_media = true
+        show_media_controls = true
+        show_password_reveal = true
+        show_session_buttons = true
+        show_unlock_hint = true
+        show_weather = true
+
+[plugins]
+enabled = [ "yuuto/calculator" ]
+
+[shell]
+circular_avatar = false
+polkit_agent = true
+settings_show_advanced = false
+
+    [shell.launcher]
+    app_grid = true
+    categories = false
+    layout = "simple"
+
+    [shell.panel]
+    launcher_placement = "attached"
+    launcher_position = "auto"
+    open_near_click_control_center = true
+
+    [shell.screenshot]
+    confirm_region = true
+    format = "jpeg"
+    save_to_file = false
+
+[theme]
+builtin = "Dracula"
+community_palette = "Oxocarbon"
+mode = "dark"
+wallpaper_scheme = "m3-content"
+
+    [theme.templates]
+    builtin_ids = [ "alacritty", "gtk3", "gtk4", "qt", "umbriel" ]
+
+[wallpaper.automation]
+recursive = true
+
+[wallpaper.default]
+path = "/home/thiago/Imagens/wallpaper.jpg"
+
+[wallpaper.last]
+path = "/home/thiago/Imagens/wallpaper.jpg"
+
+[wallpaper.monitors.HDMI-A-1]
+path = "/home/thiago/Imagens/wallpaper.jpg"
+
+[wallpaper.monitors.eDP-1]
+path = "/home/thiago/Imagens/wallpaper.jpg"
+
+[widget.media]
+hide_when_no_media = true

@@ -65,14 +65,20 @@
   # Esta opção recompila vários pacotes com suporte a CUDA.
   # Provavelmente os nixos-rebuild vão demorar várias horas.
   #nixpkgs.config.cudaSupport = true;
+  hardware.bluetooth.enable = true;
+  services.tuned.enable = true;
+  services.upower.enable = true;
 
-  services.displayManager.cosmic-greeter.enable = true;
-  services.desktopManager.cosmic.enable = true;
+  services.displayManager.noctalia-greeter.enable = true;
+  programs.umbriel.enable = true;
 
   services.displayManager.autoLogin = {
     enable = true;
     user = "thiago";
   };
+
+  # Enable trash and network locations for some file managers
+  services.gvfs.enable = true;
 
   # Enable CUPS to print documents.
   #services.printing = {
@@ -88,8 +94,6 @@
   #hardware.sane.enable = true;
 
   # Enable sound.
-  # services.pulseaudio.enable = true;
-  # OR
   services.pipewire = {
     enable = true;
     pulse.enable = true;
@@ -124,7 +128,7 @@
     kdeconnect.enable = true;
     htop.enable = true;
   };
-  programs.nix-ld.enable = true;
+  programs.nix-ld.enable = false;
 
   virtualisation.libvirtd = {
     enable = true;
@@ -153,14 +157,6 @@
     };
     #storageDriver = "btrfs";
   };
-
-  # Some programs need SUID wrappers, can be configured further or are
-  # started in user sessions.
-  # programs.mtr.enable = true;
-  # programs.gnupg.agent = {
-  #   enable = true;
-  #   enableSSHSupport = true;
-  # };
 
   # List services that you want to enable:
 

@@ -5,8 +5,8 @@
   home.packages = with pkgs; [
     # GUI
     keepassxc
+    selectdefaultapplication
     virt-manager
-    winapps
     spotify
     zathura
     thunderbird
@@ -16,6 +16,9 @@
     (hunspell.withDicts (dicts: with dicts;
       [pt_BR en_US]))
     slack
+
+    # CLI
+    glib # gio command
 
     # Programming
     bruno
@@ -46,6 +49,16 @@
     lldb
     gdb
   ];
+  programs.alacritty = {
+    enable = true;
+    settings = {
+      general = {
+        import = [ "${config.xdg.configHome}/alacritty/themes/noctalia.toml" ];
+      };
+      terminal.shell = "fish";
+    };
+  };
+  programs.luciole.enable = true;
   programs.librewolf = {
     enable = true;
     languagePacks = [ "pt-BR" "en-US" "de" ];
@@ -86,18 +99,6 @@
     package = pkgs.ollama-cuda;
   };
   programs.java.enable = true;
-
-  programs.zed-editor = {
-    enable = true;
-    extraPackages = with pkgs; [];
-  };
-  programs.zed-editor-extensions = {
-    enable = true;
-    packages = with pkgs.zed-extensions; [
-      dockerfile docker-compose java sql lua log nix nginx org neocmake toml
-      xml angular
-    ];
-  };
 
   programs.emacs = {
     enable = true;
@@ -149,7 +150,7 @@
     enable = true;
     enableDefaultConfig = false;
     settings = {
-      "bitbucket.org" = {
+      "ssh.bitbucket.org" = {
         IdentityFile = "~/.ssh/bitbucket-triliton_rsa";
       };
       "github.com" = {
@@ -179,17 +180,37 @@
 
   fonts.fontconfig.enable = true;
 
-  dconf.settings = {
-    "org/virt-manager/virt-manager/connections" = {
-      autoconnect = ["qemu:///system"];
-      uris = ["qemu:///system"];
-    };
-  };
   # See https://wiki.nixos.org/wiki/Virt-manager#Wayland
   home.pointerCursor = {
     enable = true;
     gtk.enable = true;
     package = pkgs.vanilla-dmz;
     name = "Vanilla-DMZ";
+  };
+
+  programs.noctalia = {
+    enable = true;
+  };
+
+  gtk = {
+    enable = true;
+    theme = {
+      name = "adw-gtk3";
+      package = pkgs.adw-gtk3;
+    };
+    gtk4.theme = null;
+  };
+  qt = {
+    enable = true;
+    platformTheme.name = "qtct";
+
+    qt6ctSettings = {
+      Appearance = {
+        # ~/.config/qt6ct/qt6ct.conf
+        color_scheme_path = "${config.xdg.configHome}/qt6ct/colors/noctalia.conf";
+        custom_palette = true;
+        style = "Fusion";
+      };
+    };
   };
 }
