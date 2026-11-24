@@ -31,6 +31,9 @@ minimum_brightness = 0.0099999997764825821
 [control_center.calendar]
 show_events_card = false
 
+[control_center.media]
+show_visualizer = false
+
 [desktop_widgets]
 enabled = false
 

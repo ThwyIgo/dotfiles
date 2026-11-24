@@ -198,12 +198,13 @@ follows_focus = true
 # Applications
 "Mod+A" = "submap apps"
 "submap[apps],Return" = { action = "spawn alacritty", submap = "reset" }
+"submap[apps],B" = { action = "spawn xdg-open https://", submap = "reset" }
 "submap[apps],C" = { action = "spawn noctalia msg panel-toggle yuuto/calculator:panel", submap = "reset" }
-"submap[apps],E" = { action = "spawn gio launch /etc/profiles/per-user/$USER/share/applications/emacsclient.desktop", submap = "reset" }
-"submap[apps],F" = { action = "spawn luciole", submap = "reset" }
-"submap[apps],B" = { action = "spawn librewolf", submap = "reset" }
+"submap[apps],E" = { action = "spawn gio launch \"$(echo \"$XDG_DATA_DIRS\" | tr ':' '\n' | xargs -I{} find '{}/applications' -name 'emacsclient.desktop' 2>/dev/null | head -n 1)\"", submap = "reset" }
+"submap[apps],F" = { action = "spawn gio launch \"$(echo \"$XDG_DATA_DIRS\" | tr ':' '\n' | xargs -I{} find '{}/applications' -name \"$(xdg-mime query default inode/directory)\" 2>/dev/null | head -n 1)\"", submap = "reset" }
+"submap[apps],L" = { action = "spawn keepassxc", submap = "reset" }
+"submap[apps],M" = { action = "spawn gio launch \"$(echo \"$XDG_DATA_DIRS\" | tr ':' '\n' | xargs -I{} find '{}/applications' -name \"$(xdg-mime query default x-scheme-handler/mailto)\" 2>/dev/null | head -n 1)\"", submap = "reset" }
 "submap[apps],S" = { action = "spawn slack", submap = "reset" }
-"submap[apps],M" = { action = "spawn spotify", submap = "reset" }
 
 # Noctalia
 "Mod" = "spawn noctalia msg panel-toggle launcher"
@@ -232,7 +233,6 @@ follows_focus = true
 "Mod+J" = "window-focus-down"
 "Mod+K" = "window-focus-up"
 "Mod+L" = "window-focus-right"
-"Mod+F1" = "window-focus-next"
 "Mod+Shift+Left" = "window-move-to-output-left"
 "Mod+Shift+Down" = "window-move-to-output-down"
 "Mod+Shift+Up" = "window-move-to-output-up"
@@ -247,21 +247,19 @@ follows_focus = true
 "Mod+Shift+T" = { action = "window-focus-switch-floating", repeat = false }
 "Mod+P" = { action = "window-toggle-pinned", repeat = false }
 "Mod+M" = { action = "window-toggle-maximize-to-edges", repeat = false }
-"Mod+F" = { action = "window-toggle-fullscreen", repeat = false }
-"Mod+Ctrl+F" = { action = "window-toggle-maximize", repeat = false }
+"Mod+F11" = { action = "window-toggle-fullscreen", repeat = false }
+"Mod+F" = { action = "window-toggle-maximize", repeat = false }
 "Mod+R" = "window-cycle-primary-extent"
 "Mod+Shift+R" = "window-cycle-primary-extent-back"
 "Mod+Minus" = "window-modify-primary-extent -0.02"
 "Mod+Equal" = "window-modify-primary-extent +0.02"
 "Mod+Ctrl+Minus" = "window-modify-secondary-extent -0.02"
 "Mod+Ctrl+Equal" = "window-modify-secondary-extent +0.02"
-"Mod+Comma" = "window-consume-or-expel-left"
-"Mod+Period" = "window-consume-or-expel-right"
 # Needs layout.mode = "dwindle".
 # "Mod+Alt+T" = "layout-toggle-split"
 "Mod+W" = { action = "column-toggle-tabbed", repeat = false }
-"Mod+Alt+Right" = "column-focus-tab-next"
-"Mod+Alt+Left" = "column-focus-tab-previous"
+"Mod+Ctrl+L" = "column-focus-tab-next"
+"Mod+Ctrl+H" = "column-focus-tab-previous"
 "Mod+WheelUp" = "window-focus-left"
 "Mod+WheelDown" = "window-focus-right"
 "Mod+O" = { action = "overview-toggle", repeat = false }
@@ -376,7 +374,7 @@ default_focused = false
 default_pinned = true
 
 [[window_rule]]
-match.app_id = "^org.keepassxc.KeePassXC$"
+match.app_id = "^(org.keepassxc.KeePassXC|com.obsproject.Studio)$"
 block_capture = true
 
 # Keep game menus inside their window; a focus or workspace keybind releases the pointer.

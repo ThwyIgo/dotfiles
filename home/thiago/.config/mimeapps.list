@@ -1,3 +1,6 @@
+[Added Associations]
+x-scheme-handler/bruno=bruno.desktop;
+
 [Default Applications]
 application/xhtml+xml=librewolf.desktop
 application/x-mobipocket-ebook=org.pwmt.zathura.desktop
@@ -7,11 +10,11 @@ application/pdf=org.pwmt.zathura.desktop
 text/plain=emacsclient.desktop
 text/tab-separated-values=calc.desktop
 text/csv=calc.desktop
-text/html=librewolf.desktop
 message/rfc822=thunderbird.desktop
-inode/directory=dev.noctalia.luciole.desktop
 x-scheme-handler/slack=slack.desktop
 x-scheme-handler/bruno=bruno.desktop
-
-[Added Associations]
-x-scheme-handler/bruno=bruno.desktop;
+text/html=librewolf.desktop
+inode/directory=dev.noctalia.luciole.desktop
+x-scheme-handler/http=librewolf.desktop
+x-scheme-handler/https=librewolf.desktop
+x-scheme-handler/mailto=thunderbird.desktop

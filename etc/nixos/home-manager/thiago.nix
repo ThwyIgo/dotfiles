@@ -8,6 +8,8 @@
     selectdefaultapplication
     virt-manager
     spotify
+    pix
+    celluloid
     zathura
     thunderbird
     obs-studio

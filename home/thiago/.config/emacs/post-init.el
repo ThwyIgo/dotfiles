@@ -839,7 +839,7 @@
 
 ;; Configure dir-locals
 (setq enable-local-variables t)
-(setq enable-local-eval 'maybe)
+(setq enable-local-eval t)
 
 ;; (use-package treesit-auto
 ;;   :config
